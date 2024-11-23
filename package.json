@@ -1,12 +1,14 @@
 {
   "name": "markdown-viewer",
   "version": "0.0.1",
-  "main": "index.js",
   "license": "MIT",
   "private": true,
   "workspaces": {
     "packages": [
-      "/packages/*"
+      "packages/*"
     ]
+  },
+  "scripts": {
+    "dev": "yarn workspace playground dev"
   }
 }
