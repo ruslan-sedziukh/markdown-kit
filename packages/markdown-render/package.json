@@ -4,11 +4,6 @@
   "license": "MIT",
   "main": "index.js",
   "private": false,
-  "workspaces": {
-    "packages": [
-      "/packages/*"
-    ]
-  },
   "peerDependencies": {
     "react": "^18.3.1"
   }
