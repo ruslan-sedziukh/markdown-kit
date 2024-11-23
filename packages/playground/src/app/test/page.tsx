@@ -1,7 +1,7 @@
-import { testConst } from 'markdown-render'
+import { renderMarkdown } from 'markdown-render'
 
 const Test = () => {
-  return <div>{testConst}</div>
+  return renderMarkdown()
 }
 
 export default Test
