@@ -1,7 +1,10 @@
 import { renderMarkdown } from 'markdown-render'
+import { parseMarkdown } from 'markdown-parser'
 
 const Test = () => {
-  return renderMarkdown()
+  console.log('markdown:', parseMarkdown())
+
+  return <div>{renderMarkdown()}</div>
 }
 
 export default Test
