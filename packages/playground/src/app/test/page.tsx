@@ -1,5 +1,5 @@
-import { renderMarkdown } from 'markdown-render'
-import { parseMarkdown } from 'markdown-parser'
+import { renderMarkdown } from 'md-render'
+import { parseMarkdown } from 'md-parser'
 
 const Test = () => {
   console.log('markdown:', parseMarkdown())
