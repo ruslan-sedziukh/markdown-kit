@@ -1,5 +1,6 @@
 import React from 'react'
+import styles from './styles.module.css'
 
 export const renderMarkdown = () => {
-  return <div>aa</div>
+  return <div className={styles.main}>aa</div>
 }
