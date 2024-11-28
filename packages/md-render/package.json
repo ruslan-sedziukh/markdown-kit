@@ -4,6 +4,9 @@
   "license": "MIT",
   "main": "index.js",
   "private": false,
+  "dependencies": {
+    "md-types": "^0.0.1"
+  },
   "peerDependencies": {
     "react": "^18.3.1"
   }

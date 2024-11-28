@@ -1,19 +1,4 @@
-type HeadingType = 'heading-1' | 'heading-2' | 'heading-3'
-
-type HeadingMdElement = {
-  type: HeadingType
-  content: string[]
-}
-
-const isHeadingType = (
-  el: Partial<HeadingMdElement>
-): el is HeadingMdElement => {
-  if (el.type && el.content) {
-    return true
-  }
-
-  return false
-}
+import { HeadingMdElement, HeadingType, isHeadingType } from 'md-types'
 
 export const parseHeading = (heading: string): HeadingMdElement | undefined => {
   const lineMdElement: Partial<HeadingMdElement> = {}
