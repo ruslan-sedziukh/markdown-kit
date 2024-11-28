@@ -1,8 +1,6 @@
-import { HeadingMdElement, HeadingType, isHeadingType } from 'md-types'
+import { HeadingMdElement, HeadingType } from 'md-types'
 
-export const parseHeading = (heading: string): HeadingMdElement | undefined => {
-  const lineMdElement: Partial<HeadingMdElement> = {}
-
+const getHeadingType = (heading: string): [HeadingType, number] => {
   let headingLevel = 0
   let i = 0
 
@@ -11,11 +9,21 @@ export const parseHeading = (heading: string): HeadingMdElement | undefined => {
     i++
   }
 
-  lineMdElement.type = `heading-${headingLevel}` as HeadingType
+  if (i === 1) {
+    return ['heading-1', i]
+  } else if (i === 2) {
+    return ['heading-2', i]
+  }
 
-  lineMdElement.content = [heading.slice(i + 1)]
+  return ['heading-3', i]
+}
 
-  if (isHeadingType(lineMdElement)) {
-    return lineMdElement
+export const parseHeading = (heading: string): HeadingMdElement | undefined => {
+  const [headingType, i] = getHeadingType(heading)
+  const content = [heading.slice(i + 1)]
+
+  return {
+    type: headingType,
+    content,
   }
 }
