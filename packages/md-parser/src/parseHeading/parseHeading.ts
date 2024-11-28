@@ -1,5 +1,6 @@
 import { HeadingMdElement, HeadingType } from 'md-types'
 
+// returns type of heading and index of content
 const getHeadingType = (heading: string): [HeadingType, number] => {
   let headingLevel = 0
   let i = 0
@@ -10,17 +11,17 @@ const getHeadingType = (heading: string): [HeadingType, number] => {
   }
 
   if (i === 1) {
-    return ['heading-1', i]
+    return ['heading-1', i + 1]
   } else if (i === 2) {
-    return ['heading-2', i]
+    return ['heading-2', i + 1]
   }
 
-  return ['heading-3', i]
+  return ['heading-3', i + 1]
 }
 
-export const parseHeading = (heading: string): HeadingMdElement | undefined => {
-  const [headingType, i] = getHeadingType(heading)
-  const content = [heading.slice(i + 1)]
+export const parseHeading = (heading: string): HeadingMdElement => {
+  const [headingType, contentIndex] = getHeadingType(heading)
+  const content = [heading.slice(contentIndex)]
 
   return {
     type: headingType,
