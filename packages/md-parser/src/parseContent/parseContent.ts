@@ -3,7 +3,7 @@ import { InlineType, InlineElement } from 'md-types'
 type TempElement = {
   temp?: true
   openChars?: string
-  content: string | (string | TempElement)[]
+  content: (string | TempElement)[]
   type: InlineType
 }
 
@@ -22,12 +22,12 @@ export const parseContent = (content: string): InlineElement[] => {
         temp: true,
         type,
         openChars,
-        content: content.slice(i + openChars.length),
+        content: [],
       }
 
       parsed.push(temp)
 
-      parseTempElementContent(temp)
+      parseTempElementContent(temp, content, i)
 
       break
     }
@@ -46,19 +46,31 @@ export const parseContent = (content: string): InlineElement[] => {
   return extracted
 }
 
-const parseTempElementContent = (temp: TempElement) => {
-  if (typeof temp.content !== 'string') {
-    return
-  }
+const parseTempElementContent = (
+  temp: TempElement,
+  content: string,
+  start: number
+) => {
+  let str = ''
 
-  for (let i = 0; i < temp.content.length; i++) {
-    const [type, openChars] = getElementType(temp.content, i)
+  for (let i = start; i < temp.content.length; i++) {
+    const [type, openChars] = getElementType(content, i)
 
     if (type === temp.type) {
-      temp.content = temp.content.slice(0, i)
-
+      temp.content.push(str)
       delete temp.temp
       delete temp.openChars
+    } else if (type) {
+      temp.content.push(str)
+      temp.content.push({
+        temp: true,
+        type,
+        openChars,
+        content: [],
+      })
+      str = ''
+    } else {
+      str += content[i]
     }
   }
 }
