@@ -7,8 +7,10 @@ type TempElement = {
   type: InlineType
 }
 
+type TempContent = (TempElement | string)[]
+
 export const parseContent = (content: string): InlineElement[] => {
-  const parsed: (TempElement | string)[] = []
+  const parsed: TempContent = []
 
   for (let i = 0; i < content.length; i++) {
     const [type, openChars] = getElementType(content, i)
@@ -35,12 +37,13 @@ export const parseContent = (content: string): InlineElement[] => {
     return [content]
   }
 
-  // TODO: Extract content from all temp element objects that are in `parsed`
+  const extracted = extractTempElementsContent(parsed)
 
   // TODO: Concatenate all sequential strings in `parsed`
+  // const concatenated = concatenateStringElements(extracted)
 
   // @ts-ignore
-  return parsed
+  return extracted
 }
 
 const parseTempElementContent = (temp: TempElement) => {
@@ -56,6 +59,29 @@ const parseTempElementContent = (temp: TempElement) => {
 
       delete temp.temp
       delete temp.openChars
+    }
+  }
+}
+
+const extractTempElementsContent = (content: TempContent) =>
+  content.map((el) => {
+    if (typeof el !== 'string' && el.temp) {
+      return el.content
+    }
+
+    return el
+  })
+
+const concatenateStringElements = (content: InlineElement[]) => {
+  const concatenated: InlineElement[] = []
+
+  for (let i = 0; i < content.length; i++) {
+    if (typeof content[i] === 'string' && typeof content[i + 1] === 'string') {
+      // @ts-ignore
+      concatenated.push(content[i] + content[i + 1])
+      i++
+    } else {
+      concatenated.push(content[i])
     }
   }
 }
