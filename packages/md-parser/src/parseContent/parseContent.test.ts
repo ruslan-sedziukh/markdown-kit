@@ -5,7 +5,7 @@ describe('parseContent', () => {
     const content = 'Heading **one**'
 
     expect(parseContent(content)).toEqual([
-      'Heading',
+      'Heading ',
       {
         type: 'bold',
         content: 'one',
