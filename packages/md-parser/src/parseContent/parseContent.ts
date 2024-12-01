@@ -1,101 +1,49 @@
-import { InlineType, InlineElement } from 'md-types'
+import { InlineType, InlineContent, InlineElement } from 'md-types'
 
-type TempElement = {
-  temp?: true
-  openChars?: string
-  content: (string | TempElement)[]
-  type: InlineType
-}
+export const parseContent = (content: string): InlineContent[] => {
+  const parsed: InlineContent[] = []
 
-type TempContent = (TempElement | string)[]
+  let start = 0
+  let i = 0
 
-export const parseContent = (content: string): InlineElement[] => {
-  const parsed: TempContent = []
-
-  for (let i = 0; i < content.length; i++) {
+  while (i < content.length) {
     const [type, openChars] = getElementType(content, i)
 
     if (type) {
-      parsed.push(content.slice(0, i))
+      const restContent = content.slice(i + openChars.length)
+      const match = restContent.match(RegExpByChar[openChars])
+      const closingCharsIndex = match?.index
 
-      const temp: TempElement = {
-        temp: true,
-        type,
-        openChars,
-        content: [],
+      if (closingCharsIndex) {
+        parsed.push(content.slice(start, i))
+
+        const newEl = {
+          type,
+          content: [
+            content.slice(
+              i + openChars.length,
+              i + openChars.length + closingCharsIndex
+            ),
+          ],
+        }
+
+        parsed.push(newEl)
+
+        parseElementContent(newEl.content[0], newEl)
+
+        start = i + openChars.length * 2 + closingCharsIndex
+        i = start
       }
-
-      parsed.push(temp)
-
-      parseTempElementContent(temp, content, i)
-
-      break
-    }
-  }
-
-  if (!parsed.length) {
-    return [content]
-  }
-
-  const extracted = extractTempElementsContent(parsed)
-
-  // TODO: Concatenate all sequential strings in `parsed`
-  // const concatenated = concatenateStringElements(extracted)
-
-  // @ts-ignore
-  return extracted
-}
-
-const parseTempElementContent = (
-  temp: TempElement,
-  content: string,
-  start: number
-) => {
-  let str = ''
-
-  for (let i = start; i < temp.content.length; i++) {
-    const [type, openChars] = getElementType(content, i)
-
-    if (type === temp.type) {
-      temp.content.push(str)
-      delete temp.temp
-      delete temp.openChars
-    } else if (type) {
-      temp.content.push(str)
-      temp.content.push({
-        temp: true,
-        type,
-        openChars,
-        content: [],
-      })
-      str = ''
-    } else {
-      str += content[i]
-    }
-  }
-}
-
-const extractTempElementsContent = (content: TempContent) =>
-  content.map((el) => {
-    if (typeof el !== 'string' && el.temp) {
-      return el.content
     }
 
-    return el
-  })
-
-const concatenateStringElements = (content: InlineElement[]) => {
-  const concatenated: InlineElement[] = []
-
-  for (let i = 0; i < content.length; i++) {
-    if (typeof content[i] === 'string' && typeof content[i + 1] === 'string') {
-      // @ts-ignore
-      concatenated.push(content[i] + content[i + 1])
-      i++
-    } else {
-      concatenated.push(content[i])
-    }
+    i++
   }
+
+  if (start < content.length) {
+    parsed.push(content.slice(start))
+  }
+
+  return parsed
 }
 
 const getElementType = (
@@ -106,5 +54,52 @@ const getElementType = (
     return ['bold', '**']
   }
 
+  if (content[i] === '*') {
+    return ['italic', '*']
+  }
+
   return [null, null]
+}
+
+const RegExpByChar = {
+  '**': /\*\*/,
+  '*': /\*/,
+}
+
+const parseElementContent = (content: string, element: InlineElement) => {
+  let start = 0
+  let i = 0
+
+  while (i < content.length) {
+    const [type, openChars] = getElementType(content, i)
+
+    if (type) {
+      const restContent = content.slice(i + openChars.length)
+      const match = restContent.match(RegExpByChar[openChars])
+      const closingCharsIndex = match?.index
+
+      if (closingCharsIndex) {
+        element.content[0] = content.slice(start, i)
+
+        const newEl = {
+          type,
+          content: [
+            content.slice(
+              i + openChars.length,
+              i + openChars.length + closingCharsIndex
+            ),
+          ],
+        }
+
+        element.content.push(newEl)
+
+        parseElementContent(newEl.content[0], newEl)
+      }
+
+      start = i + openChars.length
+      i = start
+    }
+
+    i++
+  }
 }

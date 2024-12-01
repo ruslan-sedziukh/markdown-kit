@@ -2,7 +2,7 @@ import { parseContent } from '.'
 
 describe('parseContent', () => {
   it('return correct emphasized content', () => {
-    const content = 'Heading **one**'
+    const content = 'Heading **one** of two'
 
     const parsed = parseContent(content)
 
@@ -12,8 +12,9 @@ describe('parseContent', () => {
       'Heading ',
       {
         type: 'bold',
-        content: 'one',
+        content: ['one'],
       },
+      ' of two',
     ])
   })
 
@@ -25,5 +26,27 @@ describe('parseContent', () => {
     console.log('parsed:', parsed)
 
     expect(parseContent(content)).toEqual(['Heading **one'])
+  })
+
+  it.skip('return correct emphasized content inside another emphasized content', () => {
+    const content = 'Heading ***o*ne**'
+
+    const parsed = parseContent(content)
+
+    console.log('parsed:', parsed)
+
+    expect(parseContent(content)).toEqual([
+      'Heading ',
+      {
+        type: 'bold',
+        content: [
+          {
+            type: 'italic',
+            content: ['o'],
+          },
+          'ne',
+        ],
+      },
+    ])
   })
 })
