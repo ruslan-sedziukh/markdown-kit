@@ -15,7 +15,9 @@ export const parseContent = (content: string): InlineContent[] => {
       const closingCharsIndex = match?.index
 
       if (closingCharsIndex) {
-        parsed.push(content.slice(start, i))
+        if (i - start > 0) {
+          parsed.push(content.slice(start, i))
+        }
 
         const elContent = content.slice(
           i + openChars.length,
@@ -23,12 +25,10 @@ export const parseContent = (content: string): InlineContent[] => {
         )
         const newEl = {
           type,
-          content: [],
+          content: parseContent(elContent),
         }
 
         parsed.push(newEl)
-
-        parseElementContent(elContent, newEl)
 
         start = i + openChars.length * 2 + closingCharsIndex
         i = start
@@ -63,48 +63,4 @@ const getElementType = (
 const RegExpByChar = {
   '**': /\*\*/,
   '*': /\*/,
-}
-
-const parseElementContent = (content: string, element: InlineElement) => {
-  let start = 0
-  let i = 0
-
-  while (i < content.length) {
-    const [type, openChars] = getElementType(content, i)
-
-    if (type) {
-      const restContent = content.slice(i + openChars.length)
-      const match = restContent.match(RegExpByChar[openChars])
-      const closingCharsIndex = match?.index
-
-      if (closingCharsIndex) {
-        if (i - start > 0) {
-          element.content.push(content.slice(start, i))
-        }
-
-        const elContent = content.slice(
-          i + openChars.length,
-          i + openChars.length + closingCharsIndex
-        )
-
-        const newEl = {
-          type,
-          content: [],
-        }
-
-        element.content.push(newEl)
-
-        parseElementContent(elContent, newEl)
-
-        start = i + openChars.length * 2 + closingCharsIndex
-        i = start
-      }
-    }
-
-    i++
-  }
-
-  if (start < content.length) {
-    element.content.push(content.slice(start))
-  }
 }
