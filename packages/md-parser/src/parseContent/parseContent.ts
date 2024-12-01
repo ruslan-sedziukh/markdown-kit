@@ -1,5 +1,25 @@
 import { InlineType, InlineContent, InlineElement } from 'md-types'
 
+const RegExpByChar = {
+  '**': /\*\*/,
+  '*': /\*/,
+}
+
+const getElementType = (
+  content: string,
+  i: number
+): [InlineType, string] | [null, null] => {
+  if (content[i] === '*' && content[i + 1] === '*') {
+    return ['bold', '**']
+  }
+
+  if (content[i] === '*') {
+    return ['italic', '*']
+  }
+
+  return [null, null]
+}
+
 export const parseContent = (content: string): InlineContent[] => {
   const parsed: InlineContent[] = []
 
@@ -43,24 +63,4 @@ export const parseContent = (content: string): InlineContent[] => {
   }
 
   return parsed
-}
-
-const getElementType = (
-  content: string,
-  i: number
-): [InlineType, string] | [null, null] => {
-  if (content[i] === '*' && content[i + 1] === '*') {
-    return ['bold', '**']
-  }
-
-  if (content[i] === '*') {
-    return ['italic', '*']
-  }
-
-  return [null, null]
-}
-
-const RegExpByChar = {
-  '**': /\*\*/,
-  '*': /\*/,
 }
