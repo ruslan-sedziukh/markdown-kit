@@ -1,4 +1,4 @@
-import { InlineType, InlineContent, InlineElement } from 'md-types'
+import type { InlineType, InlineContent } from 'md-types'
 
 const RegExpByChar = {
   '**': /\*\*/,

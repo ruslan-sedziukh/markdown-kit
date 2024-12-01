@@ -43,4 +43,28 @@ describe('parseContent', () => {
       },
     ])
   })
+
+  it('!!return correct emphasized content inside another emphasized content', () => {
+    const content = '*H*eading ***o*ne**'
+
+    const parsed = parseContent(content)
+
+    expect(parseContent(content)).toEqual([
+      {
+        type: 'italic',
+        content: ['H'],
+      },
+      'eading ',
+      {
+        type: 'bold',
+        content: [
+          {
+            type: 'italic',
+            content: ['o'],
+          },
+          'ne',
+        ],
+      },
+    ])
+  })
 })
