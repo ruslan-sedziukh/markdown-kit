@@ -78,21 +78,23 @@ const parseElementContent = (content: string, element: InlineElement) => {
       const closingCharsIndex = match?.index
 
       if (closingCharsIndex) {
-        element.content.push(content.slice(start, i))
+        if (i - start > 0) {
+          element.content.push(content.slice(start, i))
+        }
+
+        const elContent = content.slice(
+          i + openChars.length,
+          i + openChars.length + closingCharsIndex
+        )
 
         const newEl = {
           type,
-          content: [
-            content.slice(
-              i + openChars.length,
-              i + openChars.length + closingCharsIndex
-            ),
-          ],
+          content: [],
         }
 
         element.content.push(newEl)
 
-        parseElementContent(newEl.content[0], newEl)
+        parseElementContent(elContent, newEl)
 
         start = i + openChars.length * 2 + closingCharsIndex
         i = start
