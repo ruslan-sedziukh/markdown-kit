@@ -6,8 +6,6 @@ describe('parseContent', () => {
 
     const parsed = parseContent(content)
 
-    console.log('parsed:', parsed)
-
     expect(parseContent(content)).toEqual([
       'Heading ',
       {
@@ -23,12 +21,10 @@ describe('parseContent', () => {
 
     const parsed = parseContent(content)
 
-    console.log('parsed:', parsed)
-
     expect(parseContent(content)).toEqual(['Heading **one'])
   })
 
-  it.skip('return correct emphasized content inside another emphasized content', () => {
+  it.only('return correct emphasized content inside another emphasized content', () => {
     const content = 'Heading ***o*ne**'
 
     const parsed = parseContent(content)

@@ -17,19 +17,18 @@ export const parseContent = (content: string): InlineContent[] => {
       if (closingCharsIndex) {
         parsed.push(content.slice(start, i))
 
+        const elContent = content.slice(
+          i + openChars.length,
+          i + openChars.length + closingCharsIndex
+        )
         const newEl = {
           type,
-          content: [
-            content.slice(
-              i + openChars.length,
-              i + openChars.length + closingCharsIndex
-            ),
-          ],
+          content: [],
         }
 
         parsed.push(newEl)
 
-        parseElementContent(newEl.content[0], newEl)
+        parseElementContent(elContent, newEl)
 
         start = i + openChars.length * 2 + closingCharsIndex
         i = start
@@ -79,7 +78,7 @@ const parseElementContent = (content: string, element: InlineElement) => {
       const closingCharsIndex = match?.index
 
       if (closingCharsIndex) {
-        element.content[0] = content.slice(start, i)
+        element.content.push(content.slice(start, i))
 
         const newEl = {
           type,
@@ -94,12 +93,16 @@ const parseElementContent = (content: string, element: InlineElement) => {
         element.content.push(newEl)
 
         parseElementContent(newEl.content[0], newEl)
-      }
 
-      start = i + openChars.length
-      i = start
+        start = i + openChars.length * 2 + closingCharsIndex
+        i = start
+      }
     }
 
     i++
+  }
+
+  if (start < content.length) {
+    element.content.push(content.slice(start))
   }
 }
