@@ -1,24 +1,5 @@
-import type { InlineType, InlineContent } from 'md-types'
-
-const RegExpByChar = {
-  '**': /\*\*/,
-  '*': /\*/,
-}
-
-const getElementType = (
-  content: string,
-  i: number
-): [InlineType, string] | [null, null] => {
-  if (content[i] === '*' && content[i + 1] === '*') {
-    return ['bold', '**']
-  }
-
-  if (content[i] === '*') {
-    return ['italic', '*']
-  }
-
-  return [null, null]
-}
+import type { InlineContent } from 'md-types'
+import { getElementType, RegExpByChar } from './utils'
 
 export const parseContent = (content: string): InlineContent[] => {
   const parsed: InlineContent[] = []
@@ -31,8 +12,9 @@ export const parseContent = (content: string): InlineContent[] => {
 
     if (type) {
       const restContent = content.slice(i + openChars.length)
-      const match = restContent.match(RegExpByChar[openChars])
-      const closingCharsIndex = match?.index
+      const closingCharsIndex = restContent.match(
+        RegExpByChar[openChars]
+      )?.index
 
       if (closingCharsIndex) {
         if (i - start > 0) {
