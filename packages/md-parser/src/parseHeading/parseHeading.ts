@@ -1,27 +1,10 @@
-import { HeadingMdElement, HeadingType } from 'md-types'
+import { HeadingElement } from 'md-types'
+import { parseContent } from '../parseContent'
+import { getHeadingType } from './utils'
 
-// returns type of heading and index of content
-const getHeadingType = (heading: string): [HeadingType, number] => {
-  let headingLevel = 0
-  let i = 0
-
-  while (heading[i] === '#') {
-    headingLevel++
-    i++
-  }
-
-  if (i === 1) {
-    return ['heading-1', i + 1]
-  } else if (i === 2) {
-    return ['heading-2', i + 1]
-  }
-
-  return ['heading-3', i + 1]
-}
-
-export const parseHeading = (heading: string): HeadingMdElement => {
+export const parseHeading = (heading: string): HeadingElement => {
   const [headingType, contentIndex] = getHeadingType(heading)
-  const content = [heading.slice(contentIndex)]
+  const content = parseContent(heading.slice(contentIndex))
 
   return {
     type: headingType,
