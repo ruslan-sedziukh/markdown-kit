@@ -12,12 +12,9 @@ export type Bold = 'bold'
 
 export type Italic = 'italic'
 
-// Type for all possible inline elements
-export type InlineContent = BoldElement | ItalicElement | string
+export type Link = 'link'
 
-export type InlineElement = BoldElement | ItalicElement
-
-export type InlineType = Bold | Italic
+export type InlineType = Bold | Italic | Link
 
 export type BoldElement = {
   type: 'bold'
@@ -28,3 +25,13 @@ export type ItalicElement = {
   type: 'italic'
   content: Exclude<InlineContent, Italic>[]
 }
+
+export type LinkElement = {
+  type: 'link'
+  content: Exclude<InlineContent, Link>[]
+}
+
+// Type for all possible inline elements
+export type InlineElement = BoldElement | ItalicElement | LinkElement
+
+export type InlineContent = InlineElement | string

@@ -3,6 +3,7 @@ import type { InlineType } from 'md-types'
 export const RegExpByChar = {
   '**': /\*\*/,
   '*': /\*/,
+  '[': /\[/,
 }
 
 export const getElementType = (
@@ -15,6 +16,10 @@ export const getElementType = (
 
   if (content[i] === '*') {
     return ['italic', '*']
+  }
+
+  if (content[i] === '[') {
+    return ['link', '[']
   }
 
   return [null, null]
