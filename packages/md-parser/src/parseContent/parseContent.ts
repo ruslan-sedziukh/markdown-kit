@@ -1,14 +1,16 @@
 import type { InlineContent } from 'md-types'
 import { getElementType, RegExpByChar } from './utils'
 
-type ParseParams = {
-  type: 'italic' | 'bold'
+type ParseHelperParams<T> = {
+  type: T
   openChars: string
   i: number
   start: number
   parsed: InlineContent[]
   content: string
 }
+
+type ParseHelperReturn = [number, number]
 
 const parseEmphasized = ({
   type,
@@ -17,12 +19,12 @@ const parseEmphasized = ({
   parsed,
   content,
   start,
-}: ParseParams) => {
-  const restContent = content.slice(i + openChars.length)
-  const closingCharsIndex = restContent.match(RegExpByChar[openChars])?.index
-
+}: ParseHelperParams<'italic' | 'bold'>): ParseHelperReturn => {
   let newStart = start
   let newI = i
+
+  const restContent = content.slice(i + openChars.length)
+  const closingCharsIndex = restContent.match(RegExpByChar[openChars])?.index
 
   if (closingCharsIndex) {
     if (i - start > 0) {
@@ -45,6 +47,20 @@ const parseEmphasized = ({
   }
 
   return [newStart, newI]
+}
+
+const parseLink = ({
+  type,
+  openChars,
+  i,
+  parsed,
+  content,
+  start,
+}: ParseHelperParams<'link'>): ParseHelperReturn => {
+  let newStart = start
+  let newI = i
+
+  return [0, 0]
 }
 
 export const parseContent = (content: string): InlineContent[] => {
