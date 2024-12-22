@@ -1,4 +1,4 @@
-import type { InlineContent, InlineType } from 'md-types'
+import { InlineContent, InlineType } from 'md-types'
 import { getElementType, RegExpByChar } from './utils'
 
 type ParseHelperParams<T> = {
@@ -58,11 +58,38 @@ const parseLink = ({
   parsed,
   content,
   start,
-}: ParseHelperParams<'link'>): ParseHelperReturn => {
+}: ParseHelperParams<InlineType.Link>): ParseHelperReturn => {
   let newStart = start
   let newI = i
 
-  return [0, 0]
+  const restContent1 = content.slice(i + openChars.length)
+  const textClosingCharIndex = restContent1.match(/\]\(/)?.index
+
+  if (!textClosingCharIndex) {
+    return [newStart, newI]
+  }
+
+  const restContent2 = content.slice(textClosingCharIndex + 2)
+  const hrefClosingCharIndex = restContent1.match(/\]\(/)?.index
+
+  if (!hrefClosingCharIndex) {
+    return [newStart, newI]
+  }
+
+  if (i - start > 0) {
+    parsed.push(content.slice(start, i))
+  }
+
+  parsed.push({
+    type: InlineType.Link,
+    content: parseContent(restContent1.slice(0, hrefClosingCharIndex)),
+    href: restContent2.slice(textClosingCharIndex + 2, hrefClosingCharIndex),
+  })
+
+  newStart = i + hrefClosingCharIndex + 1
+  newI = newStart
+
+  return [newStart, newI]
 }
 
 export const parseContent = (content: string): InlineContent[] => {
@@ -74,8 +101,19 @@ export const parseContent = (content: string): InlineContent[] => {
   while (i < content.length) {
     const [type, openChars] = getElementType(content, i)
 
-    if (type === 'bold' || type === 'italic') {
+    if (type === InlineType.Bold || type === InlineType.Italic) {
       ;[start, i] = parseEmphasized({
+        type,
+        openChars,
+        start,
+        i,
+        content,
+        parsed,
+      })
+    }
+
+    if (type === InlineType.Link) {
+      ;[start, i] = parseLink({
         type,
         openChars,
         start,

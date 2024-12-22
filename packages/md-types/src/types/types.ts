@@ -27,6 +27,7 @@ export type ItalicElement = {
 export type LinkElement = {
   type: InlineType.Link
   content: Exclude<InlineContent, InlineType.Link>[]
+  href: string
 }
 
 // Type for all possible inline elements
