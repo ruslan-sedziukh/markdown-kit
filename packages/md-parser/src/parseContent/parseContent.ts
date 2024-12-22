@@ -1,4 +1,4 @@
-import type { InlineContent } from 'md-types'
+import type { InlineContent, InlineType } from 'md-types'
 import { getElementType, RegExpByChar } from './utils'
 
 type ParseHelperParams<T> = {
@@ -19,7 +19,9 @@ const parseEmphasized = ({
   parsed,
   content,
   start,
-}: ParseHelperParams<'italic' | 'bold'>): ParseHelperReturn => {
+}: ParseHelperParams<
+  InlineType.Italic | InlineType.Bold
+>): ParseHelperReturn => {
   let newStart = start
   let newI = i
 

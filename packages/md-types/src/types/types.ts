@@ -8,27 +8,25 @@ export type HeadingElement = {
 // Type for all possible block elements
 export type BlockElement = HeadingElement
 
-export type Bold = 'bold'
-
-export type Italic = 'italic'
-
-export type Link = 'link'
-
-export type InlineType = Bold | Italic | Link
+export enum InlineType {
+  Bold = 'bold',
+  Italic = 'italic',
+  Link = 'link',
+}
 
 export type BoldElement = {
-  type: 'bold'
-  content: Exclude<InlineContent, Bold>[]
+  type: InlineType.Bold
+  content: Exclude<InlineContent, InlineType.Bold>[]
 }
 
 export type ItalicElement = {
-  type: 'italic'
-  content: Exclude<InlineContent, Italic>[]
+  type: InlineType.Italic
+  content: Exclude<InlineContent, InlineType.Italic>[]
 }
 
 export type LinkElement = {
-  type: 'link'
-  content: Exclude<InlineContent, Link>[]
+  type: InlineType.Link
+  content: Exclude<InlineContent, InlineType.Link>[]
 }
 
 // Type for all possible inline elements

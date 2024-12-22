@@ -1,4 +1,4 @@
-import type { InlineType } from 'md-types'
+import { InlineType } from 'md-types'
 
 export const RegExpByChar = {
   '**': /\*\*/,
@@ -11,15 +11,15 @@ export const getElementType = (
   i: number
 ): [InlineType, string] | [null, null] => {
   if (content[i] === '*' && content[i + 1] === '*') {
-    return ['bold', '**']
+    return [InlineType.Bold, '**']
   }
 
   if (content[i] === '*') {
-    return ['italic', '*']
+    return [InlineType.Italic, '*']
   }
 
   if (content[i] === '[') {
-    return ['link', '[']
+    return [InlineType.Link, '[']
   }
 
   return [null, null]
