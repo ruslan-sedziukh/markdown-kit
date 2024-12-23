@@ -69,8 +69,8 @@ const parseLink = ({
     return [newStart, newI]
   }
 
-  const restContent2 = content.slice(textClosingCharIndex + 2)
-  const hrefClosingCharIndex = restContent1.match(/\]\(/)?.index
+  const restContent2 = restContent1.slice(textClosingCharIndex + 2)
+  const hrefClosingCharIndex = restContent2.match(/\)/)?.index
 
   if (!hrefClosingCharIndex) {
     return [newStart, newI]
@@ -82,11 +82,11 @@ const parseLink = ({
 
   parsed.push({
     type: InlineType.Link,
-    content: parseContent(restContent1.slice(0, hrefClosingCharIndex)),
-    href: restContent2.slice(textClosingCharIndex + 2, hrefClosingCharIndex),
+    content: parseContent(restContent1.slice(0, textClosingCharIndex)),
+    href: restContent2.slice(0, hrefClosingCharIndex),
   })
 
-  newStart = i + hrefClosingCharIndex + 1
+  newStart = i + hrefClosingCharIndex + textClosingCharIndex + 5
   newI = newStart
 
   return [newStart, newI]
