@@ -1,3 +1,4 @@
+import { InlineType } from 'md-types'
 import { parseContent } from '.'
 
 describe('parseContent', () => {
@@ -56,6 +57,19 @@ describe('parseContent', () => {
           {
             type: 'link',
             content: ['this'],
+            href: 'www.test.com',
+          },
+          ' and be aware',
+        ],
+      },
+      {
+        text: 'is parsed in correctly with emphasized text',
+        content: 'Look at [**this**](www.test.com) and be aware',
+        expected: [
+          'Look at ',
+          {
+            type: 'link',
+            content: [{ type: InlineType.Bold, content: ['this'] }],
             href: 'www.test.com',
           },
           ' and be aware',
