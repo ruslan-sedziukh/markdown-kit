@@ -76,6 +76,7 @@ const parseLink = ({
     return [newStart, newI]
   }
 
+  // Push text before link
   if (i - start > 0) {
     parsed.push(content.slice(start, i))
   }
@@ -86,7 +87,9 @@ const parseLink = ({
     href: restContent2.slice(0, hrefClosingCharIndex),
   })
 
-  newStart = i + hrefClosingCharIndex + textClosingCharIndex + 5
+  const elCharsLength = 4
+
+  newStart = i + hrefClosingCharIndex + textClosingCharIndex + elCharsLength
   newI = newStart
 
   return [newStart, newI]

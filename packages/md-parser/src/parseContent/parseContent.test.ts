@@ -50,7 +50,7 @@ describe('parseContent', () => {
     it.each([
       {
         text: 'is parsed in simple text',
-        content: 'Look at [this](www.test.com)',
+        content: 'Look at [this](www.test.com) and be aware',
         expected: [
           'Look at ',
           {
@@ -58,6 +58,7 @@ describe('parseContent', () => {
             content: ['this'], //
             href: 'www.test.com',
           },
+          ' and be aware',
         ],
       },
     ])('$text', ({ content, expected }) => {
