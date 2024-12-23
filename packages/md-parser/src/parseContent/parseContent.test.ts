@@ -55,7 +55,7 @@ describe('parseContent', () => {
           'Look at ',
           {
             type: 'link',
-            content: ['this'], //
+            content: ['this'],
             href: 'www.test.com',
           },
           ' and be aware',
