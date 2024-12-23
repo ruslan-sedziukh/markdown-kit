@@ -1,70 +1,83 @@
+import { InlineType } from 'md-types'
 import { parseContent } from '.'
 
 describe('parseContent', () => {
-  it('return correct emphasized content', () => {
-    const content = 'Heading **one** of two'
-
-    const parsed = parseContent(content)
-
-    expect(parseContent(content)).toEqual([
-      'Heading ',
+  describe('emphasized content', () => {
+    it.each([
       {
-        type: 'bold',
-        content: ['one'],
-      },
-      ' of two',
-    ])
-  })
-
-  it('return correct content when only open symbols are without pair', () => {
-    const content = 'Heading **one'
-
-    const parsed = parseContent(content)
-
-    expect(parseContent(content)).toEqual(['Heading **one'])
-  })
-
-  it('return correct emphasized content inside another emphasized content', () => {
-    const content = 'Heading ***o*ne**'
-
-    const parsed = parseContent(content)
-
-    expect(parseContent(content)).toEqual([
-      'Heading ',
-      {
-        type: 'bold',
-        content: [
+        text: 'is parsed correctly in case simple text',
+        content: 'Heading **one** of two',
+        expected: [
+          'Heading ',
           {
-            type: 'italic',
-            content: ['o'],
+            type: 'bold',
+            content: ['one'],
           },
-          'ne',
+          ' of two',
         ],
       },
-    ])
-  })
-
-  it('!!return correct emphasized content inside another emphasized content', () => {
-    const content = '*H*eading ***o*ne**'
-
-    const parsed = parseContent(content)
-
-    expect(parseContent(content)).toEqual([
       {
-        type: 'italic',
-        content: ['H'],
+        text: 'is not parsed when there are only opened symbols',
+        content: 'Heading **one',
+        expected: ['Heading **one'],
       },
-      'eading ',
       {
-        type: 'bold',
-        content: [
+        text: 'is parsed inside another emphasized content',
+        content: '*H*eading ***o*ne**',
+        expected: [
           {
             type: 'italic',
-            content: ['o'],
+            content: ['H'],
           },
-          'ne',
+          'eading ',
+          {
+            type: 'bold',
+            content: [
+              {
+                type: 'italic',
+                content: ['o'],
+              },
+              'ne',
+            ],
+          },
         ],
       },
-    ])
+    ])('$text', ({ content, expected }) => {
+      expect(parseContent(content)).toEqual(expected)
+    })
+  })
+
+  describe('link', () => {
+    it.each([
+      {
+        text: 'is parsed in simple text',
+        content: 'Look at [this](www.test.com) and be aware',
+        expected: [
+          'Look at ',
+          {
+            type: 'link',
+            content: ['this'],
+            href: 'www.test.com',
+          },
+          ' and be aware',
+        ],
+      },
+      {
+        text: 'is parsed in correctly with emphasized text',
+        content: 'Look at [**this**](www.test.com) and be aware',
+        expected: [
+          'Look at ',
+          {
+            type: 'link',
+            content: [{ type: InlineType.Bold, content: ['this'] }],
+            href: 'www.test.com',
+          },
+          ' and be aware',
+        ],
+      },
+    ])('$text', ({ content, expected }) => {
+      console.log('parseContent(content)', parseContent(content))
+      expect(parseContent(content)).toEqual(expected)
+    })
   })
 })
