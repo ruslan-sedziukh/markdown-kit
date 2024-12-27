@@ -1,4 +1,4 @@
-import { InlineContent, InlineType } from 'md-types'
+import { InlineContent, InlineElement, InlineType } from 'md-types'
 import { getElementType, RegExpByChar } from './utils'
 
 type ParseHelperParams<T> = {
@@ -95,7 +95,7 @@ const parseLink = ({
   return [newStart, newI]
 }
 
-export const parseContent = (content: string): InlineContent[] => {
+export const parseContentOld = (content: string): InlineContent[] => {
   const parsed: InlineContent[] = []
 
   let start = 0
@@ -133,6 +133,20 @@ export const parseContent = (content: string): InlineContent[] => {
   if (start < content.length) {
     parsed.push(content.slice(start))
   }
+
+  return parsed
+}
+
+type TempElement =
+  | InlineContent
+  | {
+      temp: true
+      openSymbols: string
+    }
+
+export const parseContent = (content: string): InlineContent[] => {
+  const parsed: InlineContent[] = []
+  const temp: TempElement[] = []
 
   return parsed
 }
