@@ -75,6 +75,18 @@ describe('parseContent', () => {
           ' and be aware',
         ],
       },
+      {
+        text: 'is parsed correctly when ** are before',
+        content: '**[mini**mum](blabla)',
+        expected: [
+          '**',
+          {
+            type: 'link',
+            content: ['mini**mum'],
+            href: 'blabla',
+          },
+        ],
+      },
     ])('$text', ({ content, expected }) => {
       console.log('parseContent(content)', parseContent(content))
       expect(parseContent(content)).toEqual(expected)
