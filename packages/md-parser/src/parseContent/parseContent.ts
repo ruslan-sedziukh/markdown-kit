@@ -159,15 +159,24 @@ const isTempElement = (el: any): el is TempElement => {
 const getParsed = (temp: Temp[], i: number): InlineContent[] => {
   const result: InlineContent[] = []
 
+  let el = temp[i]
+  i++
+
   for (; i < temp.length; i++) {
-    const el = temp[i]
+    el = temp[i]
+    const prev = temp[i - 1]
 
     if (typeof el === 'string') {
-      result.push(el)
+      if (typeof prev === 'string') {
+        temp[i - 1] = prev.concat(el)
+      } else {
+        result.push(el)
+      }
     } else if (el.temp) {
-      const prev = temp[i - 1]
       if (prev && typeof prev === 'string') {
         temp[temp.length - 1] = prev.concat(el.openSymbols || '')
+      } else if (typeof el.openSymbols === 'string') {
+        result.push(el.openSymbols)
       }
     } else {
       result.push(el.openSymbols || '')
@@ -181,8 +190,7 @@ export const parseContent = (
   content: string,
   tempExternal: Temp[] = []
 ): InlineContent[] => {
-  const parsed: InlineContent[] = []
-  const temp: Temp[] = [...tempExternal]
+  let temp: Temp[] = [...tempExternal]
 
   const getTempEl = (openSymbols: string) =>
     temp.findIndex((el) => {
@@ -204,6 +212,8 @@ export const parseContent = (
           type: InlineType.Bold,
           content: getParsed(temp, tempElI),
         }
+
+        temp = temp.slice(0, tempElI + 1)
       } else {
         temp.push({
           temp: [],
@@ -234,5 +244,11 @@ export const parseContent = (
     i++
   }
 
-  return getParsed(temp, 0)
+  console.log(temp)
+
+  const parsed: InlineContent[] = getParsed(temp, 0)
+
+  console.log(parsed)
+
+  return parsed
 }
