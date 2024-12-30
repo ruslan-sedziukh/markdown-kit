@@ -161,17 +161,17 @@ const getParsed = (temp: Temp[], i: number): InlineContent[] => {
 
   for (; i < temp.length; i++) {
     const el = temp[i]
-    const prev = temp[i - 1]
+    const prev = result[result.length - 1]
 
     if (typeof el === 'string') {
       if (typeof prev === 'string') {
-        temp[i - 1] = prev.concat(el)
+        result[result.length - 1] = prev.concat(el)
       } else {
         result.push(el)
       }
     } else if (el.temp) {
       if (prev && typeof prev === 'string') {
-        temp[temp.length - 1] = prev.concat(el.openSymbols || '')
+        result[result.length - 1] = prev.concat(el.openSymbols || '')
       } else if (typeof el.openSymbols === 'string') {
         result.push(el.openSymbols)
       }

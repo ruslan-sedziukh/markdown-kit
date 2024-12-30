@@ -16,32 +16,32 @@ describe('parseContent', () => {
           ' of two', //
         ],
       },
-      // {
-      //   text: 'is not parsed when there are only opened symbols',
-      //   content: 'Heading **one',
-      //   expected: ['Heading **one'],
-      // },
-      // {
-      //   text: 'is parsed inside another emphasized content',
-      //   content: '*H*eading ***o*ne**',
-      //   expected: [
-      //     {
-      //       type: 'italic',
-      //       content: ['H'],
-      //     },
-      //     'eading ',
-      //     {
-      //       type: 'bold',
-      //       content: [
-      //         {
-      //           type: 'italic',
-      //           content: ['o'],
-      //         },
-      //         'ne',
-      //       ],
-      //     },
-      //   ],
-      // },
+      {
+        text: 'is not parsed when there are only opened symbols',
+        content: 'Heading **one',
+        expected: ['Heading **one'],
+      },
+      {
+        text: 'is parsed inside another emphasized content',
+        content: '*H*eading ***o*ne**',
+        expected: [
+          {
+            type: 'italic',
+            content: ['H'],
+          },
+          'eading ',
+          {
+            type: 'bold',
+            content: [
+              {
+                type: 'italic',
+                content: ['o'],
+              },
+              'ne',
+            ],
+          },
+        ],
+      },
     ])('$text', ({ content, expected }) => {
       expect(parseContent(content)).toEqual(expected)
     })
