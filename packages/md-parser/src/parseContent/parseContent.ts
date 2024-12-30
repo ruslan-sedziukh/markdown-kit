@@ -159,11 +159,8 @@ const isTempElement = (el: any): el is TempElement => {
 const getParsed = (temp: Temp[], i: number): InlineContent[] => {
   const result: InlineContent[] = []
 
-  let el = temp[i]
-  i++
-
   for (; i < temp.length; i++) {
-    el = temp[i]
+    const el = temp[i]
     const prev = temp[i - 1]
 
     if (typeof el === 'string') {
@@ -178,8 +175,11 @@ const getParsed = (temp: Temp[], i: number): InlineContent[] => {
       } else if (typeof el.openSymbols === 'string') {
         result.push(el.openSymbols)
       }
-    } else {
-      result.push(el.openSymbols || '')
+    } else if (el.openSymbols) {
+      result.push(el.openSymbols)
+    } else if (el.type) {
+      // @ts-ignore
+      result.push(el)
     }
   }
 
@@ -210,7 +210,7 @@ export const parseContent = (
       if (tempElI !== -1) {
         temp[tempElI] = {
           type: InlineType.Bold,
-          content: getParsed(temp, tempElI),
+          content: getParsed(temp, tempElI + 1),
         }
 
         temp = temp.slice(0, tempElI + 1)
