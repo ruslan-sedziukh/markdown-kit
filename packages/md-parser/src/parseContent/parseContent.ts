@@ -137,16 +137,102 @@ export const parseContentOld = (content: string): InlineContent[] => {
   return parsed
 }
 
-type TempElement =
-  | InlineContent
-  | {
-      temp: true
-      openSymbols: string
+type TempElement = {
+  temp?: TempElement[]
+  openSymbols?: string
+}
+
+type Temp = (TempElement & Partial<InlineElement>) | string
+
+const isTempElement = (el: any): el is TempElement => {
+  if (el.temp && typeof el?.openSymbols === 'string') {
+    return true
+  }
+
+  return false
+}
+
+/**
+ * @temp - array of parsed and temp elements
+ * @return array of parsed elements cleaned from temp
+ */
+const getParsed = (temp: Temp[], i: number): InlineContent[] => {
+  const result: InlineContent[] = []
+
+  for (; i < temp.length; i++) {
+    const el = temp[i]
+
+    if (typeof el === 'string') {
+      result.push(el)
+    } else if (el.temp) {
+      const prev = temp[i - 1]
+      if (prev && typeof prev === 'string') {
+        temp[temp.length - 1] = prev.concat(el.openSymbols || '')
+      }
+    } else {
+      result.push(el.openSymbols || '')
+    }
+  }
+
+  return result
+}
+
+export const parseContent = (
+  content: string,
+  tempExternal: Temp[] = []
+): InlineContent[] => {
+  const parsed: InlineContent[] = []
+  const temp: Temp[] = [...tempExternal]
+
+  const getTempEl = (openSymbols: string) =>
+    temp.findIndex((el) => {
+      if (isTempElement(el)) {
+        return el.openSymbols === openSymbols
+      }
+
+      return false
+    })
+
+  let i = 0
+
+  while (i < content.length) {
+    if (content[i] === '*' && content[i + 1] === '*') {
+      const tempElI = getTempEl('**')
+
+      if (tempElI !== -1) {
+        temp[tempElI] = {
+          type: InlineType.Bold,
+          content: getParsed(temp, tempElI),
+        }
+      } else {
+        temp.push({
+          temp: [],
+          openSymbols: '**',
+        })
+      }
+
+      i++
+    } else {
+      const prev = temp[temp.length - 1]
+
+      if (typeof prev === 'string') {
+        temp[temp.length - 1] = prev.concat(content[i])
+      } else {
+        temp.push(content[i])
+      }
     }
 
-export const parseContent = (content: string): InlineContent[] => {
-  const parsed: InlineContent[] = []
-  const temp: TempElement[] = []
+    // if (content[i] === '*') {
 
-  return parsed
+    //   i = i + 2
+    // }
+
+    // if (type === InlineType.Link) {
+
+    // }
+
+    i++
+  }
+
+  return getParsed(temp, 0)
 }

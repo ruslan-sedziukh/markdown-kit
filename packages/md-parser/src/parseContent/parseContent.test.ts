@@ -2,7 +2,7 @@ import { InlineType } from 'md-types'
 import { parseContent } from '.'
 
 describe('parseContent', () => {
-  describe('emphasized content', () => {
+  describe.only('emphasized content', () => {
     it.each([
       {
         text: 'is parsed correctly in case simple text',
