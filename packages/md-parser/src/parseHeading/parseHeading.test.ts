@@ -1,7 +1,7 @@
 import { parseHeading } from '.'
 
 describe('parseHeading', () => {
-  describe.skip('heading of different levels', () => {
+  describe('heading of different levels', () => {
     it('parses correctly', () => {
       const heading = 'Heading'
 

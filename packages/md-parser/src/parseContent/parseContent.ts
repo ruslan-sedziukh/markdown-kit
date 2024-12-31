@@ -25,9 +25,9 @@ export const parseContent = (
           }
 
           if (elSymbols === ')') {
-            // @ts-ignore
             temp[tempElI] = {
-              ...tempEl,
+              content: tempEl.content,
+              type: tempEl.type,
               // TODO: Write another function that can convert to string possible elements and temp elements
               href: temp[temp.length - 1] as string,
             }
