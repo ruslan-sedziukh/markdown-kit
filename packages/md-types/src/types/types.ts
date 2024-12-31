@@ -34,3 +34,11 @@ export type LinkElement = {
 export type InlineElement = BoldElement | ItalicElement | LinkElement
 
 export type InlineContent = InlineElement | string
+
+export const isInlineContent = (el: any): el is InlineContent => {
+  if (el.type && Array.isArray(el.content)) {
+    return true
+  }
+
+  return false
+}

@@ -1,4 +1,9 @@
-import { InlineContent, InlineElement, InlineType } from 'md-types'
+import {
+  InlineContent,
+  InlineElement,
+  InlineType,
+  isInlineContent,
+} from 'md-types'
 import { getElementType, RegExpByChar } from './utils'
 
 type ParseHelperParams<T> = {
@@ -177,8 +182,7 @@ const getParsed = (temp: Temp[], i: number): InlineContent[] => {
       }
     } else if (el.openSymbols) {
       result.push(el.openSymbols)
-    } else if (el.type) {
-      // @ts-ignore
+    } else if (isInlineContent(el)) {
       result.push(el)
     }
   }

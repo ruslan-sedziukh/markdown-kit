@@ -13,7 +13,7 @@ describe('parseContent', () => {
             type: 'bold',
             content: ['one'],
           },
-          ' of two', //
+          ' of two',
         ],
       },
       {
