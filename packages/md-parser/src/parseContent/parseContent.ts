@@ -1,194 +1,5 @@
-import {
-  InlineContent,
-  InlineElement,
-  InlineType,
-  isInlineContent,
-} from 'md-types'
-import { getElementType, RegExpByChar } from './utils'
-
-type ParseHelperParams<T> = {
-  type: T
-  openChars: string
-  i: number
-  start: number
-  parsed: InlineContent[]
-  content: string
-}
-
-type ParseHelperReturn = [number, number]
-
-const parseEmphasized = ({
-  type,
-  openChars,
-  i,
-  parsed,
-  content,
-  start,
-}: ParseHelperParams<
-  InlineType.Italic | InlineType.Bold
->): ParseHelperReturn => {
-  let newStart = start
-  let newI = i
-
-  const restContent = content.slice(i + openChars.length)
-  const closingCharsIndex = restContent.match(RegExpByChar[openChars])?.index
-
-  if (closingCharsIndex) {
-    if (i - start > 0) {
-      parsed.push(content.slice(start, i))
-    }
-
-    const elContent = content.slice(
-      i + openChars.length,
-      i + openChars.length + closingCharsIndex
-    )
-    const newEl = {
-      type,
-      content: parseContent(elContent),
-    }
-
-    parsed.push(newEl)
-
-    newStart = i + openChars.length * 2 + (closingCharsIndex || 0)
-    newI = newStart
-  }
-
-  return [newStart, newI]
-}
-
-const parseLink = ({
-  type,
-  openChars,
-  i,
-  parsed,
-  content,
-  start,
-}: ParseHelperParams<InlineType.Link>): ParseHelperReturn => {
-  let newStart = start
-  let newI = i
-
-  const restContent1 = content.slice(i + openChars.length)
-  const textClosingCharIndex = restContent1.match(/\]\(/)?.index
-
-  if (!textClosingCharIndex) {
-    return [newStart, newI]
-  }
-
-  const restContent2 = restContent1.slice(textClosingCharIndex + 2)
-  const hrefClosingCharIndex = restContent2.match(/\)/)?.index
-
-  if (!hrefClosingCharIndex) {
-    return [newStart, newI]
-  }
-
-  // Push text before link
-  if (i - start > 0) {
-    parsed.push(content.slice(start, i))
-  }
-
-  parsed.push({
-    type: InlineType.Link,
-    content: parseContent(restContent1.slice(0, textClosingCharIndex)),
-    href: restContent2.slice(0, hrefClosingCharIndex),
-  })
-
-  const elCharsLength = 4
-
-  newStart = i + hrefClosingCharIndex + textClosingCharIndex + elCharsLength
-  newI = newStart
-
-  return [newStart, newI]
-}
-
-export const parseContentOld = (content: string): InlineContent[] => {
-  const parsed: InlineContent[] = []
-
-  let start = 0
-  let i = 0
-
-  while (i < content.length) {
-    const [type, openChars] = getElementType(content, i)
-
-    if (type === InlineType.Bold || type === InlineType.Italic) {
-      ;[start, i] = parseEmphasized({
-        type,
-        openChars,
-        start,
-        i,
-        content,
-        parsed,
-      })
-    }
-
-    if (type === InlineType.Link) {
-      ;[start, i] = parseLink({
-        type,
-        openChars,
-        start,
-        i,
-        content,
-        parsed,
-      })
-    }
-
-    i++
-  }
-
-  // Push rest of the content as a texts
-  if (start < content.length) {
-    parsed.push(content.slice(start))
-  }
-
-  return parsed
-}
-
-type TempElement = {
-  temp?: TempElement[]
-  openSymbols?: string
-}
-
-type Temp = (TempElement & Partial<InlineElement>) | string
-
-const isTempElement = (el: any): el is TempElement => {
-  if (el.temp && typeof el?.openSymbols === 'string') {
-    return true
-  }
-
-  return false
-}
-
-/**
- * @temp - array of parsed and temp elements
- * @return array of parsed elements cleaned from temp
- */
-const getParsed = (temp: Temp[], i: number): InlineContent[] => {
-  const result: InlineContent[] = []
-
-  for (; i < temp.length; i++) {
-    const el = temp[i]
-    const prev = result[result.length - 1]
-
-    if (typeof el === 'string') {
-      if (typeof prev === 'string') {
-        result[result.length - 1] = prev.concat(el)
-      } else {
-        result.push(el)
-      }
-    } else if (el.temp) {
-      if (prev && typeof prev === 'string') {
-        result[result.length - 1] = prev.concat(el.openSymbols || '')
-      } else if (typeof el.openSymbols === 'string') {
-        result.push(el.openSymbols)
-      }
-    } else if (el.openSymbols) {
-      result.push(el.openSymbols)
-    } else if (isInlineContent(el)) {
-      result.push(el)
-    }
-  }
-
-  return result
-}
+import { InlineContent, InlineType } from 'md-types'
+import { getElementType, getParsed, isTempElement, Temp } from './utils'
 
 export const parseContent = (
   content: string,
@@ -208,18 +19,14 @@ export const parseContent = (
   let i = 0
 
   while (i < content.length) {
-    if (content[i] === '*') {
-      let symbols = '*'
+    const { elSymbols, elType } = getElementType(content, i)
 
-      if (content[i + 1] === '*') {
-        symbols = '**'
-      }
-
-      const tempElI = getTempEl(symbols)
+    if (elType) {
+      const tempElI = getTempEl(elSymbols)
 
       if (tempElI !== -1) {
         temp[tempElI] = {
-          type: symbols === '**' ? InlineType.Bold : InlineType.Italic,
+          type: elSymbols === '**' ? InlineType.Bold : InlineType.Italic,
           content: getParsed(temp, tempElI + 1),
         }
 
@@ -227,11 +34,11 @@ export const parseContent = (
       } else {
         temp.push({
           temp: [],
-          openSymbols: symbols,
+          openSymbols: elSymbols,
         })
       }
 
-      if (symbols.length === 2) {
+      if (elSymbols.length === 2) {
         i++
       }
     } else {
