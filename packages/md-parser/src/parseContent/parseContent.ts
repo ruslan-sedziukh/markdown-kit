@@ -208,12 +208,18 @@ export const parseContent = (
   let i = 0
 
   while (i < content.length) {
-    if (content[i] === '*' && content[i + 1] === '*') {
-      const tempElI = getTempEl('**')
+    if (content[i] === '*') {
+      let symbols = '*'
+
+      if (content[i + 1] === '*') {
+        symbols = '**'
+      }
+
+      const tempElI = getTempEl(symbols)
 
       if (tempElI !== -1) {
         temp[tempElI] = {
-          type: InlineType.Bold,
+          type: symbols === '**' ? InlineType.Bold : InlineType.Italic,
           content: getParsed(temp, tempElI + 1),
         }
 
@@ -221,11 +227,13 @@ export const parseContent = (
       } else {
         temp.push({
           temp: [],
-          openSymbols: '**',
+          openSymbols: symbols,
         })
       }
 
-      i++
+      if (symbols.length === 2) {
+        i++
+      }
     } else {
       const prev = temp[temp.length - 1]
 
@@ -235,15 +243,6 @@ export const parseContent = (
         temp.push(content[i])
       }
     }
-
-    // if (content[i] === '*') {
-
-    //   i = i + 2
-    // }
-
-    // if (type === InlineType.Link) {
-
-    // }
 
     i++
   }

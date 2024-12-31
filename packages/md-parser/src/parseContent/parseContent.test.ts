@@ -2,7 +2,7 @@ import { InlineType } from 'md-types'
 import { parseContent } from '.'
 
 describe('parseContent', () => {
-  describe.only('emphasized content', () => {
+  describe('emphasized content', () => {
     it.each([
       {
         text: 'is parsed correctly in case simple text',
@@ -47,7 +47,7 @@ describe('parseContent', () => {
     })
   })
 
-  describe.skip('link', () => {
+  describe('link', () => {
     it.each([
       {
         text: 'is parsed in simple text',
