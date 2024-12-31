@@ -14,3 +14,8 @@ Idea:
     - Questionable elements can be formatted to text while they are putted inside and no indexes are needed 
 - Problem: How to handle questionable elements?
   - Maybe all that need to be done just to check if previous element is string and if it is concatenate those strings instead of putting  
+
+Parsing link:
+- How to know that it should be end of content
+  - Maybe add some kind of additional property to `Temp`
+  - 

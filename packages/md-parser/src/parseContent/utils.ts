@@ -5,6 +5,13 @@ import {
   isInlineContent,
 } from 'md-types'
 
+type TempElement = {
+  temp?: TempElement[]
+  openSymbols?: string
+}
+
+export type Temp = (TempElement & Partial<InlineElement>) | string
+
 const getTempEl = (temp: Temp[], openSymbols: string) =>
   temp.findIndex((el) => {
     if (isTempElement(el)) {
@@ -49,15 +56,32 @@ export const getElementType = ({
     }
   }
 
+  if (content[i] === ']' && content[i + 1] === '(') {
+    const tempElI = getTempEl(temp, '[')
+
+    // @ts-ignore
+    if (tempElI !== -1 && !temp[tempElI].content)
+      return {
+        elType: InlineType.Link,
+        elSymbols: '](',
+        tempElI: getTempEl(temp, '['),
+      }
+  }
+
+  if (content[i] === ')') {
+    const tempElI = getTempEl(temp, '[')
+
+    // @ts-ignore
+    if (tempElI !== -1 && temp[tempElI].content)
+      return {
+        elType: InlineType.Link,
+        elSymbols: ')',
+        tempElI: getTempEl(temp, '['),
+      }
+  }
+
   return { elType: null, elSymbols: null, tempElI: -1 }
 }
-
-type TempElement = {
-  temp?: TempElement[]
-  openSymbols?: string
-}
-
-export type Temp = (TempElement & Partial<InlineElement>) | string
 
 export const isTempElement = (el: any): el is TempElement => {
   if (el.temp && typeof el?.openSymbols === 'string') {

@@ -14,15 +14,36 @@ export const parseContent = (
 
     if (elType) {
       if (tempElI !== -1) {
-        temp[tempElI] = {
-          type: elSymbols === '**' ? InlineType.Bold : InlineType.Italic,
-          content: getParsed(temp, tempElI + 1),
+        const tempEl = temp[tempElI]
+
+        if (typeof tempEl !== 'string' && tempEl.type === InlineType.Link) {
+          if (elSymbols === '](') {
+            temp[tempElI] = {
+              ...tempEl,
+              content: getParsed(temp, tempElI + 1),
+            }
+          }
+
+          if (elSymbols === ')') {
+            // @ts-ignore
+            temp[tempElI] = {
+              ...tempEl,
+              // TODO: Write another function that can convert to string possible elements and temp elements
+              href: temp[temp.length - 1] as string,
+            }
+          }
+        } else {
+          temp[tempElI] = {
+            type: elType,
+            content: getParsed(temp, tempElI + 1),
+          }
         }
 
         temp = temp.slice(0, tempElI + 1)
       } else {
         temp.push({
           temp: [],
+          type: elType,
           openSymbols: elSymbols,
         })
       }
