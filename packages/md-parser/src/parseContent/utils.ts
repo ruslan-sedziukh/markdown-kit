@@ -5,25 +5,51 @@ import {
   isInlineContent,
 } from 'md-types'
 
-export const getElementType = (
-  content: string,
+const getTempEl = (temp: Temp[], openSymbols: string) =>
+  temp.findIndex((el) => {
+    if (isTempElement(el)) {
+      return el.openSymbols === openSymbols
+    }
+
+    return false
+  })
+
+export const getElementType = ({
+  content,
+  i,
+  temp,
+}: {
+  content: string
   i: number
-):
-  | { elType: InlineType; elSymbols: string }
-  | { elType: null; elSymbols: null } => {
+  temp: Temp[]
+}):
+  | { elType: InlineType; elSymbols: string; tempElI: number }
+  | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === '*' && content[i + 1] === '*') {
-    return { elType: InlineType.Bold, elSymbols: '**' }
+    return {
+      elType: InlineType.Bold,
+      elSymbols: '**',
+      tempElI: getTempEl(temp, '**'),
+    }
   }
 
   if (content[i] === '*') {
-    return { elType: InlineType.Italic, elSymbols: '*' }
+    return {
+      elType: InlineType.Italic,
+      elSymbols: '*',
+      tempElI: getTempEl(temp, '*'),
+    }
   }
 
   if (content[i] === '[') {
-    return { elType: InlineType.Link, elSymbols: '[' }
+    return {
+      elType: InlineType.Link,
+      elSymbols: '[',
+      tempElI: getTempEl(temp, '['),
+    }
   }
 
-  return { elType: null, elSymbols: null }
+  return { elType: null, elSymbols: null, tempElI: -1 }
 }
 
 type TempElement = {

@@ -1,5 +1,5 @@
 import { InlineContent, InlineType } from 'md-types'
-import { getElementType, getParsed, isTempElement, Temp } from './utils'
+import { getElementType, getParsed, Temp } from './utils'
 
 export const parseContent = (
   content: string,
@@ -7,23 +7,12 @@ export const parseContent = (
 ): InlineContent[] => {
   let temp: Temp[] = [...tempExternal]
 
-  const getTempEl = (openSymbols: string) =>
-    temp.findIndex((el) => {
-      if (isTempElement(el)) {
-        return el.openSymbols === openSymbols
-      }
-
-      return false
-    })
-
   let i = 0
 
   while (i < content.length) {
-    const { elSymbols, elType } = getElementType(content, i)
+    const { elSymbols, elType, tempElI } = getElementType({ content, i, temp })
 
     if (elType) {
-      const tempElI = getTempEl(elSymbols)
-
       if (tempElI !== -1) {
         temp[tempElI] = {
           type: elSymbols === '**' ? InlineType.Bold : InlineType.Italic,
