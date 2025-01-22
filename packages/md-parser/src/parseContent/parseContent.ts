@@ -1,11 +1,8 @@
 import { InlineContent, InlineType } from 'md-types'
 import { getElementType, getParsed, Temp } from './utils'
 
-export const parseContent = (
-  content: string,
-  tempExternal: Temp[] = []
-): InlineContent[] => {
-  let temp: Temp[] = [...tempExternal]
+export const parseContent = (content: string): InlineContent[] => {
+  let temp: Temp[] = []
 
   let i = 0
 

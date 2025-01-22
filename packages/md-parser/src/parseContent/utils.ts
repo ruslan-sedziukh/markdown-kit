@@ -12,6 +12,13 @@ type TempElement = {
 
 export type Temp = (TempElement & Partial<InlineElement>) | string
 
+/**
+ * Returns temp el that matches open symbols.
+ *
+ * @temp - array of temp elements
+ * @openSymbols - string with open symbols
+ * @returns temp el.
+ */
 const getTempEl = (temp: Temp[], openSymbols: string) =>
   temp.findIndex((el) => {
     if (isTempElement(el)) {
@@ -21,6 +28,9 @@ const getTempEl = (temp: Temp[], openSymbols: string) =>
     return false
   })
 
+/**
+ * Returns element type, element symbols (last symbols in temp element)
+ */
 export const getElementType = ({
   content,
   i,
@@ -92,6 +102,9 @@ export const isTempElement = (el: any): el is TempElement => {
 }
 
 /**
+ * Takes array of temp elements and returns only array of
+ * completed elements.
+ *
  * @temp - array of parsed and temp elements
  * @return array of parsed elements cleaned from temp
  */
