@@ -61,11 +61,11 @@ export const parseContent = (content: string): InlineContent[] => {
     i++
   }
 
-  console.log(temp)
+  // console.log(temp)
 
   const parsed: InlineContent[] = getParsed(temp, 0)
 
-  console.log(parsed)
+  // console.log(parsed)
 
   return parsed
 }

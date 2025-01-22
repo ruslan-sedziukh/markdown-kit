@@ -19,7 +19,7 @@ export type Temp = (TempElement & Partial<InlineElement>) | string
  * @openSymbols - string with open symbols
  * @returns temp el.
  */
-const getTempEl = (temp: Temp[], openSymbols: string) =>
+const getTempElI = (temp: Temp[], openSymbols: string) =>
   temp.findIndex((el) => {
     if (isTempElement(el)) {
       return el.openSymbols === openSymbols
@@ -27,6 +27,17 @@ const getTempEl = (temp: Temp[], openSymbols: string) =>
 
     return false
   })
+
+const getTempElIfNoTempLink = (temp: Temp[], openSymbols: string) => {
+  const tempLinkI = getTempElI(temp, '[')
+  const tempElI = getTempElI(temp, openSymbols)
+
+  if (tempElI > tempLinkI) {
+    return tempElI
+  }
+
+  return -1
+}
 
 /**
  * Returns element type, element symbols (last symbols in temp element)
@@ -46,7 +57,7 @@ export const getElementType = ({
     return {
       elType: InlineType.Bold,
       elSymbols: '**',
-      tempElI: getTempEl(temp, '**'),
+      tempElI: getTempElIfNoTempLink(temp, '**'),
     }
   }
 
@@ -54,7 +65,7 @@ export const getElementType = ({
     return {
       elType: InlineType.Italic,
       elSymbols: '*',
-      tempElI: getTempEl(temp, '*'),
+      tempElI: getTempElIfNoTempLink(temp, '*'),
     }
   }
 
@@ -62,31 +73,31 @@ export const getElementType = ({
     return {
       elType: InlineType.Link,
       elSymbols: '[',
-      tempElI: getTempEl(temp, '['),
+      tempElI: getTempElI(temp, '['),
     }
   }
 
   if (content[i] === ']' && content[i + 1] === '(') {
-    const tempElI = getTempEl(temp, '[')
+    const tempElI = getTempElI(temp, '[')
 
     // @ts-ignore
     if (tempElI !== -1 && !temp[tempElI].content)
       return {
         elType: InlineType.Link,
         elSymbols: '](',
-        tempElI: getTempEl(temp, '['),
+        tempElI: getTempElI(temp, '['),
       }
   }
 
   if (content[i] === ')') {
-    const tempElI = getTempEl(temp, '[')
+    const tempElI = getTempElI(temp, '[')
 
     // @ts-ignore
     if (tempElI !== -1 && temp[tempElI].content)
       return {
         elType: InlineType.Link,
         elSymbols: ')',
-        tempElI: getTempEl(temp, '['),
+        tempElI: getTempElI(temp, '['),
       }
   }
 
