@@ -19,7 +19,7 @@ export type Temp = (TempElement & Partial<InlineElement>) | string
  * @openSymbols - string with open symbols
  * @returns temp el.
  */
-const getTempElI = (temp: Temp[], openSymbols: string) =>
+export const getTempElI = (temp: Temp[], openSymbols: string) =>
   temp.findIndex((el) => {
     if (isTempElement(el)) {
       return el.openSymbols === openSymbols
@@ -28,7 +28,7 @@ const getTempElI = (temp: Temp[], openSymbols: string) =>
     return false
   })
 
-const getTempElIfNoTempLink = (temp: Temp[], openSymbols: string) => {
+export const getTempElWithTempLink = (temp: Temp[], openSymbols: string) => {
   const tempLinkI = getTempElI(temp, '[')
   const tempElI = getTempElI(temp, openSymbols)
 
@@ -57,7 +57,7 @@ export const getElementType = ({
     return {
       elType: InlineType.Bold,
       elSymbols: '**',
-      tempElI: getTempElIfNoTempLink(temp, '**'),
+      tempElI: getTempElWithTempLink(temp, '**'),
     }
   }
 
@@ -65,7 +65,7 @@ export const getElementType = ({
     return {
       elType: InlineType.Italic,
       elSymbols: '*',
-      tempElI: getTempElIfNoTempLink(temp, '*'),
+      tempElI: getTempElWithTempLink(temp, '*'),
     }
   }
 
