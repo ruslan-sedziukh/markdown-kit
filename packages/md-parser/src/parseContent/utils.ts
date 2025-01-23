@@ -5,12 +5,28 @@ import {
   isInlineContent,
 } from 'md-types'
 
-type TempElement = {
+type TempLink = {
   temp?: true
-  openSymbols?: string
+  openSymbols?: '['
+  openSymbolsI?: number
 }
 
+type TempElement =
+  | {
+      temp?: true
+      openSymbols?: string
+    }
+  | TempLink
+
 export type Temp = (TempElement & Partial<InlineElement>) | string
+
+export const isTempLink = (el: Temp): el is TempLink => {
+  if (typeof el !== 'string' && el.openSymbols === '[') {
+    return true
+  }
+
+  return false
+}
 
 /**
  * Returns temp el that matches open symbols.

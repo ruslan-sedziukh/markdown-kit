@@ -1,5 +1,11 @@
 import { InlineContent, InlineType } from 'md-types'
-import { getElementType, getParsed, getTempElI, Temp } from './utils'
+import {
+  getElementType,
+  getParsed,
+  getTempElI,
+  isTempLink,
+  Temp,
+} from './utils'
 
 export const parseContent = (
   // content that should be parsed
@@ -71,16 +77,28 @@ export const parseContent = (
   // console.log(temp)
 
   const tempLinkI = getTempElI(temp, '[')
+  const tempLink = temp[tempLinkI]
 
-  if (tempLinkI === -1) {
-    const parsed: InlineContent[] = getParsed(temp, 0)
+  // if there is temp link
+  if (tempLink && isTempLink(tempLink)) {
+    const prevTempEl = temp[tempLinkI - 1]
 
-    return parsed
+    // add '[' to prev el
+    if (typeof prevTempEl === 'string') {
+      prevTempEl + '['
+    } else if (prevTempEl.content) {
+      prevTempEl.content[prevTempEl.content?.length]
+    }
+
+    // parse again from next char
+    return parseContent(
+      content,
+      tempLink.openSymbolsI || 0 + 1,
+      temp.slice(0, tempLinkI)
+    )
   }
 
-  // const tempLink = temp[tempLinkI]
+  const parsed: InlineContent[] = getParsed(temp, 0)
 
-  // return parseContent(content, tempLink.)
-
-  // console.log(parsed)
+  return parsed
 }
