@@ -50,6 +50,13 @@ export const parseContent = (
         }
 
         temp = temp.slice(0, tempElI + 1)
+      } else if (elSymbols === '[') {
+        temp.push({
+          temp: true,
+          type: elType,
+          openSymbols: elSymbols,
+          openSymbolsI: i,
+        })
       } else {
         temp.push({
           temp: true,
@@ -82,19 +89,23 @@ export const parseContent = (
   // if there is temp link
   if (tempLink && isTempLink(tempLink)) {
     const prevTempEl = temp[tempLinkI - 1]
+    let tempLinkIShift = 0
 
     // add '[' to prev el
     if (typeof prevTempEl === 'string') {
       prevTempEl + '['
     } else if (prevTempEl.content) {
       prevTempEl.content[prevTempEl.content?.length]
+    } else {
+      temp[tempLinkI] = '['
+      tempLinkIShift++
     }
 
     // parse again from next char
     return parseContent(
       content,
-      tempLink.openSymbolsI || 0 + 1,
-      temp.slice(0, tempLinkI)
+      (tempLink.openSymbolsI || 0) + 1,
+      temp.slice(0, tempLinkI + tempLinkIShift)
     )
   }
 
