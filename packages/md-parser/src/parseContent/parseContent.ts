@@ -1,5 +1,5 @@
 import { InlineContent, InlineType } from 'md-types'
-import { getElementType, getParsed, Temp } from './utils'
+import { getElementType, getParsed, getTempElI, Temp } from './utils'
 
 export const parseContent = (
   // content that should be parsed
@@ -46,7 +46,7 @@ export const parseContent = (
         temp = temp.slice(0, tempElI + 1)
       } else {
         temp.push({
-          temp: [],
+          temp: true,
           type: elType,
           openSymbols: elSymbols,
         })
@@ -70,9 +70,17 @@ export const parseContent = (
 
   // console.log(temp)
 
-  const parsed: InlineContent[] = getParsed(temp, 0)
+  const tempLinkI = getTempElI(temp, '[')
+
+  if (tempLinkI === -1) {
+    const parsed: InlineContent[] = getParsed(temp, 0)
+
+    return parsed
+  }
+
+  // const tempLink = temp[tempLinkI]
+
+  // return parseContent(content, tempLink.)
 
   // console.log(parsed)
-
-  return parsed
 }

@@ -6,7 +6,7 @@ import {
 } from 'md-types'
 
 type TempElement = {
-  temp?: TempElement[]
+  temp?: true
   openSymbols?: string
 }
 
