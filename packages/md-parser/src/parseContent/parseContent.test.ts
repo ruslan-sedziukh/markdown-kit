@@ -103,6 +103,28 @@ describe('parseContent', () => {
           },
         ],
       },
+      {
+        text: 'is parsed correctly when link is missing some chars',
+        content: 'this is **[mini**mum**(blabla)** [value](test.com)',
+        expected: [
+          'this is ',
+          {
+            type: 'bold',
+            content: ['[mini'],
+          },
+          'mum',
+          {
+            type: 'bold',
+            content: ['(blabla)'],
+          },
+          ' ',
+          {
+            type: 'link',
+            content: ['value'],
+            href: 'test.com',
+          },
+        ],
+      },
     ])('$text', ({ content, expected }) => {
       console.log('parseContent(content)', parseContent(content))
       expect(parseContent(content)).toEqual(expected)
