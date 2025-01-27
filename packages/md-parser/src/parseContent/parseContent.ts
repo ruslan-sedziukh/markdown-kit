@@ -1,11 +1,5 @@
 import { InlineContent, InlineElement, InlineType } from 'md-types'
-import {
-  getElementType,
-  getParsed,
-  getTempElI,
-  isTempLink,
-  Temp,
-} from './utils'
+import { getTempElData, getParsed, getTempElI, isTempLink, Temp } from './utils'
 
 export const parseContent = (
   // content that should be parsed
@@ -20,7 +14,7 @@ export const parseContent = (
   let i = startI
 
   while (i < content.length) {
-    const { elSymbols, elType, tempElI } = getElementType({ content, i, temp })
+    const { elSymbols, elType, tempElI } = getTempElData({ content, i, temp })
 
     if (elType) {
       if (tempElI !== -1) {
@@ -28,7 +22,7 @@ export const parseContent = (
 
         if (typeof tempEl !== 'string' && tempEl.type === InlineType.Link) {
           if (elSymbols === '[') {
-            return [...reparseAfterUncompletedLink(content, temp)]
+            return reparseAfterUncompletedLink(content, temp)
           }
 
           if (elSymbols === '](') {

@@ -61,7 +61,7 @@ export const getTempElWithTempLink = (temp: Temp[], openSymbols: string) => {
 /**
  * Returns element type, element symbols (last symbols in temp element)
  */
-export const getElementType = ({
+export const getTempElData = ({
   content,
   i,
   temp,
