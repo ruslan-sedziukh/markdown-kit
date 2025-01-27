@@ -47,7 +47,7 @@ describe('parseContent', () => {
     })
   })
 
-  describe.only('link', () => {
+  describe('link', () => {
     it.each([
       {
         text: 'is parsed in simple text',
