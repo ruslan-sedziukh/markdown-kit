@@ -75,8 +75,57 @@ describe('parseContent', () => {
           ' and be aware',
         ],
       },
+      {
+        text: 'is parsed correctly when ** are before',
+        content: '**[mini**mum](blabla)',
+        expected: [
+          '**',
+          {
+            type: 'link',
+            content: ['mini**mum'],
+            href: 'blabla',
+          },
+        ],
+      },
+      {
+        text: 'is parsed correctly with uncompleted link',
+        content: 'this is **[mini**mum**(blabla)**',
+        expected: [
+          'this is ',
+          {
+            type: 'bold',
+            content: ['[mini'],
+          },
+          'mum',
+          {
+            type: 'bold',
+            content: ['(blabla)'],
+          },
+        ],
+      },
+      {
+        text: 'is parsed correctly when text has uncompleted and completed link',
+        content: 'this is **[mini**mum**(blabla)** [value](test.com)',
+        expected: [
+          'this is ',
+          {
+            type: 'bold',
+            content: ['[mini'],
+          },
+          'mum',
+          {
+            type: 'bold',
+            content: ['(blabla)'],
+          },
+          ' ',
+          {
+            type: 'link',
+            content: ['value'],
+            href: 'test.com',
+          },
+        ],
+      },
     ])('$text', ({ content, expected }) => {
-      console.log('parseContent(content)', parseContent(content))
       expect(parseContent(content)).toEqual(expected)
     })
   })

@@ -1,138 +1,118 @@
-import { InlineContent, InlineType } from 'md-types'
-import { getElementType, RegExpByChar } from './utils'
+import { InlineContent, InlineElement, InlineType } from 'md-types'
+import { getTempElData, getParsed, getTempElI, isTempLink, Temp } from './utils'
 
-type ParseHelperParams<T> = {
-  type: T
-  openChars: string
-  i: number
-  start: number
-  parsed: InlineContent[]
-  content: string
-}
+export const parseContent = (
+  // content that should be parsed
+  content: string,
+  // starting index
+  startI: number = 0,
+  // starting temp array
+  tempExternal: Temp[] = []
+): InlineContent[] => {
+  let temp: Temp[] = tempExternal
 
-type ParseHelperReturn = [number, number]
-
-const parseEmphasized = ({
-  type,
-  openChars,
-  i,
-  parsed,
-  content,
-  start,
-}: ParseHelperParams<
-  InlineType.Italic | InlineType.Bold
->): ParseHelperReturn => {
-  let newStart = start
-  let newI = i
-
-  const restContent = content.slice(i + openChars.length)
-  const closingCharsIndex = restContent.match(RegExpByChar[openChars])?.index
-
-  if (closingCharsIndex) {
-    if (i - start > 0) {
-      parsed.push(content.slice(start, i))
-    }
-
-    const elContent = content.slice(
-      i + openChars.length,
-      i + openChars.length + closingCharsIndex
-    )
-    const newEl = {
-      type,
-      content: parseContent(elContent),
-    }
-
-    parsed.push(newEl)
-
-    newStart = i + openChars.length * 2 + (closingCharsIndex || 0)
-    newI = newStart
-  }
-
-  return [newStart, newI]
-}
-
-const parseLink = ({
-  type,
-  openChars,
-  i,
-  parsed,
-  content,
-  start,
-}: ParseHelperParams<InlineType.Link>): ParseHelperReturn => {
-  let newStart = start
-  let newI = i
-
-  const restContent1 = content.slice(i + openChars.length)
-  const textClosingCharIndex = restContent1.match(/\]\(/)?.index
-
-  if (!textClosingCharIndex) {
-    return [newStart, newI]
-  }
-
-  const restContent2 = restContent1.slice(textClosingCharIndex + 2)
-  const hrefClosingCharIndex = restContent2.match(/\)/)?.index
-
-  if (!hrefClosingCharIndex) {
-    return [newStart, newI]
-  }
-
-  // Push text before link
-  if (i - start > 0) {
-    parsed.push(content.slice(start, i))
-  }
-
-  parsed.push({
-    type: InlineType.Link,
-    content: parseContent(restContent1.slice(0, textClosingCharIndex)),
-    href: restContent2.slice(0, hrefClosingCharIndex),
-  })
-
-  const elCharsLength = 4
-
-  newStart = i + hrefClosingCharIndex + textClosingCharIndex + elCharsLength
-  newI = newStart
-
-  return [newStart, newI]
-}
-
-export const parseContent = (content: string): InlineContent[] => {
-  const parsed: InlineContent[] = []
-
-  let start = 0
-  let i = 0
+  let i = startI
 
   while (i < content.length) {
-    const [type, openChars] = getElementType(content, i)
+    const { elSymbols, elType, tempElI } = getTempElData({ content, i, temp })
 
-    if (type === InlineType.Bold || type === InlineType.Italic) {
-      ;[start, i] = parseEmphasized({
-        type,
-        openChars,
-        start,
-        i,
-        content,
-        parsed,
-      })
-    }
+    if (elType) {
+      if (tempElI !== -1) {
+        const tempEl = temp[tempElI]
 
-    if (type === InlineType.Link) {
-      ;[start, i] = parseLink({
-        type,
-        openChars,
-        start,
-        i,
-        content,
-        parsed,
-      })
+        if (typeof tempEl !== 'string' && tempEl.type === InlineType.Link) {
+          if (elSymbols === '[') {
+            return reparseAfterUncompletedLink(content, temp)
+          }
+
+          if (elSymbols === '](') {
+            temp[tempElI] = {
+              ...tempEl,
+              content: getParsed(temp, tempElI + 1),
+            }
+          }
+
+          if (elSymbols === ')') {
+            temp[tempElI] = {
+              content: tempEl.content,
+              type: tempEl.type,
+              // TODO: Write another function that can convert to string possible elements and temp elements
+              href: temp[temp.length - 1] as string,
+            }
+          }
+        } else {
+          temp[tempElI] = {
+            type: elType,
+            content: getParsed(temp, tempElI + 1),
+          } as InlineElement
+        }
+
+        temp = temp.slice(0, tempElI + 1)
+      } else if (elSymbols === '[') {
+        temp.push({
+          temp: true,
+          type: elType,
+          openSymbols: elSymbols,
+          openSymbolsI: i,
+        })
+      } else {
+        temp.push({
+          temp: true,
+          type: elType,
+          openSymbols: elSymbols,
+        })
+      }
+
+      if (elSymbols.length === 2) {
+        i++
+      }
+    } else {
+      const prev = temp[temp.length - 1]
+
+      if (typeof prev === 'string') {
+        temp[temp.length - 1] = prev.concat(content[i])
+      } else {
+        temp.push(content[i])
+      }
     }
 
     i++
   }
 
-  // Push rest of the content as a texts
-  if (start < content.length) {
-    parsed.push(content.slice(start))
+  return reparseAfterUncompletedLink(content, temp)
+}
+
+const reparseAfterUncompletedLink = (
+  // content that should be parsed
+  content: string,
+  // starting temp array
+  temp: Temp[]
+) => {
+  const tempLinkI = getTempElI(temp, '[')
+  const tempLink = temp[tempLinkI]
+
+  // if there is temp link
+  if (tempLink && isTempLink(tempLink)) {
+    const prevTempEl = temp[tempLinkI - 1]
+    let tempLinkIShift = 0
+
+    // add '[' to prev el
+    if (typeof prevTempEl === 'string') {
+      prevTempEl + '['
+    } else if (prevTempEl.content) {
+      prevTempEl.content[prevTempEl.content?.length]
+    } else {
+      temp[tempLinkI] = '['
+      tempLinkIShift++
+    }
+
+    // parse again from next char
+    return parseContent(
+      content,
+      tempLink.openSymbolsI + 1,
+      temp.slice(0, tempLinkI + tempLinkIShift)
+    )
   }
 
-  return parsed
+  return getParsed(temp, 0)
 }
