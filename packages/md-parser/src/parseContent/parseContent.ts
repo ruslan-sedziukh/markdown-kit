@@ -28,9 +28,7 @@ export const parseContent = (
 
         if (typeof tempEl !== 'string' && tempEl.type === InlineType.Link) {
           if (elSymbols === '[') {
-            temp = [...getTempAfterUncompletedLink(content, temp)]
-
-            break
+            return [...reparseAfterUncompletedLink(content, temp)]
           }
 
           if (elSymbols === '](') {
@@ -87,14 +85,10 @@ export const parseContent = (
     i++
   }
 
-  temp = [...getTempAfterUncompletedLink(content, temp)]
-
-  const parsed: InlineContent[] = getParsed(temp, 0)
-
-  return parsed
+  return [...reparseAfterUncompletedLink(content, temp)]
 }
 
-const getTempAfterUncompletedLink = (
+const reparseAfterUncompletedLink = (
   // content that should be parsed
   content: string,
   // starting temp array
@@ -126,5 +120,7 @@ const getTempAfterUncompletedLink = (
     )
   }
 
-  return temp
+  const parsed: InlineContent[] = getParsed(temp, 0)
+
+  return parsed
 }
