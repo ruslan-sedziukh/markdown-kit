@@ -88,7 +88,7 @@ describe('parseContent', () => {
         ],
       },
       {
-        text: 'is parsed correctly when link is missing some chars',
+        text: 'is parsed correctly when link is missing some chars 1',
         content: '**[mini**mum(blabla)',
         expected: [
           {
@@ -96,6 +96,22 @@ describe('parseContent', () => {
             content: ['[mini'],
           },
           'mum(blabla)',
+        ],
+      },
+      {
+        text: 'is parsed correctly when link is missing some chars 2',
+        content: 'this is **[mini**mum**(blabla)**',
+        expected: [
+          'this is ',
+          {
+            type: 'bold',
+            content: ['[mini'],
+          },
+          'mum',
+          {
+            type: 'bold',
+            content: ['(blabla)'],
+          },
         ],
       },
     ])('$text', ({ content, expected }) => {
