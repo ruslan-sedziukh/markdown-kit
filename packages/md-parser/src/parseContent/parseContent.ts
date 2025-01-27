@@ -81,6 +81,19 @@ export const parseContent = (
     i++
   }
 
+  temp = [...getTempAfterUncompletedLink(content, temp)]
+
+  const parsed: InlineContent[] = getParsed(temp, 0)
+
+  return parsed
+}
+
+const getTempAfterUncompletedLink = (
+  // content that should be parsed
+  content: string,
+  // starting temp array
+  temp: Temp[]
+) => {
   const tempLinkI = getTempElI(temp, '[')
   const tempLink = temp[tempLinkI]
 
@@ -107,7 +120,5 @@ export const parseContent = (
     )
   }
 
-  const parsed: InlineContent[] = getParsed(temp, 0)
-
-  return parsed
+  return temp
 }
