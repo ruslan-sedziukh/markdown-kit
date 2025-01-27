@@ -1,4 +1,4 @@
-import { InlineContent, InlineType } from 'md-types'
+import { InlineContent, InlineElement, InlineType } from 'md-types'
 import {
   getElementType,
   getParsed,
@@ -46,7 +46,7 @@ export const parseContent = (
           temp[tempElI] = {
             type: elType,
             content: getParsed(temp, tempElI + 1),
-          }
+          } as InlineElement
         }
 
         temp = temp.slice(0, tempElI + 1)
@@ -81,8 +81,6 @@ export const parseContent = (
     i++
   }
 
-  // console.log(temp)
-
   const tempLinkI = getTempElI(temp, '[')
   const tempLink = temp[tempLinkI]
 
@@ -104,7 +102,7 @@ export const parseContent = (
     // parse again from next char
     return parseContent(
       content,
-      (tempLink.openSymbolsI || 0) + 1,
+      tempLink.openSymbolsI + 1,
       temp.slice(0, tempLinkI + tempLinkIShift)
     )
   }

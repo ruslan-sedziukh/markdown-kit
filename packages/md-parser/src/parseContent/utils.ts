@@ -6,22 +6,25 @@ import {
 } from 'md-types'
 
 type TempLink = {
-  temp?: true
-  openSymbols?: '['
-  openSymbolsI?: number
+  temp: true
+  openSymbols: '['
+  openSymbolsI: number
 }
 
 type TempElement =
   | {
-      temp?: true
-      openSymbols?: string
+      temp: true
+      openSymbols: string
     }
   | TempLink
 
-export type Temp = (TempElement & Partial<InlineElement>) | string
+export type Temp =
+  | Partial<InlineElement>
+  | (TempElement & Partial<InlineElement>)
+  | string
 
 export const isTempLink = (el: Temp): el is TempLink => {
-  if (typeof el !== 'string' && el.openSymbols === '[') {
+  if (typeof el === 'object' && 'openSymbols' in el && el.openSymbols === '[') {
     return true
   }
 
@@ -148,14 +151,12 @@ export const getParsed = (temp: Temp[], i: number): InlineContent[] => {
       } else {
         result.push(el)
       }
-    } else if (el.temp) {
+    } else if ('temp' in el) {
       if (prev && typeof prev === 'string') {
         result[result.length - 1] = prev.concat(el.openSymbols || '')
       } else if (typeof el.openSymbols === 'string') {
         result.push(el.openSymbols)
       }
-    } else if (el.openSymbols) {
-      result.push(el.openSymbols)
     } else if (isInlineContent(el)) {
       result.push(el)
     }
