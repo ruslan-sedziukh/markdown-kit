@@ -27,6 +27,12 @@ export const parseContent = (
         const tempEl = temp[tempElI]
 
         if (typeof tempEl !== 'string' && tempEl.type === InlineType.Link) {
+          if (elSymbols === '[') {
+            temp = [...getTempAfterUncompletedLink(content, temp)]
+
+            break
+          }
+
           if (elSymbols === '](') {
             temp[tempElI] = {
               ...tempEl,

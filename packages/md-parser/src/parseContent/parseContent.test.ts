@@ -88,7 +88,7 @@ describe('parseContent', () => {
         ],
       },
       {
-        text: 'is parsed correctly when link is missing some chars',
+        text: 'is parsed correctly with uncompleted link',
         content: 'this is **[mini**mum**(blabla)**',
         expected: [
           'this is ',
@@ -104,7 +104,7 @@ describe('parseContent', () => {
         ],
       },
       {
-        text: 'is parsed correctly when link is missing some chars',
+        text: 'is parsed correctly when text has uncompleted and completed link',
         content: 'this is **[mini**mum**(blabla)** [value](test.com)',
         expected: [
           'this is ',
@@ -126,7 +126,6 @@ describe('parseContent', () => {
         ],
       },
     ])('$text', ({ content, expected }) => {
-      console.log('parseContent(content)', parseContent(content))
       expect(parseContent(content)).toEqual(expected)
     })
   })
