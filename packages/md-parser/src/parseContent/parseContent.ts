@@ -21,6 +21,7 @@ export const parseContent = (
         const tempEl = temp[tempElI]
 
         if (typeof tempEl !== 'string' && tempEl.type === InlineType.Link) {
+          // if there was found existed temp link
           if (elSymbols === '[') {
             return reparseAfterUncompletedLink(content, temp)
           }
@@ -99,7 +100,7 @@ const reparseAfterUncompletedLink = (
     // add '[' to prev el
     if (typeof prevTempEl === 'string') {
       prevTempEl + '['
-    } else if (prevTempEl.content) {
+    } else if ('content' in prevTempEl && prevTempEl.content) {
       prevTempEl.content[prevTempEl.content?.length]
     } else {
       temp[tempLinkI] = '['

@@ -12,6 +12,7 @@ export enum InlineType {
   Bold = 'bold',
   Italic = 'italic',
   Link = 'link',
+  Image = 'image',
 }
 
 export type BoldElement = {
@@ -30,8 +31,18 @@ export type LinkElement = {
   href: string
 }
 
+export type ImageElement = {
+  type: InlineType.Image
+  alt: string
+  src: string
+}
+
 // Type for all possible inline elements
-export type InlineElement = BoldElement | ItalicElement | LinkElement
+export type InlineElement =
+  | BoldElement
+  | ItalicElement
+  | LinkElement
+  | ImageElement
 
 export type InlineContent = InlineElement | string
 
