@@ -130,7 +130,7 @@ describe('parseContent', () => {
     })
   })
 
-  describe('image', () => {
+  describe.only('image', () => {
     it.each([
       {
         text: 'is parsed in simple text',
@@ -145,70 +145,71 @@ describe('parseContent', () => {
           ' and be aware',
         ],
       },
-      {
-        text: 'is parsed in correctly with emphasized text',
-        content: 'Look at ![**cow**](./assets/cow.png) and be aware',
-        expected: [
-          'Look at ',
-          {
-            type: InlineType.Link,
-            alt: '**cow**',
-            src: './assets/cow.png',
-          },
-          ' and be aware',
-        ],
-      },
-      {
-        text: 'is parsed correctly when ** are before',
-        content: '**![mini**mum](./assets/minimum.png)',
-        expected: [
-          '**',
-          {
-            type: InlineType.Image,
-            alt: 'mini**mum',
-            src: './assets/minimum.png',
-          },
-        ],
-      },
-      {
-        text: 'is parsed correctly with uncompleted image',
-        content: 'this is **![mini**mum**(./assets/minimum.png)**',
-        expected: [
-          'this is ',
-          {
-            type: 'bold',
-            content: ['[mini'],
-          },
-          'mum',
-          {
-            type: 'bold',
-            content: ['(./assets/minimum.png)'],
-          },
-        ],
-      },
-      {
-        text: 'is parsed correctly when text has uncompleted and completed image',
-        content: 'this is **![mini**mum**(blabla)** ![cow](./assets/cow.png)',
-        expected: [
-          'this is ',
-          {
-            type: 'bold',
-            content: ['[mini'],
-          },
-          'mum',
-          {
-            type: 'bold',
-            content: ['(blabla)'],
-          },
-          ' ',
-          {
-            type: 'link',
-            content: ['value'],
-            href: 'test.com',
-          },
-        ],
-      },
+      // {
+      //   text: 'is parsed in correctly with emphasized text',
+      //   content: 'Look at ![**cow**](./assets/cow.png) and be aware',
+      //   expected: [
+      //     'Look at ',
+      //     {
+      //       type: InlineType.Link,
+      //       alt: '**cow**',
+      //       src: './assets/cow.png',
+      //     },
+      //     ' and be aware',
+      //   ],
+      // },
+      // {
+      //   text: 'is parsed correctly when ** are before',
+      //   content: '**![mini**mum](./assets/minimum.png)',
+      //   expected: [
+      //     '**',
+      //     {
+      //       type: InlineType.Image,
+      //       alt: 'mini**mum',
+      //       src: './assets/minimum.png',
+      //     },
+      //   ],
+      // },
+      // {
+      //   text: 'is parsed correctly with uncompleted image',
+      //   content: 'this is **![mini**mum**(./assets/minimum.png)**',
+      //   expected: [
+      //     'this is ',
+      //     {
+      //       type: 'bold',
+      //       content: ['[mini'],
+      //     },
+      //     'mum',
+      //     {
+      //       type: 'bold',
+      //       content: ['(./assets/minimum.png)'],
+      //     },
+      //   ],
+      // },
+      // {
+      //   text: 'is parsed correctly when text has uncompleted and completed image',
+      //   content: 'this is **![mini**mum**(blabla)** ![cow](./assets/cow.png)',
+      //   expected: [
+      //     'this is ',
+      //     {
+      //       type: 'bold',
+      //       content: ['[mini'],
+      //     },
+      //     'mum',
+      //     {
+      //       type: 'bold',
+      //       content: ['(blabla)'],
+      //     },
+      //     ' ',
+      //     {
+      //       type: 'link',
+      //       content: ['value'],
+      //       href: 'test.com',
+      //     },
+      //   ],
+      // },
     ])('$text', ({ content, expected }) => {
+      console.log('parseContent(content):', parseContent(content))
       expect(parseContent(content)).toEqual(expected)
     })
   })

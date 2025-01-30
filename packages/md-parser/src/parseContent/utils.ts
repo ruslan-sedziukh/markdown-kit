@@ -65,13 +65,22 @@ export const getTempElData = ({
   content,
   i,
   temp,
+  parseAsText,
 }: {
   content: string
   i: number
   temp: Temp[]
+  parseAsText: boolean
 }):
   | { elType: InlineType; elSymbols: string; tempElI: number }
   | { elType: null; elSymbols: null; tempElI: number } => {
+  if (
+    parseAsText &&
+    (`${content[i]}${content[i + 1]}` !== '](' || content[i] !== ')')
+  ) {
+    return { elType: null, elSymbols: null, tempElI: -1 }
+  }
+
   if (content[i] === '*' && content[i + 1] === '*') {
     return {
       elType: InlineType.Bold,
@@ -110,14 +119,62 @@ export const getTempElData = ({
 
   if (content[i] === ')') {
     const tempElI = getTempElI(temp, '[')
+    const tempEl = temp[tempElI]
 
-    // @ts-ignore
-    if (tempElI !== -1 && temp[tempElI].content)
+    if (
+      tempEl &&
+      typeof tempEl !== 'string' &&
+      'content' in tempEl &&
+      tempEl.type
+    ) {
       return {
-        elType: InlineType.Link,
+        elType: tempEl.type,
         elSymbols: ')',
-        tempElI: getTempElI(temp, '['),
+        tempElI,
       }
+    }
+  }
+
+  if (content[i] === ')') {
+    const tempElI = getTempElI(temp, '![')
+    const tempEl = temp[tempElI]
+
+    if (
+      tempEl &&
+      typeof tempEl !== 'string' &&
+      'alt' in tempEl &&
+      tempEl.type
+    ) {
+      return {
+        elType: tempEl.type,
+        elSymbols: ')',
+        tempElI,
+      }
+    }
+  }
+
+  if (content[i] === '!' && content[i + 1] === '[') {
+    const tempElI = getTempElI(temp, '![')
+
+    if (tempElI === -1) {
+      return {
+        elType: InlineType.Image,
+        elSymbols: '![',
+        tempElI,
+      }
+    }
+  }
+
+  if (content[i] === ']' && content[i + 1] === '(') {
+    const tempElI = getTempElI(temp, '![')
+
+    if (tempElI !== -1) {
+      return {
+        elType: InlineType.Image,
+        elSymbols: '](',
+        tempElI,
+      }
+    }
   }
 
   return { elType: null, elSymbols: null, tempElI: -1 }

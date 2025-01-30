@@ -12,9 +12,15 @@ export const parseContent = (
   let temp: Temp[] = tempExternal
 
   let i = startI
+  let parseAsText = false
 
   while (i < content.length) {
-    const { elSymbols, elType, tempElI } = getTempElData({ content, i, temp })
+    const { elSymbols, elType, tempElI } = getTempElData({
+      content,
+      i,
+      temp,
+      parseAsText,
+    })
 
     if (elType) {
       if (tempElI !== -1) {
@@ -40,6 +46,35 @@ export const parseContent = (
               // TODO: Write another function that can convert to string possible elements and temp elements
               href: temp[temp.length - 1] as string,
             }
+
+            parseAsText = false
+          }
+        } else if (
+          typeof tempEl !== 'string' &&
+          tempEl.type === InlineType.Image
+        ) {
+          // if there was found existed temp link
+          if (elSymbols === '![') {
+            // TODO: implement logic for reparsing
+            // return reparseAfterUncompletedLink(content, temp)
+          }
+
+          if (elSymbols === '](') {
+            temp[tempElI] = {
+              ...tempEl,
+              // @ts-ignore
+              alt: temp[temp.length - 1],
+            }
+          }
+
+          if (elSymbols === ')') {
+            temp[tempElI] = {
+              alt: tempEl.alt,
+              type: tempEl.type,
+              src: temp[temp.length - 1] as string,
+            }
+
+            parseAsText = false
           }
         } else {
           temp[tempElI] = {
@@ -49,7 +84,7 @@ export const parseContent = (
         }
 
         temp = temp.slice(0, tempElI + 1)
-      } else if (elSymbols === '[') {
+      } else if (elSymbols === '[' || elSymbols === '![') {
         temp.push({
           temp: true,
           type: elType,
@@ -79,6 +114,8 @@ export const parseContent = (
 
     i++
   }
+
+  console.log('temp:', temp)
 
   return reparseAfterUncompletedLink(content, temp)
 }
