@@ -47,7 +47,7 @@ export type InlineElement =
 export type InlineContent = InlineElement | string
 
 export const isInlineContent = (el: any): el is InlineContent => {
-  if (el.type && Array.isArray(el.content)) {
+  if (el.type) {
     return true
   }
 
