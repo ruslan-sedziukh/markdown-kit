@@ -91,6 +91,10 @@ export const parseContent = (
           openSymbols: elSymbols,
           openSymbolsI: i,
         })
+
+        if (elSymbols === '![') {
+          parseAsText = true
+        }
       } else {
         temp.push({
           temp: true,

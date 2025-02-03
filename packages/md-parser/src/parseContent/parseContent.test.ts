@@ -151,25 +151,25 @@ describe('parseContent', () => {
         expected: [
           'Look at ',
           {
-            type: InlineType.Link,
+            type: InlineType.Image,
             alt: '**cow**',
             src: './assets/cow.png',
           },
           ' and be aware',
         ],
       },
-      // {
-      //   text: 'is parsed correctly when ** are before',
-      //   content: '**![mini**mum](./assets/minimum.png)',
-      //   expected: [
-      //     '**',
-      //     {
-      //       type: InlineType.Image,
-      //       alt: 'mini**mum',
-      //       src: './assets/minimum.png',
-      //     },
-      //   ],
-      // },
+      {
+        text: 'is parsed correctly when ** are before',
+        content: '**![mini**mum](./assets/minimum.png)',
+        expected: [
+          '**',
+          {
+            type: InlineType.Image,
+            alt: 'mini**mum',
+            src: './assets/minimum.png',
+          },
+        ],
+      },
       // {
       //   text: 'is parsed correctly with uncompleted image',
       //   content: 'this is **![mini**mum**(./assets/minimum.png)**',

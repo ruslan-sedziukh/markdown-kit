@@ -74,14 +74,14 @@ export const getTempElData = ({
 }):
   | { elType: InlineType; elSymbols: string; tempElI: number }
   | { elType: null; elSymbols: null; tempElI: number } => {
-  if (
-    parseAsText &&
-    (`${content[i]}${content[i + 1]}` !== '](' || content[i] !== ')')
-  ) {
-    return { elType: null, elSymbols: null, tempElI: -1 }
-  }
+  // if (
+  //   parseAsText &&
+  //   (`${content[i]}${content[i + 1]}` !== '](' || content[i] !== ')')
+  // ) {
+  //   return { elType: null, elSymbols: null, tempElI: -1 }
+  // }
 
-  if (content[i] === '*' && content[i + 1] === '*') {
+  if (content[i] === '*' && content[i + 1] === '*' && !parseAsText) {
     return {
       elType: InlineType.Bold,
       elSymbols: '**',
@@ -89,7 +89,7 @@ export const getTempElData = ({
     }
   }
 
-  if (content[i] === '*') {
+  if (content[i] === '*' && !parseAsText) {
     return {
       elType: InlineType.Italic,
       elSymbols: '*',
@@ -97,7 +97,7 @@ export const getTempElData = ({
     }
   }
 
-  if (content[i] === '[') {
+  if (content[i] === '[' && !parseAsText) {
     return {
       elType: InlineType.Link,
       elSymbols: '[',
