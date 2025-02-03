@@ -60,10 +60,11 @@ export const parseContent = (
           }
 
           if (elSymbols === '](') {
+            const altText = temp[temp.length - 1]
+
             temp[tempElI] = {
               ...tempEl,
-              // @ts-ignore
-              alt: temp[temp.length - 1],
+              alt: typeof altText === 'string' ? altText : '',
             }
           }
 

@@ -121,13 +121,13 @@ export const getStrictTempElData = ({
 
   if (content[i] === ']' && content[i + 1] === '(') {
     const tempElI = getTempElI(temp, '[')
+    const tempEl = temp[tempElI]
 
-    // @ts-ignore
-    if (tempElI !== -1 && !temp[tempElI].content)
+    if (tempElI !== -1 && typeof tempEl !== 'string' && !('content' in tempEl))
       return {
         elType: InlineType.Link,
         elSymbols: '](',
-        tempElI: getTempElI(temp, '['),
+        tempElI: tempElI,
       }
   }
 
