@@ -12,14 +12,14 @@ export const parseContent = (
   let temp: Temp[] = tempExternal
 
   let i = startI
-  let parseAsText = false
+  let parseImage = false
 
   while (i < content.length) {
     const { elSymbols, elType, tempElI } = getTempElData({
       content,
       i,
       temp,
-      parseAsText,
+      parseImage: parseImage,
     })
 
     if (elType) {
@@ -47,7 +47,7 @@ export const parseContent = (
               href: temp[temp.length - 1] as string,
             }
 
-            parseAsText = false
+            parseImage = false
           }
         } else if (
           typeof tempEl !== 'string' &&
@@ -74,7 +74,7 @@ export const parseContent = (
               src: temp[temp.length - 1] as string,
             }
 
-            parseAsText = false
+            parseImage = false
           }
         } else {
           temp[tempElI] = {
@@ -93,7 +93,7 @@ export const parseContent = (
         })
 
         if (elSymbols === '![') {
-          parseAsText = true
+          parseImage = true
         }
       } else {
         temp.push({

@@ -65,23 +65,37 @@ export const getTempElData = ({
   content,
   i,
   temp,
-  parseAsText,
+  parseImage,
 }: {
   content: string
   i: number
   temp: Temp[]
-  parseAsText: boolean
+  parseImage: boolean
 }):
   | { elType: InlineType; elSymbols: string; tempElI: number }
   | { elType: null; elSymbols: null; tempElI: number } => {
-  // if (
-  //   parseAsText &&
-  //   (`${content[i]}${content[i + 1]}` !== '](' || content[i] !== ')')
-  // ) {
-  //   return { elType: null, elSymbols: null, tempElI: -1 }
-  // }
+  if (parseImage) {
+    return getImageTempElData({ content, i, temp })
+  }
 
-  if (content[i] === '*' && content[i + 1] === '*' && !parseAsText) {
+  return getStrictTempElData({ content, i, temp })
+}
+
+/**
+ * Get temp el data as it is
+ */
+export const getStrictTempElData = ({
+  content,
+  i,
+  temp,
+}: {
+  content: string
+  i: number
+  temp: Temp[]
+}):
+  | { elType: InlineType; elSymbols: string; tempElI: number }
+  | { elType: null; elSymbols: null; tempElI: number } => {
+  if (content[i] === '*' && content[i + 1] === '*') {
     return {
       elType: InlineType.Bold,
       elSymbols: '**',
@@ -89,7 +103,7 @@ export const getTempElData = ({
     }
   }
 
-  if (content[i] === '*' && !parseAsText) {
+  if (content[i] === '*') {
     return {
       elType: InlineType.Italic,
       elSymbols: '*',
@@ -97,7 +111,7 @@ export const getTempElData = ({
     }
   }
 
-  if (content[i] === '[' && !parseAsText) {
+  if (content[i] === '[') {
     return {
       elType: InlineType.Link,
       elSymbols: '[',
@@ -135,6 +149,65 @@ export const getTempElData = ({
     }
   }
 
+  if (content[i] === ')') {
+    const tempElI = getTempElI(temp, '![')
+    const tempEl = temp[tempElI]
+
+    if (
+      tempEl &&
+      typeof tempEl !== 'string' &&
+      'alt' in tempEl &&
+      tempEl.type
+    ) {
+      return {
+        elType: tempEl.type,
+        elSymbols: ')',
+        tempElI,
+      }
+    }
+  }
+
+  if (content[i] === '!' && content[i + 1] === '[') {
+    const tempElI = getTempElI(temp, '![')
+
+    if (tempElI === -1) {
+      return {
+        elType: InlineType.Image,
+        elSymbols: '![',
+        tempElI,
+      }
+    }
+  }
+
+  if (content[i] === ']' && content[i + 1] === '(') {
+    const tempElI = getTempElI(temp, '![')
+
+    if (tempElI !== -1) {
+      return {
+        elType: InlineType.Image,
+        elSymbols: '](',
+        tempElI,
+      }
+    }
+  }
+
+  return { elType: null, elSymbols: null, tempElI: -1 }
+}
+
+/**
+ * Returns element type, element symbols (last symbols in temp element)
+ */
+export const getImageTempElData = ({
+  content,
+  i,
+  temp,
+}: {
+  content: string
+  i: number
+  temp: Temp[]
+}):
+  | { elType: InlineType; elSymbols: string; tempElI: number }
+  | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === ')') {
     const tempElI = getTempElI(temp, '![')
     const tempEl = temp[tempElI]
