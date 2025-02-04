@@ -15,23 +15,22 @@ export const parseContent = (
   let parseImage = false
 
   while (i < content.length) {
-    const { elSymbols, elType, tempElI } = getTempElData({
+    const { elSymbols, elType, tempElI, reparseImage } = getTempElData({
       content,
       i,
       temp,
       parseImage: parseImage,
     })
 
+    if (reparseImage) {
+      return reparseAfterUncompletedLink(content, temp)
+    }
+
     if (elType) {
       if (tempElI !== -1) {
         const tempEl = temp[tempElI]
 
         if (typeof tempEl !== 'string' && tempEl.type === InlineType.Link) {
-          // if there was found existed temp link
-          if (elSymbols === '[') {
-            return reparseAfterUncompletedLink(content, temp)
-          }
-
           if (elSymbols === '](') {
             temp[tempElI] = {
               ...tempEl,
@@ -46,8 +45,6 @@ export const parseContent = (
               // TODO: Write another function that can convert to string possible elements and temp elements
               href: temp[temp.length - 1] as string,
             }
-
-            parseImage = false
           }
         } else if (
           typeof tempEl !== 'string' &&

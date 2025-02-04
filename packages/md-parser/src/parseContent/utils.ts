@@ -72,8 +72,13 @@ export const getTempElData = ({
   temp: Temp[]
   parseImage: boolean
 }):
-  | { elType: InlineType; elSymbols: string; tempElI: number }
-  | { elType: null; elSymbols: null; tempElI: number } => {
+  | {
+      elType: InlineType
+      elSymbols: string
+      tempElI: number
+      reparseImage?: true
+    }
+  | { elType: null; elSymbols: null; tempElI: number; reparseImage? } => {
   if (parseImage) {
     return getImageTempElData({ content, i, temp })
   }
@@ -93,7 +98,12 @@ export const getStrictTempElData = ({
   i: number
   temp: Temp[]
 }):
-  | { elType: InlineType; elSymbols: string; tempElI: number }
+  | {
+      elType: InlineType
+      elSymbols: string
+      tempElI: number
+      reparseImage?: true
+    }
   | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === '*' && content[i + 1] === '*') {
     return {
@@ -112,10 +122,13 @@ export const getStrictTempElData = ({
   }
 
   if (content[i] === '[') {
+    const tempElI = getTempElI(temp, '[')
+
     return {
       elType: InlineType.Link,
       elSymbols: '[',
-      tempElI: getTempElI(temp, '['),
+      tempElI: tempElI,
+      reparseImage: tempElI !== -1 ? true : undefined,
     }
   }
 

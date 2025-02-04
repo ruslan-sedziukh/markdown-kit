@@ -170,22 +170,22 @@ describe('parseContent', () => {
           },
         ],
       },
-      // {
-      //   text: 'is parsed correctly with uncompleted image',
-      //   content: 'this is **![mini**mum**(./assets/minimum.png)**',
-      //   expected: [
-      //     'this is ',
-      //     {
-      //       type: 'bold',
-      //       content: ['[mini'],
-      //     },
-      //     'mum',
-      //     {
-      //       type: 'bold',
-      //       content: ['(./assets/minimum.png)'],
-      //     },
-      //   ],
-      // },
+      {
+        text: 'is parsed correctly with uncompleted image',
+        content: 'this is **![mini**mum**(./assets/minimum.png)**',
+        expected: [
+          'this is ',
+          {
+            type: 'bold',
+            content: ['[mini'],
+          },
+          'mum',
+          {
+            type: 'bold',
+            content: ['(./assets/minimum.png)'],
+          },
+        ],
+      },
       // {
       //   text: 'is parsed correctly when text has uncompleted and completed image',
       //   content: 'this is **![mini**mum**(blabla)** ![cow](./assets/cow.png)',
