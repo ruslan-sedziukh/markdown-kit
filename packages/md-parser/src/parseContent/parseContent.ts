@@ -1,7 +1,7 @@
 import { InlineContent, InlineElement, InlineType } from 'md-types'
 import {
   getTempElData,
-  getParsed,
+  getElementsWithNoTemp,
   isTempLink,
   Temp,
   isTempImage,
@@ -45,7 +45,7 @@ export const parseContent = (
           if (elSymbols === '](') {
             temp[tempElI] = {
               ...tempEl,
-              content: getParsed(temp, tempElI + 1),
+              content: getElementsWithNoTemp(temp, tempElI + 1),
             }
           }
 
@@ -88,7 +88,7 @@ export const parseContent = (
         } else {
           temp[tempElI] = {
             type: elType,
-            content: getParsed(temp, tempElI + 1),
+            content: getElementsWithNoTemp(temp, tempElI + 1),
           } as InlineElement
         }
 
@@ -172,7 +172,7 @@ const finalParse = (content: string, temp: Temp[]) => {
     )
   }
 
-  return getParsed(temp, 0)
+  return getElementsWithNoTemp(temp, 0)
 }
 
 const reparseAfterUncompletedElement = (
@@ -218,5 +218,5 @@ const reparseAfterUncompletedElement = (
     )
   }
 
-  return getParsed(temp, 0)
+  return getElementsWithNoTemp(temp, 0)
 }

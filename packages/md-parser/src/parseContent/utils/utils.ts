@@ -311,7 +311,10 @@ export const isTempElement = (el: any): el is TempElement => {
  * @temp - array of parsed and temp elements
  * @return array of parsed elements cleaned from temp
  */
-export const getParsed = (temp: Temp[], i: number): InlineContent[] => {
+export const getElementsWithNoTemp = (
+  temp: Temp[],
+  i: number
+): InlineContent[] => {
   const result: InlineContent[] = []
 
   for (; i < temp.length; i++) {
