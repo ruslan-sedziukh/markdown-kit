@@ -215,14 +215,14 @@ const reparseAfterUncompletedImage = (
     const prevTempEl = temp[tempImageI - 1]
     let tempImageIShift = 0
 
-    // add '[' to prev el
+    // add '![' to prev el
     if (typeof prevTempEl === 'string') {
       prevTempEl + '!['
     } else if ('content' in prevTempEl && prevTempEl.content) {
       prevTempEl.content[prevTempEl.content?.length]
     } else {
       temp[tempImageI] = '!['
-      tempImageIShift = tempImageIShift + 2
+      tempImageIShift = tempImageIShift + 1
     }
 
     // parse again from next char

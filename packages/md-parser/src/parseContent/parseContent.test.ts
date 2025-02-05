@@ -177,7 +177,7 @@ describe('parseContent', () => {
           'this is ',
           {
             type: 'bold',
-            content: ['[mini'],
+            content: ['![mini'],
           },
           'mum',
           {
