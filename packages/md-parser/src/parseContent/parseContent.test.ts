@@ -186,28 +186,28 @@ describe('parseContent', () => {
           },
         ],
       },
-      // {
-      //   text: 'is parsed correctly when text has uncompleted and completed image',
-      //   content: 'this is **![mini**mum**(blabla)** ![cow](./assets/cow.png)',
-      //   expected: [
-      //     'this is ',
-      //     {
-      //       type: 'bold',
-      //       content: ['[mini'],
-      //     },
-      //     'mum',
-      //     {
-      //       type: 'bold',
-      //       content: ['(blabla)'],
-      //     },
-      //     ' ',
-      //     {
-      //       type: 'link',
-      //       content: ['value'],
-      //       href: 'test.com',
-      //     },
-      //   ],
-      // },
+      {
+        text: 'is parsed correctly when text has uncompleted and completed image',
+        content: 'this is **![mini**mum**(blabla)** ![cow](./assets/cow.png)',
+        expected: [
+          'this is ',
+          {
+            type: 'bold',
+            content: ['![mini'],
+          },
+          'mum',
+          {
+            type: 'bold',
+            content: ['(blabla)'],
+          },
+          ' ',
+          {
+            type: InlineType.Image,
+            alt: 'cow',
+            src: './assets/cow.png',
+          },
+        ],
+      },
     ])('$text', ({ content, expected }) => {
       // console.log('parseContent(content):', parseContent(content))
       expect(parseContent(content)).toEqual(expected)

@@ -276,8 +276,14 @@ export const getImageTempElData = ({
         elType: InlineType.Image,
         elSymbols: '![',
         tempElI,
-        reparseElType: tempElI !== -1 ? InlineType.Image : undefined,
       }
+    }
+
+    return {
+      elType: InlineType.Image,
+      elSymbols: '![',
+      tempElI,
+      reparseElType: tempElI !== -1 ? InlineType.Image : undefined,
     }
   }
 

@@ -53,7 +53,7 @@ export const parseContent = (
             temp[tempElI] = {
               content: tempEl.content,
               type: tempEl.type,
-              // TODO: Write another function that can convert to string possible elements and temp elements
+              // TODO: make href be parsed just as a string
               href: temp[temp.length - 1] as string,
             }
           }
@@ -61,12 +61,6 @@ export const parseContent = (
           typeof tempEl !== 'string' &&
           tempEl.type === InlineType.Image
         ) {
-          // if there was found existed temp link
-          if (elSymbols === '![') {
-            // TODO: implement logic for reparsing
-            // return reparseAfterUncompletedLink(content, temp)
-          }
-
           if (elSymbols === '](') {
             const altText = temp[temp.length - 1]
 
@@ -198,7 +192,7 @@ const reparseAfterUncompletedElement = (
   // if there is temp link
   if (tempEl && (isTempImage(tempEl) || isTempLink(tempEl))) {
     const prevTempEl = temp[tempElI - 1]
-    let tempImageIShift = 0
+    let tempElIShift = 0
 
     // add open symbols to prev el
     if (typeof prevTempEl === 'string') {
@@ -207,14 +201,14 @@ const reparseAfterUncompletedElement = (
       prevTempEl.content[prevTempEl.content?.length]
     } else {
       temp[tempElI] = openSymbols
-      tempImageIShift = tempImageIShift + 1
+      tempElIShift = tempElIShift + 1
     }
 
     // parse again from next char
     return parseContent(
       content,
       tempEl.openSymbolsI + openSymbols.length,
-      temp.slice(0, tempElI + tempImageIShift)
+      temp.slice(0, tempElI + tempElIShift)
     )
   }
 
