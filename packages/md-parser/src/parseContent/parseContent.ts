@@ -2,7 +2,6 @@ import { InlineContent, InlineElement, InlineType } from 'md-types'
 import {
   getTempElData,
   getParsed,
-  getTempElI,
   isTempLink,
   Temp,
   isTempImage,
@@ -30,7 +29,12 @@ export const parseContent = (
     })
 
     if (reparseElType) {
-      return reparseAfterUncompletedElement(content, temp, reparseElType)
+      return reparseAfterUncompletedElement(
+        content,
+        temp,
+        tempElI,
+        reparseElType
+      )
     }
 
     if (elType) {
@@ -124,7 +128,7 @@ export const parseContent = (
     i++
   }
 
-  const tempLink = temp.find((el) => {
+  const tempLinkI = temp.findIndex((el) => {
     if (typeof el !== 'object') {
       return false
     }
@@ -134,7 +138,7 @@ export const parseContent = (
     }
   })
 
-  const tempImage = temp.find((el) => {
+  const tempImageI = temp.findIndex((el) => {
     if (typeof el !== 'object') {
       return false
     }
@@ -144,12 +148,25 @@ export const parseContent = (
     }
   })
 
+  const tempImage = temp[tempImageI]
+  const tempLink = temp[tempLinkI]
+
   if (tempImage) {
-    return reparseAfterUncompletedElement(content, temp, InlineType.Image)
+    return reparseAfterUncompletedElement(
+      content,
+      temp,
+      tempImageI,
+      InlineType.Image
+    )
   }
 
   if (tempLink) {
-    return reparseAfterUncompletedElement(content, temp, InlineType.Link)
+    return reparseAfterUncompletedElement(
+      content,
+      temp,
+      tempLinkI,
+      InlineType.Link
+    )
   }
 
   return getParsed(temp, 0)
@@ -160,6 +177,8 @@ const reparseAfterUncompletedElement = (
   content: string,
   // starting temp array
   temp: Temp[],
+  // uncompleted temp element index,
+  tempElI: number,
   // temp element type
   type: InlineType.Image | InlineType.Link
 ) => {
@@ -171,7 +190,6 @@ const reparseAfterUncompletedElement = (
     openSymbols = '['
   }
 
-  const tempElI = getTempElI(temp, openSymbols)
   const tempEl = temp[tempElI]
 
   // if there is temp link
