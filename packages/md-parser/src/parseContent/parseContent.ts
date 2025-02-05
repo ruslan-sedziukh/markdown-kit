@@ -22,20 +22,15 @@ export const parseContent = (
   let parseImage = false
 
   while (i < content.length) {
-    const { elSymbols, elType, tempElI, reparseImage, reparseLink } =
-      getTempElData({
-        content,
-        i,
-        temp,
-        parseImage: parseImage,
-      })
+    const { elSymbols, elType, tempElI, reparseElType } = getTempElData({
+      content,
+      i,
+      temp,
+      parseImage: parseImage,
+    })
 
-    if (reparseLink) {
-      return reparseAfterUncompletedElement(content, temp, InlineType.Link)
-    }
-
-    if (reparseImage) {
-      return reparseAfterUncompletedElement(content, temp, InlineType.Image)
+    if (reparseElType) {
+      return reparseAfterUncompletedElement(content, temp, reparseElType)
     }
 
     if (elType) {

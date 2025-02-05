@@ -95,15 +95,13 @@ export const getTempElData = ({
       elType: InlineType
       elSymbols: string
       tempElI: number
-      reparseImage?: true
-      reparseLink?: true
+      reparseElType?: InlineType.Link | InlineType.Image
     }
   | {
       elType: null
       elSymbols: null
       tempElI: number
-      reparseImage?
-      reparseLink?
+      reparseElType?
     } => {
   if (parseImage) {
     return getImageTempElData({ content, i, temp })
@@ -128,7 +126,7 @@ export const getStrictTempElData = ({
       elType: InlineType
       elSymbols: string
       tempElI: number
-      reparseLink?: true
+      reparseElType?: InlineType.Link | InlineType.Image
     }
   | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === '*' && content[i + 1] === '*') {
@@ -154,7 +152,7 @@ export const getStrictTempElData = ({
       elType: InlineType.Link,
       elSymbols: '[',
       tempElI: tempElI,
-      reparseLink: tempElI !== -1 ? true : undefined,
+      reparseElType: tempElI !== -1 ? InlineType.Link : undefined,
     }
   }
 
@@ -249,7 +247,7 @@ export const getImageTempElData = ({
       elType: InlineType
       elSymbols: string
       tempElI: number
-      reparseImage?: true
+      reparseElType?: InlineType.Image
     }
   | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === ')') {
@@ -278,7 +276,7 @@ export const getImageTempElData = ({
         elType: InlineType.Image,
         elSymbols: '![',
         tempElI,
-        reparseImage: tempElI !== -1 ? true : undefined,
+        reparseElType: tempElI !== -1 ? InlineType.Image : undefined,
       }
     }
   }
