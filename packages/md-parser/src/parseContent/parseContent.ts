@@ -31,12 +31,11 @@ export const parseContent = (
       })
 
     if (reparseLink) {
-      return reparseAfterUncompletedLink(content, temp)
+      return reparseAfterUncompletedElement(content, temp, InlineType.Link)
     }
 
     if (reparseImage) {
-      console.log('parseImage')
-      return reparseAfterUncompletedImage(content, temp)
+      return reparseAfterUncompletedElement(content, temp, InlineType.Image)
     }
 
     if (elType) {
@@ -130,8 +129,6 @@ export const parseContent = (
     i++
   }
 
-  console.log('temp:', temp)
-
   const tempLink = temp.find((el) => {
     if (typeof el !== 'object') {
       return false
@@ -152,84 +149,56 @@ export const parseContent = (
     }
   })
 
-  console.log('>>> tempImage:', tempImage)
-  console.log('>>> tempLink:', tempLink)
-
   if (tempImage) {
-    return reparseAfterUncompletedImage(content, temp)
+    return reparseAfterUncompletedElement(content, temp, InlineType.Image)
   }
 
   if (tempLink) {
-    return reparseAfterUncompletedLink(content, temp)
+    return reparseAfterUncompletedElement(content, temp, InlineType.Link)
   }
 
   return getParsed(temp, 0)
 }
 
-const reparseAfterUncompletedLink = (
+const reparseAfterUncompletedElement = (
   // content that should be parsed
   content: string,
   // starting temp array
-  temp: Temp[]
+  temp: Temp[],
+  // temp element type
+  type: InlineType.Image | InlineType.Link
 ) => {
-  const tempLinkI = getTempElI(temp, '[')
-  const tempLink = temp[tempLinkI]
+  let openSymbols = ''
 
-  // if there is temp link
-  if (tempLink && isTempLink(tempLink)) {
-    const prevTempEl = temp[tempLinkI - 1]
-    let tempLinkIShift = 0
-
-    // add '[' to prev el
-    if (typeof prevTempEl === 'string') {
-      prevTempEl + '['
-    } else if ('content' in prevTempEl && prevTempEl.content) {
-      prevTempEl.content[prevTempEl.content?.length]
-    } else {
-      temp[tempLinkI] = '['
-      tempLinkIShift++
-    }
-
-    // parse again from next char
-    return parseContent(
-      content,
-      tempLink.openSymbolsI + 1,
-      temp.slice(0, tempLinkI + tempLinkIShift)
-    )
+  if (type === InlineType.Image) {
+    openSymbols = '!['
+  } else if (type === InlineType.Link) {
+    openSymbols = '['
   }
 
-  return getParsed(temp, 0)
-}
-
-const reparseAfterUncompletedImage = (
-  // content that should be parsed
-  content: string,
-  // starting temp array
-  temp: Temp[]
-) => {
-  const tempImageI = getTempElI(temp, '![')
-  const tempImage = temp[tempImageI]
+  const tempElI = getTempElI(temp, openSymbols)
+  const tempEl = temp[tempElI]
 
   // if there is temp link
-  if (tempImage && isTempImage(tempImage)) {
-    const prevTempEl = temp[tempImageI - 1]
+  if (tempEl && (isTempImage(tempEl) || isTempLink(tempEl))) {
+    const prevTempEl = temp[tempElI - 1]
     let tempImageIShift = 0
 
-    // add '![' to prev el
+    // add open symbols to prev el
     if (typeof prevTempEl === 'string') {
-      prevTempEl + '!['
+      prevTempEl + openSymbols
     } else if ('content' in prevTempEl && prevTempEl.content) {
       prevTempEl.content[prevTempEl.content?.length]
     } else {
-      temp[tempImageI] = '!['
+      temp[tempElI] = openSymbols
       tempImageIShift = tempImageIShift + 1
     }
 
     // parse again from next char
     return parseContent(
       content,
-      tempImage.openSymbolsI + 2,
-      temp.slice(0, tempImageI + tempImageIShift)
+      tempEl.openSymbolsI + openSymbols.length,
+      temp.slice(0, tempElI + tempImageIShift)
     )
   }
 
