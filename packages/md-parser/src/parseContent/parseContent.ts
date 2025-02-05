@@ -1,5 +1,12 @@
 import { InlineContent, InlineElement, InlineType } from 'md-types'
-import { getTempElData, getParsed, getTempElI, isTempLink, Temp } from './utils'
+import {
+  getTempElData,
+  getParsed,
+  getTempElI,
+  isTempLink,
+  Temp,
+  isTempImage,
+} from './utils/utils'
 
 export const parseContent = (
   // content that should be parsed
@@ -15,15 +22,21 @@ export const parseContent = (
   let parseImage = false
 
   while (i < content.length) {
-    const { elSymbols, elType, tempElI, reparseImage } = getTempElData({
-      content,
-      i,
-      temp,
-      parseImage: parseImage,
-    })
+    const { elSymbols, elType, tempElI, reparseImage, reparseLink } =
+      getTempElData({
+        content,
+        i,
+        temp,
+        parseImage: parseImage,
+      })
+
+    if (reparseLink) {
+      return reparseAfterUncompletedLink(content, temp)
+    }
 
     if (reparseImage) {
-      return reparseAfterUncompletedLink(content, temp)
+      console.log('parseImage')
+      return reparseAfterUncompletedImage(content, temp)
     }
 
     if (elType) {
@@ -119,7 +132,38 @@ export const parseContent = (
 
   console.log('temp:', temp)
 
-  return reparseAfterUncompletedLink(content, temp)
+  const tempLink = temp.find((el) => {
+    if (typeof el !== 'object') {
+      return false
+    }
+
+    if (el.type === InlineType.Link && !el.href) {
+      return true
+    }
+  })
+
+  const tempImage = temp.find((el) => {
+    if (typeof el !== 'object') {
+      return false
+    }
+
+    if (el.type === InlineType.Image && !el.src) {
+      return true
+    }
+  })
+
+  console.log('>>> tempImage:', tempImage)
+  console.log('>>> tempLink:', tempLink)
+
+  if (tempImage) {
+    return reparseAfterUncompletedImage(content, temp)
+  }
+
+  if (tempLink) {
+    return reparseAfterUncompletedLink(content, temp)
+  }
+
+  return getParsed(temp, 0)
 }
 
 const reparseAfterUncompletedLink = (
@@ -151,6 +195,41 @@ const reparseAfterUncompletedLink = (
       content,
       tempLink.openSymbolsI + 1,
       temp.slice(0, tempLinkI + tempLinkIShift)
+    )
+  }
+
+  return getParsed(temp, 0)
+}
+
+const reparseAfterUncompletedImage = (
+  // content that should be parsed
+  content: string,
+  // starting temp array
+  temp: Temp[]
+) => {
+  const tempImageI = getTempElI(temp, '![')
+  const tempImage = temp[tempImageI]
+
+  // if there is temp link
+  if (tempImage && isTempImage(tempImage)) {
+    const prevTempEl = temp[tempImageI - 1]
+    let tempImageIShift = 0
+
+    // add '[' to prev el
+    if (typeof prevTempEl === 'string') {
+      prevTempEl + '!['
+    } else if ('content' in prevTempEl && prevTempEl.content) {
+      prevTempEl.content[prevTempEl.content?.length]
+    } else {
+      temp[tempImageI] = '!['
+      tempImageIShift = tempImageIShift + 2
+    }
+
+    // parse again from next char
+    return parseContent(
+      content,
+      tempImage.openSymbolsI + 2,
+      temp.slice(0, tempImageI + tempImageIShift)
     )
   }
 

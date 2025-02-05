@@ -11,12 +11,19 @@ type TempLink = {
   openSymbolsI: number
 }
 
+type TempImage = {
+  temp: true
+  openSymbols: '!['
+  openSymbolsI: number
+}
+
 type TempElement =
   | {
       temp: true
       openSymbols: string
     }
   | TempLink
+  | TempImage
 
 export type Temp =
   | Partial<InlineElement>
@@ -25,6 +32,18 @@ export type Temp =
 
 export const isTempLink = (el: Temp): el is TempLink => {
   if (typeof el === 'object' && 'openSymbols' in el && el.openSymbols === '[') {
+    return true
+  }
+
+  return false
+}
+
+export const isTempImage = (el: Temp): el is TempImage => {
+  if (
+    typeof el === 'object' &&
+    'openSymbols' in el &&
+    el.openSymbols === '!['
+  ) {
     return true
   }
 
@@ -77,8 +96,15 @@ export const getTempElData = ({
       elSymbols: string
       tempElI: number
       reparseImage?: true
+      reparseLink?: true
     }
-  | { elType: null; elSymbols: null; tempElI: number; reparseImage? } => {
+  | {
+      elType: null
+      elSymbols: null
+      tempElI: number
+      reparseImage?
+      reparseLink?
+    } => {
   if (parseImage) {
     return getImageTempElData({ content, i, temp })
   }
@@ -102,7 +128,7 @@ export const getStrictTempElData = ({
       elType: InlineType
       elSymbols: string
       tempElI: number
-      reparseImage?: true
+      reparseLink?: true
     }
   | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === '*' && content[i + 1] === '*') {
@@ -128,7 +154,7 @@ export const getStrictTempElData = ({
       elType: InlineType.Link,
       elSymbols: '[',
       tempElI: tempElI,
-      reparseImage: tempElI !== -1 ? true : undefined,
+      reparseLink: tempElI !== -1 ? true : undefined,
     }
   }
 
@@ -219,7 +245,12 @@ export const getImageTempElData = ({
   i: number
   temp: Temp[]
 }):
-  | { elType: InlineType; elSymbols: string; tempElI: number }
+  | {
+      elType: InlineType
+      elSymbols: string
+      tempElI: number
+      reparseImage?: true
+    }
   | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === ')') {
     const tempElI = getTempElI(temp, '![')
@@ -247,6 +278,7 @@ export const getImageTempElData = ({
         elType: InlineType.Image,
         elSymbols: '![',
         tempElI,
+        reparseImage: tempElI !== -1 ? true : undefined,
       }
     }
   }
