@@ -128,7 +128,7 @@ export const parseContent = (
     i++
   }
 
-  const tempLinkI = temp.findIndex((el) => {
+  const uncompletedTempLinkI = temp.findIndex((el) => {
     if (typeof el !== 'object') {
       return false
     }
@@ -138,7 +138,7 @@ export const parseContent = (
     }
   })
 
-  const tempImageI = temp.findIndex((el) => {
+  const uncompletedTempImageI = temp.findIndex((el) => {
     if (typeof el !== 'object') {
       return false
     }
@@ -148,24 +148,23 @@ export const parseContent = (
     }
   })
 
-  const tempImage = temp[tempImageI]
-  const tempLink = temp[tempLinkI]
+  const uncompletedTempElI = [uncompletedTempImageI, uncompletedTempLinkI].find(
+    (i) => i !== -1
+  )
+  const uncompletedTempEl = uncompletedTempElI && temp[uncompletedTempElI]
 
-  if (tempImage) {
+  if (
+    uncompletedTempEl &&
+    typeof uncompletedTempEl === 'object' &&
+    'type' in uncompletedTempEl &&
+    (uncompletedTempEl.type === InlineType.Link ||
+      uncompletedTempEl.type === InlineType.Image)
+  ) {
     return reparseAfterUncompletedElement(
       content,
       temp,
-      tempImageI,
-      InlineType.Image
-    )
-  }
-
-  if (tempLink) {
-    return reparseAfterUncompletedElement(
-      content,
-      temp,
-      tempLinkI,
-      InlineType.Link
+      uncompletedTempElI,
+      uncompletedTempEl.type
     )
   }
 
