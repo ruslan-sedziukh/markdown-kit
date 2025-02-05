@@ -128,10 +128,10 @@ export const parseContent = (
     i++
   }
 
-  return finalParse(content, temp)
+  return getParsedFromTemp(content, temp)
 }
 
-const finalParse = (content: string, temp: Temp[]) => {
+const getParsedFromTemp = (content: string, temp: Temp[]) => {
   const uncompletedTempLinkI = temp.findIndex((el) => {
     if (typeof el !== 'object') {
       return false
