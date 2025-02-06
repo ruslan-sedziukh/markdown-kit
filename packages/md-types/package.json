@@ -1,9 +1,9 @@
 {
   "name": "@ruslan-sedziukh/md-types",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "main": "build/index.js",
   "private": false,
+  "main": "build/index.js",
   "files": [
     "build",
     "README.md"
