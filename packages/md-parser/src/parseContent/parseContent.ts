@@ -5,7 +5,7 @@ import {
   isTempLink,
   Temp,
   isTempImage,
-} from './utils/utils'
+} from './utils'
 
 export const parseContent = (
   // content that should be parsed
