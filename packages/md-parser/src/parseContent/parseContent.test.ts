@@ -125,6 +125,28 @@ describe('parseContent', () => {
           },
         ],
       },
+      {
+        text: 'is parsed correctly when text has uncompleted link before',
+        content: 'this is **![mini**mum**(blabla)** [cow](test.com)',
+        expected: [
+          'this is ',
+          {
+            type: 'bold',
+            content: ['![mini'],
+          },
+          'mum',
+          {
+            type: 'bold',
+            content: ['(blabla)'],
+          },
+          ' ',
+          {
+            type: InlineType.Link,
+            content: ['cow'],
+            href: 'test.com',
+          },
+        ],
+      },
     ])('$text', ({ content, expected }) => {
       expect(parseContent(content)).toEqual(expected)
     })
@@ -194,6 +216,28 @@ describe('parseContent', () => {
           {
             type: 'bold',
             content: ['![mini'],
+          },
+          'mum',
+          {
+            type: 'bold',
+            content: ['(blabla)'],
+          },
+          ' ',
+          {
+            type: InlineType.Image,
+            alt: 'cow',
+            src: './assets/cow.png',
+          },
+        ],
+      },
+      {
+        text: 'is parsed correctly when text has uncompleted link before',
+        content: 'this is **[mini**mum**(blabla)** ![cow](./assets/cow.png)',
+        expected: [
+          'this is ',
+          {
+            type: 'bold',
+            content: ['[mini'],
           },
           'mum',
           {

@@ -125,6 +125,9 @@ export const parseContent = (
   return getParsedFromTemp(content, temp)
 }
 
+/**
+ * Takes array of temp elements and returns array of completed elements.
+ */
 const getParsedFromTemp = (content: string, temp: Temp[]) => {
   const uncompletedTempLinkI = temp.findIndex((el) => {
     if (typeof el !== 'object') {
