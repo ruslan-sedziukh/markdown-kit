@@ -5,6 +5,6 @@
   "main": "index.js",
   "private": false,
   "dependencies": {
-    "md-types": "^0.0.1"
+    "@ruslan-sedziukh/md-types": "^0.0.1"
   }
 }
