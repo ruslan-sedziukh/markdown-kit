@@ -268,6 +268,19 @@ export const getImageTempElData = ({
     }
   }
 
+  if (content[i] === '[') {
+    const tempElI = getTempElI(temp, '![')
+
+    if (tempElI !== -1) {
+      return {
+        elType: InlineType.Image,
+        elSymbols: '![',
+        tempElI,
+        reparseElType: InlineType.Image,
+      }
+    }
+  }
+
   if (content[i] === '!' && content[i + 1] === '[') {
     const tempElI = getTempElI(temp, '![')
 
@@ -283,7 +296,7 @@ export const getImageTempElData = ({
       elType: InlineType.Image,
       elSymbols: '![',
       tempElI,
-      reparseElType: tempElI !== -1 ? InlineType.Image : undefined,
+      reparseElType: InlineType.Image,
     }
   }
 
