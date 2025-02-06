@@ -2,9 +2,17 @@
   "name": "@ruslan-sedziukh/md-parser",
   "version": "0.0.1",
   "license": "MIT",
-  "main": "index.js",
   "private": false,
+  "main": "build/index.js",
+  "files": [
+    "build",
+    "README.md"
+  ],
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "npx tsc"
+  },
   "dependencies": {
-    "@ruslan-sedziukh/md-types": "^0.0.1"
+    "@ruslan-sedziukh/md-types": "^0.0.2"
   }
 }
