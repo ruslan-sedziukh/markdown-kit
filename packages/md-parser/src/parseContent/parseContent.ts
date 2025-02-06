@@ -1,5 +1,11 @@
 import { InlineContent, InlineElement, InlineType } from 'md-types'
-import { getTempElData, getParsed, getTempElI, isTempLink, Temp } from './utils'
+import {
+  getTempElData,
+  getElementsWithNoTemp,
+  isTempLink,
+  Temp,
+  isTempImage,
+} from './utils/utils'
 
 export const parseContent = (
   // content that should be parsed
@@ -12,23 +18,34 @@ export const parseContent = (
   let temp: Temp[] = tempExternal
 
   let i = startI
+  let parseImage = false
 
   while (i < content.length) {
-    const { elSymbols, elType, tempElI } = getTempElData({ content, i, temp })
+    const { elSymbols, elType, tempElI, reparseElType } = getTempElData({
+      content,
+      i,
+      temp,
+      parseImage: parseImage,
+    })
+
+    if (reparseElType) {
+      return reparseAfterUncompletedElement(
+        content,
+        temp,
+        tempElI,
+        reparseElType
+      )
+    }
 
     if (elType) {
       if (tempElI !== -1) {
         const tempEl = temp[tempElI]
 
         if (typeof tempEl !== 'string' && tempEl.type === InlineType.Link) {
-          if (elSymbols === '[') {
-            return reparseAfterUncompletedLink(content, temp)
-          }
-
           if (elSymbols === '](') {
             temp[tempElI] = {
               ...tempEl,
-              content: getParsed(temp, tempElI + 1),
+              content: getElementsWithNoTemp(temp, tempElI + 1),
             }
           }
 
@@ -36,25 +53,51 @@ export const parseContent = (
             temp[tempElI] = {
               content: tempEl.content,
               type: tempEl.type,
-              // TODO: Write another function that can convert to string possible elements and temp elements
+              // TODO: make href be parsed just as a string
               href: temp[temp.length - 1] as string,
             }
+          }
+        } else if (
+          typeof tempEl !== 'string' &&
+          tempEl.type === InlineType.Image
+        ) {
+          if (elSymbols === '](') {
+            const altText = temp[temp.length - 1]
+
+            temp[tempElI] = {
+              ...tempEl,
+              alt: typeof altText === 'string' ? altText : '',
+            }
+          }
+
+          if (elSymbols === ')') {
+            temp[tempElI] = {
+              alt: tempEl.alt,
+              type: tempEl.type,
+              src: temp[temp.length - 1] as string,
+            }
+
+            parseImage = false
           }
         } else {
           temp[tempElI] = {
             type: elType,
-            content: getParsed(temp, tempElI + 1),
+            content: getElementsWithNoTemp(temp, tempElI + 1),
           } as InlineElement
         }
 
         temp = temp.slice(0, tempElI + 1)
-      } else if (elSymbols === '[') {
+      } else if (elSymbols === '[' || elSymbols === '![') {
         temp.push({
           temp: true,
           type: elType,
           openSymbols: elSymbols,
           openSymbolsI: i,
         })
+
+        if (elSymbols === '![') {
+          parseImage = true
+        }
       } else {
         temp.push({
           temp: true,
@@ -79,40 +122,98 @@ export const parseContent = (
     i++
   }
 
-  return reparseAfterUncompletedLink(content, temp)
+  return getParsedFromTemp(content, temp)
 }
 
-const reparseAfterUncompletedLink = (
+/**
+ * Takes array of temp elements and returns array of completed elements.
+ */
+const getParsedFromTemp = (content: string, temp: Temp[]) => {
+  const uncompletedTempLinkI = temp.findIndex((el) => {
+    if (typeof el !== 'object') {
+      return false
+    }
+
+    if (el.type === InlineType.Link && !el.href) {
+      return true
+    }
+  })
+
+  const uncompletedTempImageI = temp.findIndex((el) => {
+    if (typeof el !== 'object') {
+      return false
+    }
+
+    if (el.type === InlineType.Image && !el.src) {
+      return true
+    }
+  })
+
+  const uncompletedTempElI = [uncompletedTempImageI, uncompletedTempLinkI].find(
+    (i) => i !== -1
+  )
+  const uncompletedTempEl = uncompletedTempElI && temp[uncompletedTempElI]
+
+  if (
+    uncompletedTempEl &&
+    typeof uncompletedTempEl === 'object' &&
+    'type' in uncompletedTempEl &&
+    (uncompletedTempEl.type === InlineType.Link ||
+      uncompletedTempEl.type === InlineType.Image)
+  ) {
+    return reparseAfterUncompletedElement(
+      content,
+      temp,
+      uncompletedTempElI,
+      uncompletedTempEl.type
+    )
+  }
+
+  return getElementsWithNoTemp(temp, 0)
+}
+
+const reparseAfterUncompletedElement = (
   // content that should be parsed
   content: string,
   // starting temp array
-  temp: Temp[]
+  temp: Temp[],
+  // uncompleted temp element index,
+  tempElI: number,
+  // temp element type
+  type: InlineType.Image | InlineType.Link
 ) => {
-  const tempLinkI = getTempElI(temp, '[')
-  const tempLink = temp[tempLinkI]
+  let openSymbols = ''
+
+  if (type === InlineType.Image) {
+    openSymbols = '!['
+  } else if (type === InlineType.Link) {
+    openSymbols = '['
+  }
+
+  const tempEl = temp[tempElI]
 
   // if there is temp link
-  if (tempLink && isTempLink(tempLink)) {
-    const prevTempEl = temp[tempLinkI - 1]
-    let tempLinkIShift = 0
+  if (tempEl && (isTempImage(tempEl) || isTempLink(tempEl))) {
+    const prevTempEl = temp[tempElI - 1]
+    let tempElIShift = 0
 
-    // add '[' to prev el
+    // add open symbols to prev el
     if (typeof prevTempEl === 'string') {
-      prevTempEl + '['
-    } else if (prevTempEl.content) {
+      prevTempEl + openSymbols
+    } else if ('content' in prevTempEl && prevTempEl.content) {
       prevTempEl.content[prevTempEl.content?.length]
     } else {
-      temp[tempLinkI] = '['
-      tempLinkIShift++
+      temp[tempElI] = openSymbols
+      tempElIShift = tempElIShift + 1
     }
 
     // parse again from next char
     return parseContent(
       content,
-      tempLink.openSymbolsI + 1,
-      temp.slice(0, tempLinkI + tempLinkIShift)
+      tempEl.openSymbolsI + openSymbols.length,
+      temp.slice(0, tempElI + tempElIShift)
     )
   }
 
-  return getParsed(temp, 0)
+  return getElementsWithNoTemp(temp, 0)
 }
