@@ -3,7 +3,7 @@ import {
   InlineElement,
   InlineType,
   isInlineContent,
-} from 'md-types'
+} from '@ruslan-sedziukh/md-types'
 
 type TempLink = {
   temp: true
