@@ -101,7 +101,7 @@ export const getTempElData = ({
       elType: null
       elSymbols: null
       tempElI: number
-      reparseElType?
+      reparseElType?: null
     } => {
   if (parseImage) {
     return getImageTempElData({ content, i, temp })
