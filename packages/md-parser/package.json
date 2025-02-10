@@ -1,22 +1,28 @@
 {
   "name": "@ruslan-sedziukh/md-parser",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "license": "MIT",
   "private": false,
   "type": "module",
-  "main": "dist-package/index.js",
+  "main": "./dist-package/index.js",
   "exports": {
     ".": "./dist-package/index.js"
   },
   "files": [
-    "build",
+    "dist-package",
     "README.md"
   ],
   "types": "build/index.d.ts",
   "scripts": {
-    "build": "npx tsc && find dist-package -name '*.test.js' -delete"
+    "build": "webpack"
   },
   "dependencies": {
     "@ruslan-sedziukh/md-types": "^0.0.2"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.7.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
   }
 }
