@@ -14,7 +14,7 @@
     "dist/md-parser.js.map",
     "README.md"
   ],
-  "types": "dist/index.d.ts",
+  "types": "./dist/md-parser.d.ts",
   "scripts": {
     "build": "rimraf dist/* && tsc && rollup --config"
   },

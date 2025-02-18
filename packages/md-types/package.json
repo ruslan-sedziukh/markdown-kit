@@ -3,13 +3,25 @@
   "version": "0.0.2",
   "license": "MIT",
   "private": false,
-  "main": "build/index.js",
+  "type": "module",
+  "main": "./dist/md-types.js",
+  "exports": {
+    ".": "./dist/md-types.js"
+  },
   "files": [
-    "build",
+    "dist/md-types.js",
+    "dist/md-types.d.ts",
+    "dist/md-types.map.js",
     "README.md"
   ],
-  "types": "build/index.d.ts",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "npx tsc"
+    "build": "rimraf dist/* && tsc && rollup --config"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^12.1.2",
+    "rollup": "^4.34.8",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-local-resolve": "^1.0.7"
   }
 }
