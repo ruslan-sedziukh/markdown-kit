@@ -6,6 +6,11 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "declaration": true, // Enable declaration file generation
+    "lib": ["esnext"],
+    "noEmitOnError": true,
+    "removeComments": false
   }
 }
