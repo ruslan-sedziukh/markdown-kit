@@ -1,7 +1,27 @@
 {
-  "name": "md-types",
-  "version": "0.0.1",
+  "name": "@ruslan-sedziukh/md-types",
+  "version": "0.0.4",
   "license": "MIT",
-  "main": "index.js",
-  "private": false
+  "private": false,
+  "type": "module",
+  "main": "./dist/md-types.js",
+  "exports": {
+    ".": "./dist/md-types.js"
+  },
+  "files": [
+    "dist/md-types.js",
+    "dist/md-types.d.ts",
+    "dist/md-types.js.map",
+    "README.md"
+  ],
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist/* && tsc && rollup --config"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^12.1.2",
+    "rollup": "^4.34.8",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-local-resolve": "^1.0.7"
+  }
 }
