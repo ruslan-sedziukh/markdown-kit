@@ -1,6 +1,6 @@
 {
   "name": "@ruslan-sedziukh/md-parser",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license": "MIT",
   "private": false,
   "type": "module",
@@ -19,7 +19,7 @@
     "build": "rimraf dist/* && tsc && rollup --config"
   },
   "dependencies": {
-    "@ruslan-sedziukh/md-types": "^0.0.2"
+    "@ruslan-sedziukh/md-types": "^0.0.4"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^12.1.2",
