@@ -1,6 +1,6 @@
 {
   "name": "@ruslan-sedziukh/md-types",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "private": false,
   "type": "module",
@@ -11,7 +11,7 @@
   "files": [
     "dist/md-types.js",
     "dist/md-types.d.ts",
-    "dist/md-types.map.js",
+    "dist/md-types.js.map",
     "README.md"
   ],
   "types": "./dist/index.d.ts",
