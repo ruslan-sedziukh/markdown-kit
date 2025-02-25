@@ -13,7 +13,7 @@
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "next": "15.0.3",
     "@ruslan-sedziukh/md-render": "^0.0.1",
-    "@ruslan-sedziukh/md-parser": "^0.0.1"
+    "@ruslan-sedziukh/md-parser": "^0.0.6"
   },
   "devDependencies": {
     "typescript": "^5",

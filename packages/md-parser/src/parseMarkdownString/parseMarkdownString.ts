@@ -1,7 +1,8 @@
+import { ParsedMarkdown } from '@ruslan-sedziukh/md-types'
 import { parseContent } from '../parseContent'
 import { parseHeading } from '../parseHeading'
 
-export const parseMarkdownString = (md: string) => {
+export const parseMarkdownString = (md: string): ParsedMarkdown => {
   const lines = md.split('\n')
 
   const parsedLines = lines.map((line) => {
@@ -9,7 +10,7 @@ export const parseMarkdownString = (md: string) => {
       return parseHeading(line)
     }
 
-    return parseContent(line)
+    return { type: 'paragraph' as const, content: parseContent(line) }
   })
 
   return parsedLines
