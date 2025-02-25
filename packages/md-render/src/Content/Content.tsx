@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { InlineContent } from '@ruslan-sedziukh/md-types/dist/md-types'
 import Bold from '../Bold'
+import Italic from '../Italic/Italic'
 
 type Props = {
   content: InlineContent[]
@@ -19,6 +20,14 @@ const Content = ({ content }: Props) => {
             <Bold>
               <Content content={el.content} />
             </Bold>
+          )
+        }
+
+        if (el.type === 'italic') {
+          return (
+            <Italic>
+              <Content content={el.content} />
+            </Italic>
           )
         }
       })}
