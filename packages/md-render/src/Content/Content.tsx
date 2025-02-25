@@ -3,6 +3,7 @@ import { InlineContent, InlineType } from '@ruslan-sedziukh/md-types'
 import Bold from '../Bold'
 import Italic from '../Italic'
 import Link from '../Link'
+import Image from '../Image'
 
 type Props = {
   content: InlineContent[]
@@ -38,6 +39,10 @@ const Content = ({ content }: Props) => {
               <Content content={el.content} />
             </Link>
           )
+        }
+
+        if (el.type === InlineType.Image) {
+          return <Image src={el.src} alt={el.alt} />
         }
       })}
     </>
