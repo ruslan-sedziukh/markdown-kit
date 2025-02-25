@@ -1,6 +1,7 @@
 import { Heading as HeadingType } from '@ruslan-sedziukh/md-types'
 import { InlineContent } from '@ruslan-sedziukh/md-types/dist/md-types'
 import React, { ElementType } from 'react'
+import Content from '../Content'
 
 type Props = {
   type: HeadingType
@@ -10,7 +11,11 @@ type Props = {
 const Heading = ({ type, content }: Props) => {
   const Component = getRootElement(type)
 
-  return <Component>{JSON.stringify(content)}</Component>
+  return (
+    <Component>
+      <Content content={content} />
+    </Component>
+  )
 }
 
 const getRootElement = (type: HeadingType): ElementType => {
