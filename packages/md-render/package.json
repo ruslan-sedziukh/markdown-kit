@@ -2,8 +2,28 @@
   "name": "@ruslan-sedziukh/md-render",
   "version": "0.0.1",
   "license": "MIT",
-  "main": "index.js",
+  "type": "module",
+  "main": "./dist/md-render.js",
+  "exports": {
+    ".": "./dist/md-render.js"
+  },
   "private": false,
+  "files": [
+    "dist/md-render.js",
+    "dist/md-render.d.ts",
+    "dist/md-render.js.map",
+    "README.md"
+  ],
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist/* && tsc && rollup --config"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^12.1.2",
+    "rollup": "^4.34.8",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-local-resolve": "^1.0.7"
+  },
   "dependencies": {
     "@ruslan-sedziukh/md-types": "^0.0.1"
   },
