@@ -19,9 +19,9 @@ const Heading = ({ type, content }: Props) => {
 }
 
 const getRootElement = (type: HeadingType): ElementType => {
-  if (type === 'heading-1') {
+  if (type === HeadingType.heading1) {
     return 'h1'
-  } else if (type === 'heading-2') {
+  } else if (type === HeadingType.heading2) {
     return 'h2'
   }
 
