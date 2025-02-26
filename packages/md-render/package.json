@@ -16,13 +16,17 @@
   ],
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rimraf dist/* && tsc && rollup --config"
+    "build": "rimraf dist/* && rollup --config"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-typescript": "^12.1.2",
     "rollup": "^4.34.8",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^6.1.1",
-    "rollup-plugin-local-resolve": "^1.0.7"
+    "rollup-plugin-local-resolve": "^1.0.7",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^4.0.2"
   },
   "dependencies": {
     "@ruslan-sedziukh/md-types": "^0.0.1"
