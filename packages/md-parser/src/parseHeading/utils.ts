@@ -11,10 +11,10 @@ export const getHeadingType = (heading: string): [Heading, number] => {
   }
 
   if (i === 1) {
-    return ['heading-1', i + 1]
+    return [Heading.heading1, i + 1]
   } else if (i === 2) {
-    return ['heading-2', i + 1]
+    return [Heading.heading2, i + 1]
   }
 
-  return ['heading-3', i + 1]
+  return [Heading.heading3, i + 1]
 }

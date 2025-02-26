@@ -1,0 +1,14 @@
+.heading1 {
+  font-size: var(--md-parser-heading-1-font-size);
+  font-weight: 800;
+}
+
+.heading2 {
+  font-size: var(--md-parser-heading-2-font-size);
+  font-weight: 600;
+}
+
+.heading3 {
+  font-size: var(--md-parser-heading-3-font-size);
+  font-weight: 500;
+}

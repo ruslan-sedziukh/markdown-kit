@@ -11,6 +11,7 @@
     "declaration": true, // Enable declaration file generation
     "lib": ["esnext"],
     "noEmitOnError": true,
-    "removeComments": false
+    "removeComments": false,
+    "jsx": "react"
   }
 }
