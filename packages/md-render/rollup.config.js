@@ -1,39 +1,24 @@
 import typescript from '@rollup/plugin-typescript';
-import dts from 'rollup-plugin-dts';
 import postcss from 'rollup-plugin-postcss';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import copy from 'rollup-plugin-copy';
 
 const config = [
   {
-    input: 'index.ts', // Input is now your TypeScript source
+    input: 'index.ts',
     output: {
-      file: 'dist/md-render.js',
+      file: 'dist/index.js',
       format: 'es',
       sourcemap: true,
     },
-    external: ['@ruslan-sedziukh/md-types', 'react'], //Adjust this if needed.
+    external: ['@ruslan-sedziukh/md-types', 'react'],
     plugins: [
       nodeResolve(),
-      typescript(), // Rollup handles TypeScript compilation
+      typescript(),
       postcss({
         extract: true,
-        modules: true, // Enable CSS modules
-        minimize: true,
-        plugins: [],
-      }),
-      copy({
-        targets: [{ src: 'src/index.css', dest: 'dist' }],
+        modules: true,
       }),
     ],
-  },
-  {
-    input: 'dist/index.d.ts',
-    output: {
-      file: 'dist/md-render.d.ts',
-      format: 'es',
-    },
-    plugins: [dts()],
   },
 ];
 

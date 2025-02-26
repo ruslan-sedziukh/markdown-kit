@@ -3,20 +3,20 @@
   "version": "0.0.1",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/md-render.js",
+  "main": "./dist/index.js",
   "exports": {
-    ".": "./dist/md-render.js"
+    ".": "./dist/index.js"
   },
   "private": false,
   "files": [
-    "dist/md-render.js",
-    "dist/md-render.d.ts",
-    "dist/md-render.js.map",
+    "dist/index.js",
+    "dist/index.d.ts",
+    "dist/index.js.map",
     "README.md"
   ],
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rimraf dist/* && rollup --config"
+    "build": "rimraf dist/* && rollup --config && node add-css-import.js"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.0",
