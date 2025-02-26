@@ -5,13 +5,19 @@ import { parseHeading } from '../parseHeading'
 export const parseMarkdownString = (md: string): ParsedMarkdown => {
   const lines = md.split('\n')
 
-  const parsedLines = lines.map((line) => {
-    if (line[0] === '#') {
-      return parseHeading(line)
-    }
+  const parsedLines = lines
+    .map((line) => {
+      if (line[0] === '#') {
+        return parseHeading(line)
+      }
 
-    return { type: 'paragraph' as const, content: parseContent(line) }
-  })
+      if (line.length > 0) {
+        return { type: 'paragraph' as const, content: parseContent(line) }
+      }
+
+      return null
+    })
+    .filter((line) => !!line)
 
   return parsedLines
 }
