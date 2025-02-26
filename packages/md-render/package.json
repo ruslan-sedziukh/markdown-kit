@@ -1,6 +1,6 @@
 {
   "name": "@ruslan-sedziukh/md-render",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -12,6 +12,7 @@
     "dist/index.js",
     "dist/index.d.ts",
     "dist/index.js.map",
+    "dist/index.css",
     "README.md"
   ],
   "types": "./dist/index.d.ts",
@@ -27,7 +28,7 @@
     "rollup-plugin-postcss": "^4.0.2"
   },
   "dependencies": {
-    "@ruslan-sedziukh/md-types": "^0.0.1"
+    "@ruslan-sedziukh/md-types": "^0.0.5"
   },
   "peerDependencies": {
     "react": "^18.3.1"

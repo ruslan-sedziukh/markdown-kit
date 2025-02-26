@@ -14,7 +14,11 @@
     "build-types": "yarn workspace @ruslan-sedziukh/md-types build",
     "build-parser": "yarn workspace @ruslan-sedziukh/md-parser build",
     "build-render": "yarn workspace @ruslan-sedziukh/md-render build",
-    "build": "yarn build-types && yarn build-parser && yarn build-render"
+    "build": "yarn build-types && yarn build-parser && yarn build-render",
+    "publish-render": "yarn workspace @ruslan-sedziukh/md-render publish --access public",
+    "publish-types": "yarn workspace @ruslan-sedziukh/md-types publish --access public",
+    "publish-parser": "yarn workspace @ruslan-sedziukh/md-parser publish --access public",
+    "publish-all": "yarn publish-render && yarn publish-types && yarn publish-parser"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.26.9",
