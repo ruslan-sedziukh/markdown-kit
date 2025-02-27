@@ -1,11 +1,34 @@
 {
   "name": "@ruslan-sedziukh/md-render",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "main": "index.js",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "private": false,
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts",
+    "dist/index.js.map",
+    "dist/index.css",
+    "README.md"
+  ],
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist/* && rollup --config && node add-css-import.js"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "rollup": "^4.34.8",
+    "rollup-plugin-local-resolve": "^1.0.7",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^4.0.2"
+  },
   "dependencies": {
-    "@ruslan-sedziukh/md-types": "^0.0.1"
+    "@ruslan-sedziukh/md-types": "^0.0.5"
   },
   "peerDependencies": {
     "react": "^18.3.1"

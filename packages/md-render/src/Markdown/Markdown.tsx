@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react'
-import styles from './styles.module.css'
 import { isHeading, ParsedMarkdown } from '@ruslan-sedziukh/md-types'
 import Heading from '../Heading'
 import Paragraph from '../Paragraph/Paragraph'
