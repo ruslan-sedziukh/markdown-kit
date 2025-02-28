@@ -1,6 +1,6 @@
 {
   "name": "@ruslan-sedziukh/md-render",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -13,6 +13,7 @@
     "dist/index.d.ts",
     "dist/index.js.map",
     "dist/index.css",
+    "dist/src",
     "README.md"
   ],
   "types": "./dist/index.d.ts",
