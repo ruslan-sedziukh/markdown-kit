@@ -1,6 +1,6 @@
 {
   "name": "@ruslan-sedziukh/md-render",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -32,6 +32,6 @@
     "@ruslan-sedziukh/md-types": "^0.0.5"
   },
   "peerDependencies": {
-    "react": "^18.3.1"
+    "react": "^19.0.0"
   }
 }
