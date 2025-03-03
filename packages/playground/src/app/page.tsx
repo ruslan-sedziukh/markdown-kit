@@ -1,6 +1,5 @@
 import { parseMarkdown } from '@ruslan-sedziukh/md-parser'
-import { Markdown } from '@ruslan-sedziukh/md-render'
-import { ImageType } from '../../../md-render/dist/src/Image'
+import { Markdown, ImageType } from '@ruslan-sedziukh/md-render'
 
 export default function Home() {
   const parsedMarkdown = parseMarkdown('./public/example.md')
