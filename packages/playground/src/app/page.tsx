@@ -1,5 +1,5 @@
 import { parseMarkdown } from '@ruslan-sedziukh/md-parser'
-import Markdown from '@ruslan-sedziukh/md-render'
+import { Markdown } from '@ruslan-sedziukh/md-render'
 
 export default function Home() {
   const parsedMarkdown = parseMarkdown('./public/example.md')

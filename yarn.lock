@@ -1650,28 +1650,6 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.10.4.tgz#427d5549943a9c6fce808e39ea64dbe60d4047f1"
   integrity sha512-WJgX9nzTqknM393q1QJDJmoW28kUfEnybeTfVNcNAPnIx210RXm2DiXiHzfNPJNIUUb1tJnz/l4QGtJ30PgWmA==
 
-"@ruslan-sedziukh/md-parser@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@ruslan-sedziukh/md-parser/-/md-parser-0.0.6.tgz#f18e2e1ae5dc90dade57cc72ea90e95e09ebb439"
-  integrity sha512-OB6n0+EWDwXhSvfzqbjA8Vgx82e+7q/V//czzSDQg1hw08MFrDu2dn8kmPMsG4GDTKT9Xa/7uVHMjsjZzLXbWg==
-  dependencies:
-    "@ruslan-sedziukh/md-types" "^0.0.4"
-
-"@ruslan-sedziukh/md-render@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@ruslan-sedziukh/md-render/-/md-render-0.0.1.tgz#8f070b6da4c76f96ba2e245adb7dcdcea0b5efb1"
-  integrity sha512-wKyFsgcvXUDEaTvTAW36gAaliA6FcUz4TJYCLCh5G+sxP5XPxYpCyWlwRITxfv8aD1bbvAiBDYCFx6NbHoV7IA==
-  dependencies:
-    "@ruslan-sedziukh/md-types" "^0.0.1"
-
-"@ruslan-sedziukh/md-types@^0.0.1":
-  version "0.0.5"
-
-"@ruslan-sedziukh/md-types@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@ruslan-sedziukh/md-types/-/md-types-0.0.4.tgz#016cfbcfccb784469f397adb8c94d488e08d14a3"
-  integrity sha512-73WmsNETxePkYokk8XWyVS/Z8c9geWG8GSRwJlBrOsMraBoTFvW5vzvi+0I3MqCgKkHLIRB0cDJ+CJQ7HTSFpQ==
-
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"
