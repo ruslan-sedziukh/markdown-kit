@@ -1,22 +1,16 @@
 import { Heading as HeadingType } from '@ruslan-sedziukh/md-types'
-import { InlineContent } from '@ruslan-sedziukh/md-types/dist/md-types'
 import React, { ElementType, ReactNode } from 'react'
-import Content from '../Content'
 import styles from './styles.module.css'
 
 type Props = {
   type: HeadingType
-  content: InlineContent[]
+  children: ReactNode
 }
 
-const Heading = ({ type, content }: Props) => {
+const Heading = ({ type, children }: Props) => {
   const Component = getRootElement(type)
 
-  return (
-    <Component>
-      <Content content={content} />
-    </Component>
-  )
+  return <Component>{children}</Component>
 }
 
 const Heading1 = ({ children }: { children: ReactNode }) => {
