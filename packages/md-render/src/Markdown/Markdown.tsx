@@ -16,14 +16,14 @@ const Markdown = ({ parsedMarkdown: content, components }: Props) => {
       {content.map((element) => {
         if (isHeading(element.type)) {
           return (
-            <Heading type={element.type} key={JSON.stringify(element.content)}>
+            <Heading type={element.type} key={element.id}>
               <Content content={element.content} components={components} />
             </Heading>
           )
         }
 
         return (
-          <Paragraph key={JSON.stringify(element.content)}>
+          <Paragraph key={element.id}>
             <Content content={element.content} components={components} />
           </Paragraph>
         )

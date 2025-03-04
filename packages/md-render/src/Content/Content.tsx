@@ -21,7 +21,7 @@ const Content = ({ content, components }: Props) => {
 
         if (el.type === InlineType.Bold) {
           return (
-            <Bold key={JSON.stringify(el.content)}>
+            <Bold key={el.id}>
               <Content content={el.content} components={components} />
             </Bold>
           )
@@ -29,7 +29,7 @@ const Content = ({ content, components }: Props) => {
 
         if (el.type === InlineType.Italic) {
           return (
-            <Italic key={JSON.stringify(el.content)}>
+            <Italic key={el.id}>
               <Content content={el.content} components={components} />
             </Italic>
           )
@@ -37,7 +37,7 @@ const Content = ({ content, components }: Props) => {
 
         if (el.type === InlineType.Link) {
           return (
-            <Link href={el.href} key={JSON.stringify(el.href)}>
+            <Link href={el.href} key={el.id}>
               <Content content={el.content} components={components} />
             </Link>
           )
@@ -47,18 +47,10 @@ const Content = ({ content, components }: Props) => {
           if (components?.img) {
             const ImageComponent = components.img
 
-            return (
-              <ImageComponent
-                key={JSON.stringify(el.src)}
-                src={el.src}
-                alt={el.alt}
-              />
-            )
+            return <ImageComponent key={el.id} src={el.src} alt={el.alt} />
           }
 
-          return (
-            <Image key={JSON.stringify(el.src)} src={el.src} alt={el.alt} />
-          )
+          return <Image key={el.id} src={el.src} alt={el.alt} />
         }
       })}
     </>
