@@ -60,6 +60,7 @@ export const parseContent = (
               type: tempEl.type,
               // TODO: make href be parsed just as a string
               href: temp[temp.length - 1] as string,
+              id: uuidv4(),
             }
           }
         } else if (
@@ -80,6 +81,7 @@ export const parseContent = (
               alt: tempEl.alt,
               type: tempEl.type,
               src: temp[temp.length - 1] as string,
+              id: uuidv4(),
             }
 
             parseImage = false
@@ -88,6 +90,7 @@ export const parseContent = (
           temp[tempElI] = {
             type: elType,
             content: getElementsWithNoTemp(temp, tempElI + 1),
+            id: uuidv4(),
           } as InlineElement
         }
 
