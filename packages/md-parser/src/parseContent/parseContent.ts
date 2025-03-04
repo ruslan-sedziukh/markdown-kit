@@ -86,10 +86,19 @@ export const parseContent = (
 
             parseImage = false
           }
-        } else {
+        } else if (elType === InlineType.Bold) {
+          const el = {
+            type: elType,
+            content: getElementsWithNoTemp(temp, tempElI + 1),
+            id: uuidv4(),
+          }
+
+          temp[tempElI] = el
+        } else if (elType === InlineType.Italic) {
           temp[tempElI] = {
             type: elType,
             content: getElementsWithNoTemp(temp, tempElI + 1),
+            id: uuidv4(),
           }
         }
 
@@ -111,7 +120,6 @@ export const parseContent = (
           temp: true,
           type: elType,
           openSymbols: elSymbols,
-          id: uuidv4(),
         })
       }
 

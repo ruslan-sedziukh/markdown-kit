@@ -21,7 +21,6 @@ type TempElement =
   | {
       temp: true
       openSymbols: string
-      id: string
     }
   | TempLink
   | TempImage
