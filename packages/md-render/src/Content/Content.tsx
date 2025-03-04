@@ -11,16 +11,12 @@ type Props = {
   components?: Components
 }
 
-const String = ({ content }: { content: string }) => {
-  return <>{content}</>
-}
-
 const Content = ({ content, components }: Props) => {
   return (
     <>
       {content.map((el) => {
         if (typeof el === 'string') {
-          return <String content={el} key={el} />
+          return el
         }
 
         if (el.type === InlineType.Bold) {
