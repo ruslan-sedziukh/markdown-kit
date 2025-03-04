@@ -26,7 +26,7 @@ type TempElement =
   | TempImage
 
 export type Temp =
-  | Partial<InlineElement>
+  | InlineElement
   | (TempElement & Partial<InlineElement>)
   | string
 

@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import {
   InlineContent,
   InlineElement,
@@ -55,10 +56,11 @@ export const parseContent = (
 
           if (elSymbols === ')') {
             temp[tempElI] = {
-              content: tempEl.content,
+              content: tempEl.content || [],
               type: tempEl.type,
               // TODO: make href be parsed just as a string
               href: temp[temp.length - 1] as string,
+              id: uuidv4(),
             }
           }
         } else if (
@@ -76,18 +78,28 @@ export const parseContent = (
 
           if (elSymbols === ')') {
             temp[tempElI] = {
-              alt: tempEl.alt,
+              alt: tempEl.alt || '',
               type: tempEl.type,
               src: temp[temp.length - 1] as string,
+              id: uuidv4(),
             }
 
             parseImage = false
           }
-        } else {
+        } else if (elType === InlineType.Bold) {
+          const el = {
+            type: elType,
+            content: getElementsWithNoTemp(temp, tempElI + 1),
+            id: uuidv4(),
+          }
+
+          temp[tempElI] = el
+        } else if (elType === InlineType.Italic) {
           temp[tempElI] = {
             type: elType,
             content: getElementsWithNoTemp(temp, tempElI + 1),
-          } as InlineElement
+            id: uuidv4(),
+          }
         }
 
         temp = temp.slice(0, tempElI + 1)
@@ -97,6 +109,7 @@ export const parseContent = (
           type: elType,
           openSymbols: elSymbols,
           openSymbolsI: i,
+          id: uuidv4(),
         })
 
         if (elSymbols === '![') {

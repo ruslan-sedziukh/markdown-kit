@@ -11,7 +11,7 @@ const config = [
       format: 'es',
       sourcemap: true,
     },
-    external: ['@ruslan-sedziukh/md-types', 'fs'],
+    external: ['@ruslan-sedziukh/md-types', 'fs', 'uuid'],
     plugins: [typescript(), localResolve()]
   },
   {

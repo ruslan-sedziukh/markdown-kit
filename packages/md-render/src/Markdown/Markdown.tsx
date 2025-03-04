@@ -11,21 +11,25 @@ type Props = {
 }
 
 const Markdown = ({ parsedMarkdown: content, components }: Props) => {
-  return content.map((element) => {
-    if (isHeading(element.type)) {
-      return (
-        <Heading type={element.type}>
-          <Content content={element.content} components={components} />
-        </Heading>
-      )
-    }
+  return (
+    <div>
+      {content.map((element) => {
+        if (isHeading(element.type)) {
+          return (
+            <Heading type={element.type} key={element.id}>
+              <Content content={element.content} components={components} />
+            </Heading>
+          )
+        }
 
-    return (
-      <Paragraph>
-        <Content content={element.content} components={components} />
-      </Paragraph>
-    )
-  })
+        return (
+          <Paragraph key={element.id}>
+            <Content content={element.content} components={components} />
+          </Paragraph>
+        )
+      })}
+    </div>
+  )
 }
 
 export default Markdown

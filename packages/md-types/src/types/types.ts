@@ -21,11 +21,13 @@ export const isHeading = (type: string): type is Heading => {
 export type HeadingElement = {
   type: Heading
   content: InlineContent[]
+  id: string
 }
 
 export type ParagraphElement = {
   type: 'paragraph'
   content: InlineContent[]
+  id: string
 }
 
 // Type for all possible block elements
@@ -41,23 +43,27 @@ export enum InlineType {
 export type BoldElement = {
   type: InlineType.Bold
   content: Exclude<InlineContent, InlineType.Bold>[]
+  id: string
 }
 
 export type ItalicElement = {
   type: InlineType.Italic
   content: Exclude<InlineContent, InlineType.Italic>[]
+  id: string
 }
 
 export type LinkElement = {
   type: InlineType.Link
   content: Exclude<InlineContent, InlineType.Link>[]
   href: string
+  id: string
 }
 
 export type ImageElement = {
   type: InlineType.Image
   alt: string
   src: string
+  id: string
 }
 
 // Type for all possible inline elements
