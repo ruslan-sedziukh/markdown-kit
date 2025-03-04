@@ -56,7 +56,7 @@ export const parseContent = (
 
           if (elSymbols === ')') {
             temp[tempElI] = {
-              content: tempEl.content,
+              content: tempEl.content || [],
               type: tempEl.type,
               // TODO: make href be parsed just as a string
               href: temp[temp.length - 1] as string,
@@ -78,7 +78,7 @@ export const parseContent = (
 
           if (elSymbols === ')') {
             temp[tempElI] = {
-              alt: tempEl.alt,
+              alt: tempEl.alt || '',
               type: tempEl.type,
               src: temp[temp.length - 1] as string,
               id: uuidv4(),
@@ -90,8 +90,7 @@ export const parseContent = (
           temp[tempElI] = {
             type: elType,
             content: getElementsWithNoTemp(temp, tempElI + 1),
-            id: uuidv4(),
-          } as InlineElement
+          }
         }
 
         temp = temp.slice(0, tempElI + 1)

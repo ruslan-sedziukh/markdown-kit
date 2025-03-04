@@ -15,19 +15,19 @@ type TempImage = {
   temp: true
   openSymbols: '!['
   openSymbolsI: number
-  id: string
 }
 
 type TempElement =
   | {
       temp: true
       openSymbols: string
+      id: string
     }
   | TempLink
   | TempImage
 
 export type Temp =
-  | Partial<InlineElement>
+  | InlineElement
   | (TempElement & Partial<InlineElement>)
   | string
 
