@@ -14,15 +14,27 @@ const Heading = ({ type, children }: Props) => {
 }
 
 const Heading1 = ({ children }: { children: ReactNode }) => {
-  return <h1 className={styles.heading1}>{children}</h1>
+  return (
+    <h1 key={JSON.stringify(children)} className={styles.heading1}>
+      {children}
+    </h1>
+  )
 }
 
 const Heading2 = ({ children }: { children: ReactNode }) => {
-  return <h2 className={styles.heading2}>{children}</h2>
+  return (
+    <h2 key={JSON.stringify(children)} className={styles.heading2}>
+      {children}
+    </h2>
+  )
 }
 
 const Heading3 = ({ children }: { children: ReactNode }) => {
-  return <h2 className={styles.heading3}>{children}</h2>
+  return (
+    <h2 key={JSON.stringify(children)} className={styles.heading3}>
+      {children}
+    </h2>
+  )
 }
 
 const getRootElement = (type: HeadingType): ElementType => {
