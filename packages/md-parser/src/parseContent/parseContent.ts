@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import {
   InlineContent,
   InlineElement,
@@ -97,6 +98,7 @@ export const parseContent = (
           type: elType,
           openSymbols: elSymbols,
           openSymbolsI: i,
+          id: uuidv4(),
         })
 
         if (elSymbols === '![') {
@@ -107,6 +109,7 @@ export const parseContent = (
           temp: true,
           type: elType,
           openSymbols: elSymbols,
+          id: uuidv4(),
         })
       }
 

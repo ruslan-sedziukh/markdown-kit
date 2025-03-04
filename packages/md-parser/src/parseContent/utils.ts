@@ -15,6 +15,7 @@ type TempImage = {
   temp: true
   openSymbols: '!['
   openSymbolsI: number
+  id: string
 }
 
 type TempElement =

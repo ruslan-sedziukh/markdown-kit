@@ -19,7 +19,8 @@
     "build": "rimraf dist/* && tsc && rollup --config"
   },
   "dependencies": {
-    "@ruslan-sedziukh/md-types": "^0.0.5"
+    "@ruslan-sedziukh/md-types": "^0.0.5",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^12.1.2",
