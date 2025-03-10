@@ -3,6 +3,7 @@ import {
   InlineElement,
   InlineType,
   isInlineContent,
+  Types,
 } from '@ruslan-sedziukh/md-types'
 
 type TempLink = {
@@ -95,7 +96,7 @@ export const getTempElData = ({
       elType: InlineType
       elSymbols: string
       tempElI: number
-      reparseElType?: InlineType.Link | InlineType.Image
+      reparseElType?: Types.Link | Types.Image
     }
   | {
       elType: null
@@ -126,12 +127,12 @@ export const getStrictTempElData = ({
       elType: InlineType
       elSymbols: string
       tempElI: number
-      reparseElType?: InlineType.Link | InlineType.Image
+      reparseElType?: Types.Link | Types.Image
     }
   | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === '*' && content[i + 1] === '*') {
     return {
-      elType: InlineType.Bold,
+      elType: Types.Bold,
       elSymbols: '**',
       tempElI: getTempElWithTempLink(temp, '**'),
     }
@@ -139,7 +140,7 @@ export const getStrictTempElData = ({
 
   if (content[i] === '*') {
     return {
-      elType: InlineType.Italic,
+      elType: Types.Italic,
       elSymbols: '*',
       tempElI: getTempElWithTempLink(temp, '*'),
     }
@@ -149,10 +150,10 @@ export const getStrictTempElData = ({
     const tempElI = getTempElI(temp, '[')
 
     return {
-      elType: InlineType.Link,
+      elType: Types.Link,
       elSymbols: '[',
       tempElI: tempElI,
-      reparseElType: tempElI !== -1 ? InlineType.Link : undefined,
+      reparseElType: tempElI !== -1 ? Types.Link : undefined,
     }
   }
 
@@ -162,7 +163,7 @@ export const getStrictTempElData = ({
 
     if (tempElI !== -1 && typeof tempEl !== 'string' && !('content' in tempEl))
       return {
-        elType: InlineType.Link,
+        elType: Types.Link,
         elSymbols: '](',
         tempElI: tempElI,
       }
@@ -209,7 +210,7 @@ export const getStrictTempElData = ({
 
     if (tempElI === -1) {
       return {
-        elType: InlineType.Image,
+        elType: Types.Image,
         elSymbols: '![',
         tempElI,
       }
@@ -221,7 +222,7 @@ export const getStrictTempElData = ({
 
     if (tempElI !== -1) {
       return {
-        elType: InlineType.Image,
+        elType: Types.Image,
         elSymbols: '](',
         tempElI,
       }
@@ -247,7 +248,7 @@ export const getImageTempElData = ({
       elType: InlineType
       elSymbols: string
       tempElI: number
-      reparseElType?: InlineType.Image
+      reparseElType?: Types.Image
     }
   | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === ')') {
@@ -273,10 +274,10 @@ export const getImageTempElData = ({
 
     if (tempElI !== -1) {
       return {
-        elType: InlineType.Image,
+        elType: Types.Image,
         elSymbols: '![',
         tempElI,
-        reparseElType: InlineType.Image,
+        reparseElType: Types.Image,
       }
     }
   }
@@ -286,17 +287,17 @@ export const getImageTempElData = ({
 
     if (tempElI === -1) {
       return {
-        elType: InlineType.Image,
+        elType: Types.Image,
         elSymbols: '![',
         tempElI,
       }
     }
 
     return {
-      elType: InlineType.Image,
+      elType: Types.Image,
       elSymbols: '![',
       tempElI,
-      reparseElType: InlineType.Image,
+      reparseElType: Types.Image,
     }
   }
 
@@ -305,7 +306,7 @@ export const getImageTempElData = ({
 
     if (tempElI !== -1) {
       return {
-        elType: InlineType.Image,
+        elType: Types.Image,
         elSymbols: '](',
         tempElI,
       }

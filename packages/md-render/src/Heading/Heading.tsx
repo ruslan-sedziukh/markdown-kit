@@ -26,9 +26,9 @@ const Heading3 = ({ children }: { children: ReactNode }) => {
 }
 
 const getRootElement = (type: HeadingTypes): ElementType => {
-  if (type === HeadingTypes.heading1) {
+  if (type === HeadingTypes.Heading1) {
     return Heading1
-  } else if (type === HeadingTypes.heading2) {
+  } else if (type === HeadingTypes.Heading2) {
     return Heading2
   }
 

@@ -1,4 +1,4 @@
-import { InlineType } from '@ruslan-sedziukh/md-types'
+import { Types } from '@ruslan-sedziukh/md-types'
 import { parseContent } from '.'
 
 const id = 'uuid'
@@ -80,7 +80,7 @@ describe('parseContent', () => {
           'Look at ',
           {
             type: 'link',
-            content: [{ type: InlineType.Bold, content: ['this'], id }],
+            content: [{ type: Types.Bold, content: ['this'], id }],
             href: 'www.test.com',
             id,
           },
@@ -161,7 +161,7 @@ describe('parseContent', () => {
           },
           ' ',
           {
-            type: InlineType.Link,
+            type: Types.Link,
             content: ['cow'],
             href: 'test.com',
             id,
@@ -181,7 +181,7 @@ describe('parseContent', () => {
         expected: [
           'Look at ',
           {
-            type: InlineType.Image,
+            type: Types.Image,
             alt: 'cow',
             src: './assets/cow.png',
             id,
@@ -195,7 +195,7 @@ describe('parseContent', () => {
         expected: [
           'Look at ',
           {
-            type: InlineType.Image,
+            type: Types.Image,
             alt: '**cow**',
             src: './assets/cow.png',
             id,
@@ -209,7 +209,7 @@ describe('parseContent', () => {
         expected: [
           '**',
           {
-            type: InlineType.Image,
+            type: Types.Image,
             alt: 'mini**mum',
             src: './assets/minimum.png',
             id,
@@ -252,7 +252,7 @@ describe('parseContent', () => {
           },
           ' ',
           {
-            type: InlineType.Image,
+            type: Types.Image,
             alt: 'cow',
             src: './assets/cow.png',
             id,
@@ -277,7 +277,7 @@ describe('parseContent', () => {
           },
           ' ',
           {
-            type: InlineType.Image,
+            type: Types.Image,
             alt: 'cow',
             src: './assets/cow.png',
             id,

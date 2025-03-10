@@ -11,10 +11,10 @@ export const getHeadingType = (heading: string): [HeadingType, number] => {
   }
 
   if (i === 1) {
-    return [Types.heading1, i + 1]
+    return [Types.Heading1, i + 1]
   } else if (i === 2) {
-    return [Types.heading2, i + 1]
+    return [Types.Heading2, i + 1]
   }
 
-  return [Types.heading3, i + 1]
+  return [Types.Heading3, i + 1]
 }

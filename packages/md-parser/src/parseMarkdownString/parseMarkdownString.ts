@@ -21,7 +21,7 @@ export const parseMarkdownString = (md: string): ParsedMarkdown => {
     // }
     else if (line.length > 0) {
       parsedMarkdown.push({
-        type: Types.paragraph,
+        type: Types.Paragraph,
         content: parseContent(line),
         id: getId(),
       })

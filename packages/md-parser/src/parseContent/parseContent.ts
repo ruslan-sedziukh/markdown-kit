@@ -1,8 +1,4 @@
-import {
-  InlineContent,
-  InlineElement,
-  InlineType,
-} from '@ruslan-sedziukh/md-types'
+import { InlineContent, Types } from '@ruslan-sedziukh/md-types'
 import {
   getTempElData,
   getElementsWithNoTemp,
@@ -46,7 +42,7 @@ export const parseContent = (
       if (tempElI !== -1) {
         const tempEl = temp[tempElI]
 
-        if (typeof tempEl !== 'string' && tempEl.type === InlineType.Link) {
+        if (typeof tempEl !== 'string' && tempEl.type === Types.Link) {
           if (elSymbols === '](') {
             temp[tempElI] = {
               ...tempEl,
@@ -63,10 +59,7 @@ export const parseContent = (
               id: getId(),
             }
           }
-        } else if (
-          typeof tempEl !== 'string' &&
-          tempEl.type === InlineType.Image
-        ) {
+        } else if (typeof tempEl !== 'string' && tempEl.type === Types.Image) {
           if (elSymbols === '](') {
             const altText = temp[temp.length - 1]
 
@@ -86,7 +79,7 @@ export const parseContent = (
 
             parseImage = false
           }
-        } else if (elType === InlineType.Bold) {
+        } else if (elType === Types.Bold) {
           const el = {
             type: elType,
             content: getElementsWithNoTemp(temp, tempElI + 1),
@@ -94,7 +87,7 @@ export const parseContent = (
           }
 
           temp[tempElI] = el
-        } else if (elType === InlineType.Italic) {
+        } else if (elType === Types.Italic) {
           temp[tempElI] = {
             type: elType,
             content: getElementsWithNoTemp(temp, tempElI + 1),
@@ -151,7 +144,7 @@ const getParsedFromTemp = (content: string, temp: Temp[]) => {
       return false
     }
 
-    if (el.type === InlineType.Link && !el.href) {
+    if (el.type === Types.Link && !el.href) {
       return true
     }
   })
@@ -161,7 +154,7 @@ const getParsedFromTemp = (content: string, temp: Temp[]) => {
       return false
     }
 
-    if (el.type === InlineType.Image && !el.src) {
+    if (el.type === Types.Image && !el.src) {
       return true
     }
   })
@@ -175,8 +168,8 @@ const getParsedFromTemp = (content: string, temp: Temp[]) => {
     uncompletedTempEl &&
     typeof uncompletedTempEl === 'object' &&
     'type' in uncompletedTempEl &&
-    (uncompletedTempEl.type === InlineType.Link ||
-      uncompletedTempEl.type === InlineType.Image)
+    (uncompletedTempEl.type === Types.Link ||
+      uncompletedTempEl.type === Types.Image)
   ) {
     return reparseAfterUncompletedElement(
       content,
@@ -197,13 +190,13 @@ const reparseAfterUncompletedElement = (
   // uncompleted temp element index,
   tempElI: number,
   // temp element type
-  type: InlineType.Image | InlineType.Link
+  type: Types.Image | Types.Link
 ) => {
   let openSymbols = ''
 
-  if (type === InlineType.Image) {
+  if (type === Types.Image) {
     openSymbols = '!['
-  } else if (type === InlineType.Link) {
+  } else if (type === Types.Link) {
     openSymbols = '['
   }
 
