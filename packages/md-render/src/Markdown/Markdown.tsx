@@ -14,7 +14,7 @@ const Markdown = ({ parsedMarkdown: content, components }: Props) => {
   return (
     <div>
       {content.map((element) => {
-        if (isHeading(element.type)) {
+        if (isHeading(element)) {
           return (
             <Heading type={element.type} key={element.id}>
               <Content content={element.content} components={components} />

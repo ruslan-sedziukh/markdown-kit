@@ -1,16 +1,23 @@
 export type ParsedMarkdown = BlockElement[]
 
-export enum Heading {
+export enum Types {
   heading1 = 'heading-1',
   heading2 = 'heading-2',
   heading3 = 'heading-3',
+  paragraph = 'paragraph',
+  list = 'list',
+  listElement = 'list-element',
 }
 
-export const isHeading = (type: string): type is Heading => {
+export type HeadingType = Types.heading1 | Types.heading2 | Types.heading3
+
+export const isHeading = (el: { type: string }): el is Heading => {
+  const { type } = el
+
   if (
-    type === Heading.heading1 ||
-    type === Heading.heading2 ||
-    type === Heading.heading3
+    type === Types.heading1 ||
+    type === Types.heading2 ||
+    type === Types.heading3
   ) {
     return true
   }
@@ -18,20 +25,32 @@ export const isHeading = (type: string): type is Heading => {
   return false
 }
 
-export type HeadingElement = {
-  type: Heading
+export type Heading = {
+  type: HeadingType
   content: InlineContent[]
   id: string
 }
 
-export type ParagraphElement = {
-  type: 'paragraph'
+export type Paragraph = {
+  type: Types.paragraph
   content: InlineContent[]
+  id: string
+}
+
+export type ListItem = {
+  type: Types.listElement
+  content: (List | InlineContent)[]
+  id: string
+}
+
+export type List = {
+  type: Types.list
+  content: ListItem[]
   id: string
 }
 
 // Type for all possible block elements
-export type BlockElement = HeadingElement | ParagraphElement
+export type BlockElement = Heading | Paragraph | List | ListItem
 
 export enum InlineType {
   Bold = 'bold',
@@ -40,26 +59,26 @@ export enum InlineType {
   Image = 'image',
 }
 
-export type BoldElement = {
+export type Bold = {
   type: InlineType.Bold
   content: Exclude<InlineContent, InlineType.Bold>[]
   id: string
 }
 
-export type ItalicElement = {
+export type Italic = {
   type: InlineType.Italic
   content: Exclude<InlineContent, InlineType.Italic>[]
   id: string
 }
 
-export type LinkElement = {
+export type Link = {
   type: InlineType.Link
   content: Exclude<InlineContent, InlineType.Link>[]
   href: string
   id: string
 }
 
-export type ImageElement = {
+export type Image = {
   type: InlineType.Image
   alt: string
   src: string
@@ -67,11 +86,7 @@ export type ImageElement = {
 }
 
 // Type for all possible inline elements
-export type InlineElement =
-  | BoldElement
-  | ItalicElement
-  | LinkElement
-  | ImageElement
+export type InlineElement = Bold | Italic | Link | Image
 
 export type InlineContent = InlineElement | string
 

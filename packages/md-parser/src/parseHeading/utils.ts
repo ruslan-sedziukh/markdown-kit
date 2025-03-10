@@ -1,7 +1,7 @@
-import { Heading } from '@ruslan-sedziukh/md-types'
+import { HeadingType, Types } from '@ruslan-sedziukh/md-types'
 
 // returns type of heading and index of content
-export const getHeadingType = (heading: string): [Heading, number] => {
+export const getHeadingType = (heading: string): [HeadingType, number] => {
   let headingLevel = 0
   let i = 0
 
@@ -11,10 +11,10 @@ export const getHeadingType = (heading: string): [Heading, number] => {
   }
 
   if (i === 1) {
-    return [Heading.heading1, i + 1]
+    return [Types.heading1, i + 1]
   } else if (i === 2) {
-    return [Heading.heading2, i + 1]
+    return [Types.heading2, i + 1]
   }
 
-  return [Heading.heading3, i + 1]
+  return [Types.heading3, i + 1]
 }

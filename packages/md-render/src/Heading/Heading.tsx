@@ -1,9 +1,9 @@
-import { Heading as HeadingType } from '@ruslan-sedziukh/md-types'
+import { Types as HeadingTypes } from '@ruslan-sedziukh/md-types'
 import React, { ElementType, ReactNode } from 'react'
 import styles from './styles.module.css'
 
 type Props = {
-  type: HeadingType
+  type: HeadingTypes
   children: ReactNode
 }
 
@@ -25,10 +25,10 @@ const Heading3 = ({ children }: { children: ReactNode }) => {
   return <h2 className={styles.heading3}>{children}</h2>
 }
 
-const getRootElement = (type: HeadingType): ElementType => {
-  if (type === HeadingType.heading1) {
+const getRootElement = (type: HeadingTypes): ElementType => {
+  if (type === HeadingTypes.heading1) {
     return Heading1
-  } else if (type === HeadingType.heading2) {
+  } else if (type === HeadingTypes.heading2) {
     return Heading2
   }
 
