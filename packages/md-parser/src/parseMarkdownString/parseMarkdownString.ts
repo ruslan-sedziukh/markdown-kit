@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from 'uuid'
 import { ParsedMarkdown } from '@ruslan-sedziukh/md-types'
 import { parseContent } from '../parseContent'
 import { parseHeading } from '../parseHeading'
+import { getId } from '../utils'
 
 export const parseMarkdownString = (md: string): ParsedMarkdown => {
   const lines = md.split('\n')
@@ -16,7 +16,7 @@ export const parseMarkdownString = (md: string): ParsedMarkdown => {
         return {
           type: 'paragraph' as const,
           content: parseContent(line),
-          id: uuidv4(),
+          id: getId(),
         }
       }
 

@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
 import {
   InlineContent,
   InlineElement,
@@ -11,6 +10,7 @@ import {
   Temp,
   isTempImage,
 } from './utils'
+import { getId } from '../utils'
 
 export const parseContent = (
   // content that should be parsed
@@ -60,7 +60,7 @@ export const parseContent = (
               type: tempEl.type,
               // TODO: make href be parsed just as a string
               href: temp[temp.length - 1] as string,
-              id: uuidv4(),
+              id: getId(),
             }
           }
         } else if (
@@ -81,7 +81,7 @@ export const parseContent = (
               alt: tempEl.alt || '',
               type: tempEl.type,
               src: temp[temp.length - 1] as string,
-              id: uuidv4(),
+              id: getId(),
             }
 
             parseImage = false
@@ -90,7 +90,7 @@ export const parseContent = (
           const el = {
             type: elType,
             content: getElementsWithNoTemp(temp, tempElI + 1),
-            id: uuidv4(),
+            id: getId(),
           }
 
           temp[tempElI] = el
@@ -98,7 +98,7 @@ export const parseContent = (
           temp[tempElI] = {
             type: elType,
             content: getElementsWithNoTemp(temp, tempElI + 1),
-            id: uuidv4(),
+            id: getId(),
           }
         }
 
@@ -109,7 +109,7 @@ export const parseContent = (
           type: elType,
           openSymbols: elSymbols,
           openSymbolsI: i,
-          id: uuidv4(),
+          id: getId(),
         })
 
         if (elSymbols === '![') {

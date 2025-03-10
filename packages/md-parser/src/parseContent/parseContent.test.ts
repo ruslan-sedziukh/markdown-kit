@@ -1,8 +1,10 @@
 import { InlineType } from '@ruslan-sedziukh/md-types'
 import { parseContent } from '.'
 
-jest.mock('uuid', () => ({
-  v4: () => 'uuid',
+const id = 'uuid'
+
+jest.mock('../utils', () => ({
+  getId: () => id,
 }))
 
 describe('parseContent', () => {
@@ -16,7 +18,7 @@ describe('parseContent', () => {
           {
             type: 'bold',
             content: ['one'],
-            id: 'uuid',
+            id,
           },
           ' of two',
         ],
@@ -33,7 +35,7 @@ describe('parseContent', () => {
           {
             type: 'italic',
             content: ['H'],
-            id: 'uuid',
+            id,
           },
           'eading ',
           {
@@ -42,11 +44,11 @@ describe('parseContent', () => {
               {
                 type: 'italic',
                 content: ['o'],
-                id: 'uuid',
+                id,
               },
               'ne',
             ],
-            id: 'uuid',
+            id,
           },
         ],
       },
@@ -66,7 +68,7 @@ describe('parseContent', () => {
             type: 'link',
             content: ['this'],
             href: 'www.test.com',
-            id: 'uuid',
+            id,
           },
           ' and be aware',
         ],
@@ -78,9 +80,9 @@ describe('parseContent', () => {
           'Look at ',
           {
             type: 'link',
-            content: [{ type: InlineType.Bold, content: ['this'], id: 'uuid' }],
+            content: [{ type: InlineType.Bold, content: ['this'], id }],
             href: 'www.test.com',
-            id: 'uuid',
+            id,
           },
           ' and be aware',
         ],
@@ -94,7 +96,7 @@ describe('parseContent', () => {
             type: 'link',
             content: ['mini**mum'],
             href: 'blabla',
-            id: 'uuid',
+            id,
           },
         ],
       },
@@ -106,13 +108,13 @@ describe('parseContent', () => {
           {
             type: 'bold',
             content: ['[mini'],
-            id: 'uuid',
+            id,
           },
           'mum',
           {
             type: 'bold',
             content: ['(blabla)'],
-            id: 'uuid',
+            id,
           },
         ],
       },
@@ -124,20 +126,20 @@ describe('parseContent', () => {
           {
             type: 'bold',
             content: ['[mini'],
-            id: 'uuid',
+            id,
           },
           'mum',
           {
             type: 'bold',
             content: ['(blabla)'],
-            id: 'uuid',
+            id,
           },
           ' ',
           {
             type: 'link',
             content: ['value'],
             href: 'test.com',
-            id: 'uuid',
+            id,
           },
         ],
       },
@@ -149,20 +151,20 @@ describe('parseContent', () => {
           {
             type: 'bold',
             content: ['![mini'],
-            id: 'uuid',
+            id,
           },
           'mum',
           {
             type: 'bold',
             content: ['(blabla)'],
-            id: 'uuid',
+            id,
           },
           ' ',
           {
             type: InlineType.Link,
             content: ['cow'],
             href: 'test.com',
-            id: 'uuid',
+            id,
           },
         ],
       },
@@ -182,7 +184,7 @@ describe('parseContent', () => {
             type: InlineType.Image,
             alt: 'cow',
             src: './assets/cow.png',
-            id: 'uuid',
+            id,
           },
           ' and be aware',
         ],
@@ -196,7 +198,7 @@ describe('parseContent', () => {
             type: InlineType.Image,
             alt: '**cow**',
             src: './assets/cow.png',
-            id: 'uuid',
+            id,
           },
           ' and be aware',
         ],
@@ -210,7 +212,7 @@ describe('parseContent', () => {
             type: InlineType.Image,
             alt: 'mini**mum',
             src: './assets/minimum.png',
-            id: 'uuid',
+            id,
           },
         ],
       },
@@ -222,13 +224,13 @@ describe('parseContent', () => {
           {
             type: 'bold',
             content: ['![mini'],
-            id: 'uuid',
+            id,
           },
           'mum',
           {
             type: 'bold',
             content: ['(./assets/minimum.png)'],
-            id: 'uuid',
+            id,
           },
         ],
       },
@@ -240,20 +242,20 @@ describe('parseContent', () => {
           {
             type: 'bold',
             content: ['![mini'],
-            id: 'uuid',
+            id,
           },
           'mum',
           {
             type: 'bold',
             content: ['(blabla)'],
-            id: 'uuid',
+            id,
           },
           ' ',
           {
             type: InlineType.Image,
             alt: 'cow',
             src: './assets/cow.png',
-            id: 'uuid',
+            id,
           },
         ],
       },
@@ -265,20 +267,20 @@ describe('parseContent', () => {
           {
             type: 'bold',
             content: ['[mini'],
-            id: 'uuid',
+            id,
           },
           'mum',
           {
             type: 'bold',
             content: ['(blabla)'],
-            id: 'uuid',
+            id,
           },
           ' ',
           {
             type: InlineType.Image,
             alt: 'cow',
             src: './assets/cow.png',
-            id: 'uuid',
+            id,
           },
         ],
       },

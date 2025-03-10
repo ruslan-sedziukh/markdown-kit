@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from 'uuid'
 import { HeadingElement } from '@ruslan-sedziukh/md-types'
 import { parseContent } from '../parseContent'
 import { getHeadingType } from './utils'
+import { getId } from '../utils'
 
 export const parseHeading = (heading: string): HeadingElement => {
   const [headingType, contentIndex] = getHeadingType(heading)
@@ -10,6 +10,6 @@ export const parseHeading = (heading: string): HeadingElement => {
   return {
     type: headingType,
     content,
-    id: uuidv4(),
+    id: getId(),
   }
 }
