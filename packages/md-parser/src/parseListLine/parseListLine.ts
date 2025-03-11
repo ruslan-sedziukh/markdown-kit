@@ -12,8 +12,14 @@ export const parseListLine = (
   line: string,
   parsedMarkdown: ParsedMarkdown
 ): void => {
-  if (parsedMarkdown[parsedMarkdown.length - 1]?.type === Types.UnorderedList) {
-    //
+  const lastElement = parsedMarkdown[parsedMarkdown.length - 1]
+
+  if (lastElement?.type === Types.UnorderedList) {
+    lastElement.content.push({
+      type: Types.ListItem,
+      content: parseContent(getContentLine(line)),
+      id: getId(),
+    })
   } else {
     parsedMarkdown.push({
       type: Types.UnorderedList,

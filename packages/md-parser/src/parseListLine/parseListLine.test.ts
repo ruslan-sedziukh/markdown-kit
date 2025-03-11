@@ -34,24 +34,41 @@ describe('parseListLine', () => {
         },
       ],
     },
-    // {
-    //   test: 'adds list item to existed list if is the last parsed element',
-    //   listLine: '- first item',
-    //   parsedMarkdown: [
-    //     {
-    //       type: Types.UnorderedList,
-    //       content: ['first item'],
-    //       id,
-    //     },
-    //   ],
-    //   expected: [
-    //     {
-    //       type: Types.UnorderedList,
-    //       content: ['first item'],
-    //       id,
-    //     },
-    //   ],
-    // },
+    {
+      test: 'adds list item to existed list if is the last parsed element',
+      listLine: '- second item',
+      parsedMarkdown: [
+        {
+          type: Types.UnorderedList,
+          content: [
+            {
+              type: Types.ListItem,
+              content: ['first item'],
+              id,
+            },
+          ],
+          id,
+        },
+      ],
+      expected: [
+        {
+          type: Types.UnorderedList,
+          content: [
+            {
+              type: Types.ListItem,
+              content: ['first item'],
+              id,
+            },
+            {
+              type: Types.ListItem,
+              content: ['second item'],
+              id,
+            },
+          ],
+          id,
+        },
+      ],
+    },
   ] as Test)('$test', ({ listLine, parsedMarkdown, expected }) => {
     parseListLine(listLine, parsedMarkdown)
 
