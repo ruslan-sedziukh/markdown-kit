@@ -2,7 +2,7 @@ import { ParsedMarkdown, Types } from '@ruslan-sedziukh/md-types'
 import { parseContent } from '../parseContent'
 import { parseHeading } from '../parseHeading'
 import { getId } from '../utils'
-// import { parseListLine } from '../parseListLine'
+import { parseListLine } from '../parseListLine'
 
 export const parseMarkdownString = (md: string): ParsedMarkdown => {
   const lines = md.split('\n').filter((line) => !!line)
@@ -14,8 +14,8 @@ export const parseMarkdownString = (md: string): ParsedMarkdown => {
 
     if (line[0] === '#') {
       parsedMarkdown.push(parseHeading(line))
-      // } else if (isListLine(line)) {
-      //   parsedMarkdown.push(parseListLine(line, parsedMarkdown))
+    } else if (isListLine(line)) {
+      parseListLine(line, parsedMarkdown)
     } else if (line.length > 0) {
       parsedMarkdown.push({
         type: Types.Paragraph,

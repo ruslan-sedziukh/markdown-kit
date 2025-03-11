@@ -5,7 +5,8 @@ export enum Types {
   Heading2 = 'heading-2',
   Heading3 = 'heading-3',
   Paragraph = 'paragraph',
-  List = 'list',
+  UnorderedList = 'unordered-list',
+  OrderedList = 'ordered-list',
   ListElement = 'list-element',
   Bold = 'bold',
   Italic = 'italic',
@@ -48,7 +49,7 @@ export type ListItem = {
 }
 
 export type List = {
-  type: Types.List
+  type: Types.OrderedList | Types.UnorderedList
   content: ListItem[]
   id: string
 }
@@ -61,7 +62,8 @@ export type InlineType =
   | Types.Image
   | Types.Italic
   | Types.Link
-  | Types.List
+  | Types.UnorderedList
+  | Types.OrderedList
   | Types.ListElement
 
 export type Bold = {
