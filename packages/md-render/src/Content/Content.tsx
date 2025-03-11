@@ -1,5 +1,5 @@
 import React from 'react'
-import { ContentElement, Types } from '@ruslan-sedziukh/md-types'
+import { Content, Types } from '@ruslan-sedziukh/md-types'
 import Bold from '../Bold'
 import Italic from '../Italic'
 import Link from '../Link'
@@ -7,7 +7,7 @@ import Image from '../Image'
 import { Components } from '../Markdown/types'
 
 type Props = {
-  content: ContentElement[]
+  content: Content[]
   components?: Components
 }
 

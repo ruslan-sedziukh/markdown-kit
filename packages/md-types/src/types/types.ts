@@ -7,7 +7,7 @@ export enum Types {
   Paragraph = 'paragraph',
   UnorderedList = 'unordered-list',
   OrderedList = 'ordered-list',
-  ListElement = 'list-element',
+  ListItem = 'list-element',
   Bold = 'bold',
   Italic = 'italic',
   Link = 'link',
@@ -32,25 +32,25 @@ export const isHeading = (el: { type: string }): el is Heading => {
 
 export type Heading = {
   type: HeadingType
-  content: ContentElement[]
+  content: Content[]
   id: string
 }
 
 export type Paragraph = {
   type: Types.Paragraph
-  content: ContentElement[]
+  content: Content[]
   id: string
 }
 
 export type ListItem = {
-  type: Types.ListElement
-  content: ContentElement[]
+  type: Types.ListItem
+  content: Content[]
   id: string
 }
 
 export type List = {
   type: Types.OrderedList | Types.UnorderedList
-  content: ContentElement[]
+  content: Content[]
   id: string
 }
 
@@ -64,23 +64,23 @@ export type InlineType =
   | Types.Link
   | Types.UnorderedList
   | Types.OrderedList
-  | Types.ListElement
+  | Types.ListItem
 
 export type Bold = {
   type: Types.Bold
-  content: Exclude<ContentElement, Types.Bold>[]
+  content: Exclude<Content, Types.Bold>[]
   id: string
 }
 
 export type Italic = {
   type: Types.Italic
-  content: Exclude<ContentElement, Types.Italic>[]
+  content: Exclude<Content, Types.Italic>[]
   id: string
 }
 
 export type Link = {
   type: Types.Link
-  content: Exclude<ContentElement, Types.Link>[]
+  content: Exclude<Content, Types.Link>[]
   href: string
   id: string
 }
@@ -92,15 +92,10 @@ export type Image = {
   id: string
 }
 
-// Type for all possible inline elements
-export type ContentElement =
-  | Bold
-  | Italic
-  | Link
-  | Image
-  | List
-  | ListItem
-  | string
+// Type for all possible content elements
+export type ContentElement = Bold | Italic | Link | Image | List | ListItem
+
+export type Content = ContentElement | string
 
 export const isContentElement = (el: any): el is ContentElement => {
   if (el.type) {

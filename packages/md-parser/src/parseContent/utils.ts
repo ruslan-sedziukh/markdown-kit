@@ -1,7 +1,10 @@
 import {
+  Content,
   ContentElement,
   InlineType,
   isContentElement,
+  List,
+  ListItem,
   Types,
 } from '@ruslan-sedziukh/md-types'
 
@@ -22,13 +25,10 @@ type TempElement =
       temp: true
       openSymbols: string
     }
-  | TempLink
   | TempImage
+  | TempLink
 
-export type Temp =
-  | ContentElement
-  | (TempElement & Partial<ContentElement>)
-  | string
+export type Temp = Content | (TempElement & Partial<ContentElement>)
 
 export const isTempLink = (el: Temp): el is TempLink => {
   if (typeof el === 'object' && 'openSymbols' in el && el.openSymbols === '[') {
@@ -330,11 +330,8 @@ export const isTempElement = (el: any): el is TempElement => {
  * @temp - array of parsed and temp elements
  * @return array of parsed elements cleaned from temp
  */
-export const getElementsWithNoTemp = (
-  temp: Temp[],
-  i: number
-): ContentElement[] => {
-  const result: ContentElement[] = []
+export const getElementsWithNoTemp = (temp: Temp[], i: number): Content[] => {
+  const result: Content[] = []
 
   for (; i < temp.length; i++) {
     const el = temp[i]
