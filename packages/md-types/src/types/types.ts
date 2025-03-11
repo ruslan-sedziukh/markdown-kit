@@ -50,7 +50,7 @@ export type ListItem = {
 
 export type List = {
   type: Types.OrderedList | Types.UnorderedList
-  content: ListItem[]
+  content: ContentElement[]
   id: string
 }
 
