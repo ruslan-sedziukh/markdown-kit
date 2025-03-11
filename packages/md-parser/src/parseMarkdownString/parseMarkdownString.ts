@@ -14,12 +14,9 @@ export const parseMarkdownString = (md: string): ParsedMarkdown => {
 
     if (line[0] === '#') {
       parsedMarkdown.push(parseHeading(line))
-    }
-
-    // if (isListLine(line)) {
-    //   parsedMarkdown.push(parseListLine(line, parsedMarkdown))
-    // }
-    else if (line.length > 0) {
+      // } else if (isListLine(line)) {
+      //   parsedMarkdown.push(parseListLine(line, parsedMarkdown))
+    } else if (line.length > 0) {
       parsedMarkdown.push({
         type: Types.Paragraph,
         content: parseContent(line),

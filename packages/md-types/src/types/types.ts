@@ -31,19 +31,19 @@ export const isHeading = (el: { type: string }): el is Heading => {
 
 export type Heading = {
   type: HeadingType
-  content: InlineContent[]
+  content: ContentElement[]
   id: string
 }
 
 export type Paragraph = {
   type: Types.Paragraph
-  content: InlineContent[]
+  content: ContentElement[]
   id: string
 }
 
 export type ListItem = {
   type: Types.ListElement
-  content: (List | InlineContent)[]
+  content: ContentElement[]
   id: string
 }
 
@@ -66,19 +66,19 @@ export type InlineType =
 
 export type Bold = {
   type: Types.Bold
-  content: Exclude<InlineContent, Types.Bold>[]
+  content: Exclude<ContentElement, Types.Bold>[]
   id: string
 }
 
 export type Italic = {
   type: Types.Italic
-  content: Exclude<InlineContent, Types.Italic>[]
+  content: Exclude<ContentElement, Types.Italic>[]
   id: string
 }
 
 export type Link = {
   type: Types.Link
-  content: Exclude<InlineContent, Types.Link>[]
+  content: Exclude<ContentElement, Types.Link>[]
   href: string
   id: string
 }
@@ -91,11 +91,16 @@ export type Image = {
 }
 
 // Type for all possible inline elements
-export type InlineElement = Bold | Italic | Link | Image | List | ListItem
+export type ContentElement =
+  | Bold
+  | Italic
+  | Link
+  | Image
+  | List
+  | ListItem
+  | string
 
-export type InlineContent = InlineElement | string
-
-export const isInlineContent = (el: any): el is InlineContent => {
+export const isContentElement = (el: any): el is ContentElement => {
   if (el.type) {
     return true
   }

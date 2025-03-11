@@ -8,7 +8,7 @@ import {
 // export const parseListLine = (
 //   line: string,
 //   parsedMarkdown: ParsedMarkdown
-// ): List | ListElement => {
+// ): List | ListItem => {
 //   if ((parsedMarkdown[parsedMarkdown.length - 1].type = Types.list)) {
 //   }
 // }

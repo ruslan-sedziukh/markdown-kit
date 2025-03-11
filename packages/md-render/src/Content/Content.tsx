@@ -1,5 +1,5 @@
 import React from 'react'
-import { InlineContent, ListItem, List, Types } from '@ruslan-sedziukh/md-types'
+import { ContentElement, Types } from '@ruslan-sedziukh/md-types'
 import Bold from '../Bold'
 import Italic from '../Italic'
 import Link from '../Link'
@@ -7,7 +7,7 @@ import Image from '../Image'
 import { Components } from '../Markdown/types'
 
 type Props = {
-  content: (InlineContent | List | ListItem)[]
+  content: ContentElement[]
   components?: Components
 }
 

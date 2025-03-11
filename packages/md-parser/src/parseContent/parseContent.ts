@@ -1,4 +1,4 @@
-import { InlineContent, Types } from '@ruslan-sedziukh/md-types'
+import { ContentElement, Types } from '@ruslan-sedziukh/md-types'
 import {
   getTempElData,
   getElementsWithNoTemp,
@@ -15,7 +15,7 @@ export const parseContent = (
   startI: number = 0,
   // starting temp array
   tempExternal: Temp[] = []
-): InlineContent[] => {
+): ContentElement[] => {
   let temp: Temp[] = tempExternal
 
   let i = startI

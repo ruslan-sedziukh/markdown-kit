@@ -1,8 +1,7 @@
 import {
-  InlineContent,
-  InlineElement,
+  ContentElement,
   InlineType,
-  isInlineContent,
+  isContentElement,
   Types,
 } from '@ruslan-sedziukh/md-types'
 
@@ -27,8 +26,8 @@ type TempElement =
   | TempImage
 
 export type Temp =
-  | InlineElement
-  | (TempElement & Partial<InlineElement>)
+  | ContentElement
+  | (TempElement & Partial<ContentElement>)
   | string
 
 export const isTempLink = (el: Temp): el is TempLink => {
@@ -334,8 +333,8 @@ export const isTempElement = (el: any): el is TempElement => {
 export const getElementsWithNoTemp = (
   temp: Temp[],
   i: number
-): InlineContent[] => {
-  const result: InlineContent[] = []
+): ContentElement[] => {
+  const result: ContentElement[] = []
 
   for (; i < temp.length; i++) {
     const el = temp[i]
@@ -353,7 +352,7 @@ export const getElementsWithNoTemp = (
       } else if (typeof el.openSymbols === 'string') {
         result.push(el.openSymbols)
       }
-    } else if (isInlineContent(el)) {
+    } else if (isContentElement(el)) {
       result.push(el)
     }
   }
