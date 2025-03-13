@@ -5,7 +5,7 @@ import { getId } from '../utils'
 import { parseListLine } from '../parseListLine'
 
 export const parseMarkdownString = (md: string): ParsedMarkdown => {
-  const lines = md.split('\n').filter((line) => !!line)
+  const lines = md.split('\n') //.filter((line) => !!line)
 
   const parsedMarkdown: ParsedMarkdown = []
 

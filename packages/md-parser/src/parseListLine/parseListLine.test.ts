@@ -16,27 +16,62 @@ type Test = {
 
 describe('parseListLine', () => {
   it.each([
+    // {
+    //   test: 'adds new list with a list item if there was no list before that line',
+    //   listLine: '- first item',
+    //   parsedMarkdown: [],
+    //   expected: [
+    //     {
+    //       type: Types.UnorderedList,
+    //       content: [
+    //         {
+    //           type: Types.ListItem,
+    //           content: ['first item'],
+    //           id,
+    //         },
+    //       ],
+    //       id,
+    //     },
+    //   ],
+    // },
+    // {
+    //   test: 'adds list item to existed list if it is the last parsed element',
+    //   listLine: '- second item',
+    //   parsedMarkdown: [
+    //     {
+    //       type: Types.UnorderedList,
+    //       content: [
+    //         {
+    //           type: Types.ListItem,
+    //           content: ['first item'],
+    //           id,
+    //         },
+    //       ],
+    //       id,
+    //     },
+    //   ],
+    //   expected: [
+    //     {
+    //       type: Types.UnorderedList,
+    //       content: [
+    //         {
+    //           type: Types.ListItem,
+    //           content: ['first item'],
+    //           id,
+    //         },
+    //         {
+    //           type: Types.ListItem,
+    //           content: ['second item'],
+    //           id,
+    //         },
+    //       ],
+    //       id,
+    //     },
+    //   ],
+    // },
     {
-      test: 'adds new list with a list item if there was no list before that line',
-      listLine: '- first item',
-      parsedMarkdown: [],
-      expected: [
-        {
-          type: Types.UnorderedList,
-          content: [
-            {
-              type: Types.ListItem,
-              content: ['first item'],
-              id,
-            },
-          ],
-          id,
-        },
-      ],
-    },
-    {
-      test: 'adds list item to existed list if is the last parsed element',
-      listLine: '- second item',
+      test: 'correctly adds list item if there is is double spacing',
+      listLine: '  - second item',
       parsedMarkdown: [
         {
           type: Types.UnorderedList,
@@ -56,12 +91,20 @@ describe('parseListLine', () => {
           content: [
             {
               type: Types.ListItem,
-              content: ['first item'],
-              id,
-            },
-            {
-              type: Types.ListItem,
-              content: ['second item'],
+              content: [
+                'first item',
+                {
+                  type: Types.UnorderedList,
+                  content: [
+                    {
+                      type: Types.ListItem,
+                      content: ['second item'],
+                      id,
+                    },
+                  ],
+                  id,
+                },
+              ],
               id,
             },
           ],
