@@ -117,17 +117,32 @@ const getListLevelMainListItem = (
 }
 
 const appendListItem = (
-  listLevelMainListItem: List | ListItem,
+  listLevelMainListItem: ListItem,
   listItem: ListItem
 ) => {
+  const mainListItemLength = listLevelMainListItem.content.length
   const lastContentElement =
-    listLevelMainListItem.content[listLevelMainListItem.content.length - 1]
+    listLevelMainListItem.content[mainListItemLength - 1]
 
-  if (
+  if (typeof lastContentElement === 'string') {
+    listLevelMainListItem.content.push({
+      type: Types.UnorderedList,
+      content: [listItem],
+      id: getId(),
+    })
+  } else if (
     typeof lastContentElement !== 'string' &&
     lastContentElement.type === Types.UnorderedList
   ) {
     lastContentElement.content.push(listItem)
+  } else if (
+    typeof lastContentElement !== 'string' &&
+    lastContentElement.type === Types.UnorderedList
+  ) {
+    listLevelMainListItem.content.push({
+      type: Types.UnorderedList,
+      content: [listItem],
+      id: getId(),
+    })
   }
-  // els
 }

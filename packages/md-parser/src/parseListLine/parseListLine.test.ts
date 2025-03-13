@@ -88,27 +88,27 @@ describe('parseListLine', () => {
       expected: [
         {
           type: Types.UnorderedList,
+          id,
           content: [
             {
               type: Types.ListItem,
+              id,
               content: [
                 'first item',
                 {
                   type: Types.UnorderedList,
+                  id,
                   content: [
                     {
                       type: Types.ListItem,
-                      content: ['second item'],
                       id,
+                      content: ['second item'],
                     },
                   ],
-                  id,
                 },
               ],
-              id,
             },
           ],
-          id,
         },
       ],
     },
