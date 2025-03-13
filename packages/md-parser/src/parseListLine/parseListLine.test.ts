@@ -16,61 +16,61 @@ type Test = {
 
 describe('parseListLine', () => {
   it.each([
-    // {
-    //   test: 'adds new list with a list item if there was no list before that line',
-    //   listLine: '- first item',
-    //   parsedMarkdown: [],
-    //   expected: [
-    //     {
-    //       type: Types.UnorderedList,
-    //       content: [
-    //         {
-    //           type: Types.ListItem,
-    //           content: ['first item'],
-    //           id,
-    //         },
-    //       ],
-    //       id,
-    //     },
-    //   ],
-    // },
-    // {
-    //   test: 'adds list item to existed list if it is the last parsed element',
-    //   listLine: '- second item',
-    //   parsedMarkdown: [
-    //     {
-    //       type: Types.UnorderedList,
-    //       content: [
-    //         {
-    //           type: Types.ListItem,
-    //           content: ['first item'],
-    //           id,
-    //         },
-    //       ],
-    //       id,
-    //     },
-    //   ],
-    //   expected: [
-    //     {
-    //       type: Types.UnorderedList,
-    //       content: [
-    //         {
-    //           type: Types.ListItem,
-    //           content: ['first item'],
-    //           id,
-    //         },
-    //         {
-    //           type: Types.ListItem,
-    //           content: ['second item'],
-    //           id,
-    //         },
-    //       ],
-    //       id,
-    //     },
-    //   ],
-    // },
     {
-      test: 'correctly adds list item if there is is double spacing',
+      test: 'adds new list with a list item if there was no list before that line',
+      listLine: '- first item',
+      parsedMarkdown: [],
+      expected: [
+        {
+          type: Types.UnorderedList,
+          content: [
+            {
+              type: Types.ListItem,
+              content: ['first item'],
+              id,
+            },
+          ],
+          id,
+        },
+      ],
+    },
+    {
+      test: 'adds list item to existed list if it is the last parsed element',
+      listLine: '- second item',
+      parsedMarkdown: [
+        {
+          type: Types.UnorderedList,
+          content: [
+            {
+              type: Types.ListItem,
+              content: ['first item'],
+              id,
+            },
+          ],
+          id,
+        },
+      ],
+      expected: [
+        {
+          type: Types.UnorderedList,
+          content: [
+            {
+              type: Types.ListItem,
+              content: ['first item'],
+              id,
+            },
+            {
+              type: Types.ListItem,
+              content: ['second item'],
+              id,
+            },
+          ],
+          id,
+        },
+      ],
+    },
+    {
+      test: 'correctly adds list item to correct nested list if main list level item last element is a string',
       listLine: '  - second item',
       parsedMarkdown: [
         {
@@ -113,7 +113,7 @@ describe('parseListLine', () => {
       ],
     },
     {
-      test: 'correctly adds list item if there is is double spacing',
+      test: 'correctly adds list item to correct nested list if main list level item last element is not a string and not a list',
       listLine: '  - second item',
       parsedMarkdown: [
         {
