@@ -124,25 +124,16 @@ const appendListItem = (
   const lastContentElement =
     listLevelMainListItem.content[mainListItemLength - 1]
 
-  if (typeof lastContentElement === 'string') {
+  if (
+    typeof lastContentElement === 'string' ||
+    lastContentElement.type !== Types.UnorderedList
+  ) {
     listLevelMainListItem.content.push({
       type: Types.UnorderedList,
       content: [listItem],
       id: getId(),
     })
-  } else if (
-    typeof lastContentElement !== 'string' &&
-    lastContentElement.type === Types.UnorderedList
-  ) {
+  } else {
     lastContentElement.content.push(listItem)
-  } else if (
-    typeof lastContentElement !== 'string' &&
-    lastContentElement.type === Types.UnorderedList
-  ) {
-    listLevelMainListItem.content.push({
-      type: Types.UnorderedList,
-      content: [listItem],
-      id: getId(),
-    })
   }
 }

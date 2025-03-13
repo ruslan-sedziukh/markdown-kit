@@ -112,6 +112,60 @@ describe('parseListLine', () => {
         },
       ],
     },
+    {
+      test: 'correctly adds list item if there is is double spacing',
+      listLine: '  - second item',
+      parsedMarkdown: [
+        {
+          type: Types.UnorderedList,
+          content: [
+            {
+              type: Types.ListItem,
+              content: [
+                {
+                  type: Types.Bold,
+                  id,
+                  content: ['first item'],
+                },
+              ],
+              id,
+            },
+          ],
+          id,
+        },
+      ],
+      expected: [
+        {
+          type: Types.UnorderedList,
+          id,
+          content: [
+            {
+              type: Types.ListItem,
+              id,
+              content: [
+                {
+                  type: Types.Bold,
+                  id,
+                  content: ['first item'],
+                },
+
+                {
+                  type: Types.UnorderedList,
+                  id,
+                  content: [
+                    {
+                      type: Types.ListItem,
+                      id,
+                      content: ['second item'],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ] as Test)('$test', ({ listLine, parsedMarkdown, expected }) => {
     parseListLine(listLine, parsedMarkdown)
 
