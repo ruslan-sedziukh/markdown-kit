@@ -113,7 +113,7 @@ describe('parseListLine', () => {
       ],
     },
     {
-      test: 'correctly adds list item to correct nested list if main list level item last element is not a string and not a list',
+      test: 'correctly adds list item to correct nested list if last element of main list level item is not a string and not a list',
       listLine: '  - second item',
       parsedMarkdown: [
         {
@@ -157,6 +157,75 @@ describe('parseListLine', () => {
                       type: Types.ListItem,
                       id,
                       content: ['second item'],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      test: 'correctly adds list item to correct nested list if last element of main list level item is a list',
+      listLine: '  - third item',
+      parsedMarkdown: [
+        {
+          type: Types.UnorderedList,
+          content: [
+            {
+              type: Types.ListItem,
+              content: [
+                {
+                  type: Types.Bold,
+                  id,
+                  content: ['first item'],
+                },
+                {
+                  type: Types.UnorderedList,
+                  id,
+                  content: [
+                    {
+                      type: Types.ListItem,
+                      id,
+                      content: ['second item'],
+                    },
+                  ],
+                },
+              ],
+              id,
+            },
+          ],
+          id,
+        },
+      ],
+      expected: [
+        {
+          type: Types.UnorderedList,
+          id,
+          content: [
+            {
+              type: Types.ListItem,
+              id,
+              content: [
+                {
+                  type: Types.Bold,
+                  id,
+                  content: ['first item'],
+                },
+                {
+                  type: Types.UnorderedList,
+                  id,
+                  content: [
+                    {
+                      type: Types.ListItem,
+                      id,
+                      content: ['second item'],
+                    },
+                    {
+                      type: Types.ListItem,
+                      id,
+                      content: ['third item'],
                     },
                   ],
                 },
