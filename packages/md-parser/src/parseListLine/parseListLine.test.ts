@@ -343,8 +343,6 @@ describe('parseListLine', () => {
     ] as Test)('$test', ({ listLine, parsedMarkdown, expected }) => {
       parseListLine(listLine, parsedMarkdown)
 
-      console.log('>>> parsedMarkdown:', parsedMarkdown)
-
       expect(parsedMarkdown).toEqual(expected)
     })
   })
