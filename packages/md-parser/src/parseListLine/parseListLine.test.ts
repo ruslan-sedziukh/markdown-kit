@@ -77,10 +77,10 @@ describe('parseListLine', () => {
     })
   })
 
-  describe('when item level is not for a root level', () => {
+  describe('correctly adds list item to list level', () => {
     it.each([
       {
-        test: 'correctly adds list item to correct nested list if last item of main list level item is a string',
+        test: 'when last element of main list level item is a string',
         listLine: '  - second item',
         parsedMarkdown: [
           {
@@ -123,7 +123,7 @@ describe('parseListLine', () => {
         ],
       },
       {
-        test: 'correctly adds list item to correct nested list if last element of main list level item is not a string and not a list',
+        test: 'when last element of main list level item is not a string and not a list',
         listLine: '  - second item',
         parsedMarkdown: [
           {
@@ -177,7 +177,7 @@ describe('parseListLine', () => {
         ],
       },
       {
-        test: 'correctly adds list item to correct nested list if last element of main list level item is a list',
+        test: 'when last element of main list level item is a list',
         listLine: '  - third item',
         parsedMarkdown: [
           {
@@ -247,8 +247,6 @@ describe('parseListLine', () => {
       },
     ] as Test)('$test', ({ listLine, parsedMarkdown, expected }) => {
       parseListLine(listLine, parsedMarkdown)
-
-      console.log('>>> parsedMarkdown:', parsedMarkdown)
 
       expect(parsedMarkdown).toEqual(expected)
     })
