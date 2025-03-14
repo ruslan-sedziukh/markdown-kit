@@ -1,8 +1,11 @@
 import {
-  InlineContent,
-  InlineElement,
+  Content,
+  ContentElement,
   InlineType,
-  isInlineContent,
+  isContentElement,
+  List,
+  ListItem,
+  Types,
 } from '@ruslan-sedziukh/md-types'
 
 type TempLink = {
@@ -22,13 +25,10 @@ type TempElement =
       temp: true
       openSymbols: string
     }
-  | TempLink
   | TempImage
+  | TempLink
 
-export type Temp =
-  | InlineElement
-  | (TempElement & Partial<InlineElement>)
-  | string
+export type Temp = Content | (TempElement & Partial<ContentElement>)
 
 export const isTempLink = (el: Temp): el is TempLink => {
   if (typeof el === 'object' && 'openSymbols' in el && el.openSymbols === '[') {
@@ -95,7 +95,7 @@ export const getTempElData = ({
       elType: InlineType
       elSymbols: string
       tempElI: number
-      reparseElType?: InlineType.Link | InlineType.Image
+      reparseElType?: Types.Link | Types.Image
     }
   | {
       elType: null
@@ -126,12 +126,12 @@ export const getStrictTempElData = ({
       elType: InlineType
       elSymbols: string
       tempElI: number
-      reparseElType?: InlineType.Link | InlineType.Image
+      reparseElType?: Types.Link | Types.Image
     }
   | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === '*' && content[i + 1] === '*') {
     return {
-      elType: InlineType.Bold,
+      elType: Types.Bold,
       elSymbols: '**',
       tempElI: getTempElWithTempLink(temp, '**'),
     }
@@ -139,7 +139,7 @@ export const getStrictTempElData = ({
 
   if (content[i] === '*') {
     return {
-      elType: InlineType.Italic,
+      elType: Types.Italic,
       elSymbols: '*',
       tempElI: getTempElWithTempLink(temp, '*'),
     }
@@ -149,10 +149,10 @@ export const getStrictTempElData = ({
     const tempElI = getTempElI(temp, '[')
 
     return {
-      elType: InlineType.Link,
+      elType: Types.Link,
       elSymbols: '[',
       tempElI: tempElI,
-      reparseElType: tempElI !== -1 ? InlineType.Link : undefined,
+      reparseElType: tempElI !== -1 ? Types.Link : undefined,
     }
   }
 
@@ -162,7 +162,7 @@ export const getStrictTempElData = ({
 
     if (tempElI !== -1 && typeof tempEl !== 'string' && !('content' in tempEl))
       return {
-        elType: InlineType.Link,
+        elType: Types.Link,
         elSymbols: '](',
         tempElI: tempElI,
       }
@@ -209,7 +209,7 @@ export const getStrictTempElData = ({
 
     if (tempElI === -1) {
       return {
-        elType: InlineType.Image,
+        elType: Types.Image,
         elSymbols: '![',
         tempElI,
       }
@@ -221,7 +221,7 @@ export const getStrictTempElData = ({
 
     if (tempElI !== -1) {
       return {
-        elType: InlineType.Image,
+        elType: Types.Image,
         elSymbols: '](',
         tempElI,
       }
@@ -247,7 +247,7 @@ export const getImageTempElData = ({
       elType: InlineType
       elSymbols: string
       tempElI: number
-      reparseElType?: InlineType.Image
+      reparseElType?: Types.Image
     }
   | { elType: null; elSymbols: null; tempElI: number } => {
   if (content[i] === ')') {
@@ -273,10 +273,10 @@ export const getImageTempElData = ({
 
     if (tempElI !== -1) {
       return {
-        elType: InlineType.Image,
+        elType: Types.Image,
         elSymbols: '![',
         tempElI,
-        reparseElType: InlineType.Image,
+        reparseElType: Types.Image,
       }
     }
   }
@@ -286,17 +286,17 @@ export const getImageTempElData = ({
 
     if (tempElI === -1) {
       return {
-        elType: InlineType.Image,
+        elType: Types.Image,
         elSymbols: '![',
         tempElI,
       }
     }
 
     return {
-      elType: InlineType.Image,
+      elType: Types.Image,
       elSymbols: '![',
       tempElI,
-      reparseElType: InlineType.Image,
+      reparseElType: Types.Image,
     }
   }
 
@@ -305,7 +305,7 @@ export const getImageTempElData = ({
 
     if (tempElI !== -1) {
       return {
-        elType: InlineType.Image,
+        elType: Types.Image,
         elSymbols: '](',
         tempElI,
       }
@@ -330,11 +330,8 @@ export const isTempElement = (el: any): el is TempElement => {
  * @temp - array of parsed and temp elements
  * @return array of parsed elements cleaned from temp
  */
-export const getElementsWithNoTemp = (
-  temp: Temp[],
-  i: number
-): InlineContent[] => {
-  const result: InlineContent[] = []
+export const getElementsWithNoTemp = (temp: Temp[], i: number): Content[] => {
+  const result: Content[] = []
 
   for (; i < temp.length; i++) {
     const el = temp[i]
@@ -352,7 +349,7 @@ export const getElementsWithNoTemp = (
       } else if (typeof el.openSymbols === 'string') {
         result.push(el.openSymbols)
       }
-    } else if (isInlineContent(el)) {
+    } else if (isContentElement(el)) {
       result.push(el)
     }
   }

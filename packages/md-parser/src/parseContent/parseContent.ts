@@ -1,9 +1,4 @@
-import { v4 as uuidv4 } from 'uuid'
-import {
-  InlineContent,
-  InlineElement,
-  InlineType,
-} from '@ruslan-sedziukh/md-types'
+import { Content, ContentElement, Types } from '@ruslan-sedziukh/md-types'
 import {
   getTempElData,
   getElementsWithNoTemp,
@@ -11,6 +6,7 @@ import {
   Temp,
   isTempImage,
 } from './utils'
+import { getId } from '../utils'
 
 export const parseContent = (
   // content that should be parsed
@@ -19,7 +15,7 @@ export const parseContent = (
   startI: number = 0,
   // starting temp array
   tempExternal: Temp[] = []
-): InlineContent[] => {
+): Content[] => {
   let temp: Temp[] = tempExternal
 
   let i = startI
@@ -46,7 +42,7 @@ export const parseContent = (
       if (tempElI !== -1) {
         const tempEl = temp[tempElI]
 
-        if (typeof tempEl !== 'string' && tempEl.type === InlineType.Link) {
+        if (typeof tempEl !== 'string' && tempEl.type === Types.Link) {
           if (elSymbols === '](') {
             temp[tempElI] = {
               ...tempEl,
@@ -60,13 +56,10 @@ export const parseContent = (
               type: tempEl.type,
               // TODO: make href be parsed just as a string
               href: temp[temp.length - 1] as string,
-              id: uuidv4(),
+              id: getId(),
             }
           }
-        } else if (
-          typeof tempEl !== 'string' &&
-          tempEl.type === InlineType.Image
-        ) {
+        } else if (typeof tempEl !== 'string' && tempEl.type === Types.Image) {
           if (elSymbols === '](') {
             const altText = temp[temp.length - 1]
 
@@ -81,24 +74,24 @@ export const parseContent = (
               alt: tempEl.alt || '',
               type: tempEl.type,
               src: temp[temp.length - 1] as string,
-              id: uuidv4(),
+              id: getId(),
             }
 
             parseImage = false
           }
-        } else if (elType === InlineType.Bold) {
+        } else if (elType === Types.Bold) {
           const el = {
             type: elType,
             content: getElementsWithNoTemp(temp, tempElI + 1),
-            id: uuidv4(),
+            id: getId(),
           }
 
           temp[tempElI] = el
-        } else if (elType === InlineType.Italic) {
+        } else if (elType === Types.Italic) {
           temp[tempElI] = {
             type: elType,
             content: getElementsWithNoTemp(temp, tempElI + 1),
-            id: uuidv4(),
+            id: getId(),
           }
         }
 
@@ -109,7 +102,7 @@ export const parseContent = (
           type: elType,
           openSymbols: elSymbols,
           openSymbolsI: i,
-          id: uuidv4(),
+          id: getId(),
         })
 
         if (elSymbols === '![') {
@@ -151,7 +144,7 @@ const getParsedFromTemp = (content: string, temp: Temp[]) => {
       return false
     }
 
-    if (el.type === InlineType.Link && !el.href) {
+    if (el.type === Types.Link && !el.href) {
       return true
     }
   })
@@ -161,7 +154,7 @@ const getParsedFromTemp = (content: string, temp: Temp[]) => {
       return false
     }
 
-    if (el.type === InlineType.Image && !el.src) {
+    if (el.type === Types.Image && !el.src) {
       return true
     }
   })
@@ -175,8 +168,8 @@ const getParsedFromTemp = (content: string, temp: Temp[]) => {
     uncompletedTempEl &&
     typeof uncompletedTempEl === 'object' &&
     'type' in uncompletedTempEl &&
-    (uncompletedTempEl.type === InlineType.Link ||
-      uncompletedTempEl.type === InlineType.Image)
+    (uncompletedTempEl.type === Types.Link ||
+      uncompletedTempEl.type === Types.Image)
   ) {
     return reparseAfterUncompletedElement(
       content,
@@ -197,13 +190,13 @@ const reparseAfterUncompletedElement = (
   // uncompleted temp element index,
   tempElI: number,
   // temp element type
-  type: InlineType.Image | InlineType.Link
+  type: Types.Image | Types.Link
 ) => {
   let openSymbols = ''
 
-  if (type === InlineType.Image) {
+  if (type === Types.Image) {
     openSymbols = '!['
-  } else if (type === InlineType.Link) {
+  } else if (type === Types.Link) {
     openSymbols = '['
   }
 
