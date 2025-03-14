@@ -105,15 +105,21 @@ const getNestedListMainListItem = (
     return null
   }
 
-  if (itemLevel === 1) {
-    return list.content[list.content.length - 1]
+  let currentLastListItem = list.content[list.content.length - 1]
+
+  for (let i = 1; i < itemLevel; i++) {
+    const nestedList =
+      currentLastListItem.content[currentLastListItem.content.length - 1]
+
+    if (
+      typeof nestedList !== 'string' &&
+      nestedList.type === Types.UnorderedList
+    ) {
+      currentLastListItem = nestedList.content[nestedList.content.length - 1]
+    }
   }
 
-  let elementToAppend: ListItem
-
-  for (let i = 0; i < itemLevel; i++) {}
-
-  return null
+  return currentLastListItem
 }
 
 const appendListItem = (

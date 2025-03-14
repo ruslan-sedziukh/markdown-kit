@@ -15,10 +15,10 @@ type Test = {
 }[]
 
 describe('parseListLine', () => {
-  describe('when adding a root level list item', () => {
+  describe('when appending a root level list item', () => {
     it.each([
       {
-        test: 'adds new list with a list item if there was no list before that line',
+        test: 'appends new list with a list item if there was no list before that line',
         listLine: '- first item',
         parsedMarkdown: [],
         expected: [
@@ -36,7 +36,7 @@ describe('parseListLine', () => {
         ],
       },
       {
-        test: 'adds list item to existed list if it is the last parsed element',
+        test: 'appends list item to existed list if it is the last parsed element',
         listLine: '- second item',
         parsedMarkdown: [
           {
@@ -77,7 +77,7 @@ describe('parseListLine', () => {
     })
   })
 
-  describe('correctly adds list item to a nested list', () => {
+  describe('correctly appends list item to a nested list', () => {
     it.each([
       {
         test: 'when last element of main list item of a nested list is a string',
@@ -252,7 +252,7 @@ describe('parseListLine', () => {
     })
   })
 
-  describe('adds list item to correct list level', () => {
+  describe('appends list item to correct nested list', () => {
     it.each([
       {
         test: 'when main list item of nested list exists',
@@ -298,8 +298,8 @@ describe('parseListLine', () => {
         ],
       },
       {
-        test: 'when it do not exist',
-        listLine: '  - second item',
+        test: 'when main list item of nested list do not exist',
+        listLine: '    - second item',
         parsedMarkdown: [
           {
             type: Types.UnorderedList,
