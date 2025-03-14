@@ -33,15 +33,11 @@ export const parseListLine = (
         id: getId(),
       })
     } else {
-      console.log('>>> listLevelMainListItem:', listNestedListMainListItem)
-
       appendListItem(listNestedListMainListItem, {
         type: Types.ListItem,
         content: parseContent(getContentLine(line)),
         id: getId(),
       })
-
-      console.log('>>> listLevelMainListItem:', listNestedListMainListItem)
     }
   } else {
     parsedMarkdown.push({
