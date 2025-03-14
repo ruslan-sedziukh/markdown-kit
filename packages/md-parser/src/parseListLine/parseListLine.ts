@@ -20,28 +20,28 @@ export const parseListLine = (
   const lastElement = parsedMarkdown[parsedMarkdown.length - 1]
 
   if (lastElement?.type === Types.UnorderedList) {
-    const itemLevel = getItemLevel(line)
-    const listLevelMainListItem = getListLevelMainListItem(
+    const itemNestingLevel = getItemNestingLevel(line)
+    const listNestedListMainListItem = getNestedListMainListItem(
       lastElement,
-      itemLevel
+      itemNestingLevel
     )
 
-    if (!listLevelMainListItem) {
+    if (!listNestedListMainListItem) {
       lastElement.content.push({
         type: Types.ListItem,
         content: parseContent(getContentLine(line)),
         id: getId(),
       })
     } else {
-      console.log('>>> listLevelMainListItem:', listLevelMainListItem)
+      console.log('>>> listLevelMainListItem:', listNestedListMainListItem)
 
-      appendListItem(listLevelMainListItem, {
+      appendListItem(listNestedListMainListItem, {
         type: Types.ListItem,
         content: parseContent(getContentLine(line)),
         id: getId(),
       })
 
-      console.log('>>> listLevelMainListItem:', listLevelMainListItem)
+      console.log('>>> listLevelMainListItem:', listNestedListMainListItem)
     }
   } else {
     parsedMarkdown.push({
@@ -74,7 +74,7 @@ const getContentLine = (line: string) => {
  * @param line
  * @returns item level
  */
-const getItemLevel = (line: string) => {
+const getItemNestingLevel = (line: string) => {
   let spaces = 0
 
   const lineChars = line.split('')
@@ -97,7 +97,7 @@ const getItemLevel = (line: string) => {
  * @param itemLevel - nesting level of the item that should be appended
  * @returns - a list item to which new item should be appended, or null if it should be appended to the root list
  */
-const getListLevelMainListItem = (
+const getNestedListMainListItem = (
   list: List,
   itemLevel: number
 ): ListItem | null => {

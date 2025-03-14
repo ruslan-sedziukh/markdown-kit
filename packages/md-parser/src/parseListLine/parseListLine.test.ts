@@ -77,10 +77,10 @@ describe('parseListLine', () => {
     })
   })
 
-  describe('correctly adds list item to list level', () => {
+  describe('correctly adds list item to a nested list', () => {
     it.each([
       {
-        test: 'when last element of main list level item is a string',
+        test: 'when last element of main list item of a nested list is a string',
         listLine: '  - second item',
         parsedMarkdown: [
           {
@@ -123,7 +123,7 @@ describe('parseListLine', () => {
         ],
       },
       {
-        test: 'when last element of main list level item is not a string and not a list',
+        test: 'when last element of main list item of a nested list is not a string and not a list',
         listLine: '  - second item',
         parsedMarkdown: [
           {
@@ -177,7 +177,7 @@ describe('parseListLine', () => {
         ],
       },
       {
-        test: 'when last element of main list level item is a list',
+        test: 'when last element of main list item of a nested list is a list',
         listLine: '  - third item',
         parsedMarkdown: [
           {
@@ -247,6 +247,103 @@ describe('parseListLine', () => {
       },
     ] as Test)('$test', ({ listLine, parsedMarkdown, expected }) => {
       parseListLine(listLine, parsedMarkdown)
+
+      expect(parsedMarkdown).toEqual(expected)
+    })
+  })
+
+  describe('adds list item to correct list level', () => {
+    it.each([
+      {
+        test: 'when main list item of nested list exists',
+        listLine: '  - second item',
+        parsedMarkdown: [
+          {
+            type: Types.UnorderedList,
+            content: [
+              {
+                type: Types.ListItem,
+                content: ['first item'],
+                id,
+              },
+            ],
+            id,
+          },
+        ],
+        expected: [
+          {
+            type: Types.UnorderedList,
+            id,
+            content: [
+              {
+                type: Types.ListItem,
+                id,
+                content: [
+                  'first item',
+                  {
+                    type: Types.UnorderedList,
+                    id,
+                    content: [
+                      {
+                        type: Types.ListItem,
+                        id,
+                        content: ['second item'],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        test: 'when it do not exist',
+        listLine: '  - second item',
+        parsedMarkdown: [
+          {
+            type: Types.UnorderedList,
+            content: [
+              {
+                type: Types.ListItem,
+                content: ['first item'],
+                id,
+              },
+            ],
+            id,
+          },
+        ],
+        expected: [
+          {
+            type: Types.UnorderedList,
+            id,
+            content: [
+              {
+                type: Types.ListItem,
+                id,
+                content: [
+                  'first item',
+                  {
+                    type: Types.UnorderedList,
+                    id,
+                    content: [
+                      {
+                        type: Types.ListItem,
+                        id,
+                        content: ['second item'],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ] as Test)('$test', ({ listLine, parsedMarkdown, expected }) => {
+      parseListLine(listLine, parsedMarkdown)
+
+      console.log('>>> parsedMarkdown:', parsedMarkdown)
 
       expect(parsedMarkdown).toEqual(expected)
     })
