@@ -6,6 +6,7 @@ import {
 } from '@ruslan-sedziukh/md-types'
 import { getId } from '../utils'
 import { parseContent } from '../parseContent'
+import { Configs } from '../types/configs'
 
 /**
  * Parse list line. Add parsed representation of the line to a previous list if it exists or creates new one. That is why it mutates `parsedMarkdown` instead of returning something.
@@ -15,7 +16,8 @@ import { parseContent } from '../parseContent'
  */
 export const parseListLine = (
   line: string,
-  parsedMarkdown: ParsedMarkdown
+  parsedMarkdown: ParsedMarkdown,
+  configs?: Configs
 ): void => {
   const lastElement = parsedMarkdown[parsedMarkdown.length - 1]
 
@@ -29,13 +31,13 @@ export const parseListLine = (
     if (!listNestedListMainListItem) {
       lastElement.content.push({
         type: Types.ListItem,
-        content: parseContent(getContentLine(line)),
+        content: parseContent(getContentLine(line), { configs }),
         id: getId(),
       })
     } else {
       appendListItem(listNestedListMainListItem, {
         type: Types.ListItem,
-        content: parseContent(getContentLine(line)),
+        content: parseContent(getContentLine(line), { configs }),
         id: getId(),
       })
     }
@@ -45,7 +47,7 @@ export const parseListLine = (
       content: [
         {
           type: Types.ListItem,
-          content: parseContent(getContentLine(line)),
+          content: parseContent(getContentLine(line), { configs }),
           id: getId(),
         },
       ],
