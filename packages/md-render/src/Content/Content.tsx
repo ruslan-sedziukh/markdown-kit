@@ -5,6 +5,8 @@ import Italic from '../Italic'
 import Link from '../Link'
 import Image from '../Image'
 import { Components } from '../Markdown/types'
+import List from '../List'
+import ListItem from '../ListItem'
 
 type Props = {
   content: Content[]
@@ -51,6 +53,22 @@ const Content = ({ content, components }: Props) => {
           }
 
           return <Image key={el.id} src={el.src} alt={el.alt} />
+        }
+
+        if (el.type === Types.UnorderedList) {
+          return (
+            <List key={el.id}>
+              <Content content={el.content} components={components} />
+            </List>
+          )
+        }
+
+        if (el.type === Types.ListItem) {
+          return (
+            <ListItem key={el.id}>
+              <Content content={el.content} components={components} />
+            </ListItem>
+          )
         }
       })}
     </>

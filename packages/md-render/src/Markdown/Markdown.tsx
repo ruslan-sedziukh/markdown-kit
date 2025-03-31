@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react'
-import { isHeading, ParsedMarkdown } from '@ruslan-sedziukh/md-types'
+import { isHeading, ParsedMarkdown, Types } from '@ruslan-sedziukh/md-types'
 import Heading from '../Heading'
 import Paragraph from '../Paragraph/Paragraph'
 import Content from '../Content'
 import { Components } from './types'
+import List from '../List'
 
 type Props = {
   parsedMarkdown: ParsedMarkdown
@@ -19,6 +20,14 @@ const Markdown = ({ parsedMarkdown: content, components }: Props) => {
             <Heading type={element.type} key={element.id}>
               <Content content={element.content} components={components} />
             </Heading>
+          )
+        }
+
+        if (element.type === Types.UnorderedList) {
+          return (
+            <List key={element.id}>
+              <Content content={element.content} components={components} />
+            </List>
           )
         }
 
