@@ -288,5 +288,25 @@ describe('parseContent', () => {
     ])('$text', ({ content, expected }) => {
       expect(parseContent(content)).toEqual(expected)
     })
+
+    it('is parsed correctly with asset pre path', () => {
+      const content = 'Look at ![cow](./assets/cow.png) and be aware'
+      const assetsPrePath = 'md-documents'
+
+      const expected = [
+        'Look at ',
+        {
+          type: Types.Image,
+          alt: 'cow',
+          src: 'md-documents/assets/cow.png',
+          id,
+        },
+        ' and be aware',
+      ]
+
+      expect(parseContent(content, { configs: { assetsPrePath } })).toEqual(
+        expected
+      )
+    })
   })
 })
