@@ -1,4 +1,4 @@
-import { Content, ContentElement, Types } from '@ruslan-sedziukh/md-types'
+import { Content, Types } from '@ruslan-sedziukh/md-types'
 import {
   getTempElData,
   getElementsWithNoTemp,
@@ -7,15 +7,24 @@ import {
   isTempImage,
 } from './utils'
 import { getId } from '../utils'
+import { Configs } from '../types/configs'
+import { getAssetPath } from '../utils'
+
+type Rest = {
+  // starting index
+  startI?: number
+  // starting temp array
+  tempExternal?: Temp[]
+  configs?: Configs
+}
 
 export const parseContent = (
   // content that should be parsed
   content: string,
-  // starting index
-  startI: number = 0,
-  // starting temp array
-  tempExternal: Temp[] = []
+  { startI = 0, tempExternal = [], configs = {} }: Rest = {}
 ): Content[] => {
+  const { assetsPrePath } = configs
+
   let temp: Temp[] = tempExternal
 
   let i = startI
@@ -73,7 +82,7 @@ export const parseContent = (
             temp[tempElI] = {
               alt: tempEl.alt || '',
               type: tempEl.type,
-              src: temp[temp.length - 1] as string,
+              src: getAssetPath(assetsPrePath, temp[temp.length - 1] as string),
               id: getId(),
             }
 
@@ -218,11 +227,10 @@ const reparseAfterUncompletedElement = (
     }
 
     // parse again from next char
-    return parseContent(
-      content,
-      tempEl.openSymbolsI + openSymbols.length,
-      temp.slice(0, tempElI + tempElIShift)
-    )
+    return parseContent(content, {
+      startI: tempEl.openSymbolsI + openSymbols.length,
+      tempExternal: temp.slice(0, tempElI + tempElIShift),
+    })
   }
 
   return getElementsWithNoTemp(temp, 0)

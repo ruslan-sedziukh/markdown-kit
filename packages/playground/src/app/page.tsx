@@ -1,8 +1,13 @@
-import { parseMarkdown } from '@ruslan-sedziukh/md-parser'
+import { parseMarkdownFile } from '@ruslan-sedziukh/md-parser'
 import { Markdown } from '@ruslan-sedziukh/md-render'
 
 export default function Home() {
-  const parsedMarkdown = parseMarkdown('./public/example.md')
+  const parsedMarkdown = parseMarkdownFile(
+    './public/md-documents/example/example.md',
+    {
+      assetsPrePath: 'md-documents/example',
+    }
+  )
 
   return (
     <div className="flex items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">

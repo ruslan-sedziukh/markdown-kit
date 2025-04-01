@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { isHeading, ParsedMarkdown, Types } from '@ruslan-sedziukh/md-types'
 import Heading from '../Heading'
 import Paragraph from '../Paragraph/Paragraph'
@@ -13,7 +13,7 @@ type Props = {
 
 const Markdown = ({ parsedMarkdown: content, components }: Props) => {
   return (
-    <div>
+    <>
       {content.map((element) => {
         if (isHeading(element)) {
           return (
@@ -37,7 +37,7 @@ const Markdown = ({ parsedMarkdown: content, components }: Props) => {
           </Paragraph>
         )
       })}
-    </div>
+    </>
   )
 }
 
