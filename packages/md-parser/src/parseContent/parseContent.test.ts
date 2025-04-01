@@ -4,6 +4,7 @@ import { parseContent } from '.'
 const id = 'uuid'
 
 jest.mock('../utils', () => ({
+  ...jest.requireActual('../utils'),
   getId: () => id,
 }))
 
